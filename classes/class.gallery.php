@@ -6,17 +6,39 @@ class Gallery {
     private $folder;
     private $optimizer;
     private $thumbnailer;
+    private $meta;
 
-    public function __construct($folder) {
+    public function __construct($folder, $meta) {
         $this->folder = $folder;
         $this->identifier = basename($folder);
+        $this->meta = $meta;
     }
 
     public function getIdentifier() {
         return $this->identifier;
     }
 
-    public function getImageList($process=true) {
+    public function getCover() {
+        return isset($this->meta['cover']) ? $this->meta['cover'] : GALLERY_DEFAULT_COVER;
+    }
+
+    public function getTitle() {
+        return isset($this->meta['title']) ? $this->meta['title'] : $this->identifier;
+    }
+
+    public function getDescription() {
+        return isset($this->meta['description']) ? $this->meta['description'] : '';
+    }
+
+    public function getLevel() {
+        return isset($this->meta['level']) ? $this->meta['level'] : 0;
+    }
+
+    public function getLink() {
+        return WWW_ROOT . 'view/' . $this->getIdentifier();
+    }
+
+    public function getImageList($process=true, $nopaths=false) {
         $list = [];
         $pattern = '/^.*\.(jpg|jpeg|bmp|png)$/';
 
@@ -36,12 +58,14 @@ class Gallery {
                 ];
             }
         }
-        if($process) {
-            foreach($list as $image) {
+        foreach($list as &$image) {
+            if($process) {
                 $image = $this->processImage($image);
             }
+            if($nopaths) {
+                unset($image['original_path']);
+            }
         }
-
 
         return $list;
     }
@@ -59,8 +83,8 @@ class Gallery {
         }
         $optimized   = $this->optimizer->process($image);
         $thumbnailed = $this->thumbnailer->process($image);
-        $image['optimized_url'] = $this->getFileUrl($optimized[1]);
-        $image['thumbnail_url'] = $this->getFileUrl($thumbnailed[1]);
+        $image['optimized_url'] = $this->getFileURL($optimized[1]);
+        $image['thumbnail_url'] = $this->getFileURL($thumbnailed[1]);
         return $image;
     }
 
@@ -81,10 +105,10 @@ class Gallery {
         return null;
     }
 
-    private function getFileUrl($path) {
+    private function getFileURL($path) {
         $path = str_replace(ROOT, WWW_ROOT, $path);
         $path = str_replace('\\', '/', $path);
-        return $path;
+        return str_replace(' ', '%20', $path);
     }
 
     private function loadProcessed() {
