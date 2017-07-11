@@ -33,19 +33,25 @@ define('AUTH_USERS', serialize(array(
     array(
         'name' => 'radmin',
         'password' => 'be814a82404fcfb0099c5b3f9db51a7e',
-        'level' => 2,
+        'level' => 0,
+    ),
+    array(
+        'name' => 'photobox',
+        'password' => 'be814a82404fcfb0099c5b3f9db51a7e',
+        'level' => 1,
     ),
     array(
         'name' => 'besucher',
-        'password' => 'b5acc84295c979fbbb8a597f7e32b31d',
-        'level' => 1,
+        'password' => 'be814a82404fcfb0099c5b3f9db51a7e',
+        'level' => 2,
     )
 )));
 
 define('AUTH_RESTRICTIONS', serialize(array(
-    WWW_ROOT . 'admin' => 2,
+    WWW_ROOT . 'admin' => 0,
     WWW_ROOT . 'view/photobox' => 1,
-    WWW_GALLERY_ROOT . 'photobox' => 1
+    WWW_GALLERY_ROOT . 'photobox' => 1,
+    WWW_ROOT . 'view' => 2
 )));
 
 define('PROCESS_CONFIG_THUMB', serialize(array(

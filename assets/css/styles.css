@@ -41,6 +41,10 @@ li.error a.btn {
     cursor: pointer;
 }
 
+.image-holder:hover {
+    z-index:100;
+}
+
 /* MODAL */
 /* Style the Image Used to Trigger the Modal */
 .gallery img {
@@ -72,8 +76,16 @@ li.error a.btn {
 .modal-content {
     margin: auto;
     display: block;
-    width: 80%;
-    max-width: 700px;
+    max-width: 83vw;
+    max-height: 85vh;
+}
+
+.modal img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
@@ -86,6 +98,46 @@ li.error a.btn {
     color: #ccc;
     padding: 10px 0;
     height: 150px;
+}
+
+.modal-control {
+    position: absolute;
+    top: 0;
+    
+    padding: 20px;
+    height: 100%;
+    
+    line-height: 100vh;
+    font-size: 100px;
+    color: #fff;
+    opacity: 0.85;
+    background-color: transparent;
+    cursor: pointer;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+         -khtml-user-select: none; /* Konqueror HTML */
+           -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently */
+}
+
+.modal-control:hover {
+    opacity: 1;
+    background-color: rgba(121, 121, 121, 0.22);
+}
+
+.modal-control__prev {
+    left: 0;
+}
+
+.modal-control__next {
+    right: 0;
+}
+
+.at-start .modal-control__prev,
+.at-end .modal-control__next {
+    display: none;
 }
 
 /* Add Animation - Zoom in the Modal */
@@ -111,10 +163,12 @@ li.error a.btn {
     position: absolute;
     top: 15px;
     right: 35px;
+    padding: 20px;
     color: #f1f1f1;
     font-size: 40px;
     font-weight: bold;
     transition: 0.3s;
+    z-index: 100000;
 }
 
 .close:hover,
@@ -124,9 +178,58 @@ li.error a.btn {
     cursor: pointer;
 }
 
-/* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px){
-    .modal-content {
-        width: 100%;
-    }
+
+.loading .loader {
+    position: absolute;
+    display: block;
+    
+    top: 50%;
+    left: 50%;
+    margin-top: -5em;
+    margin-left: -5em;
+    
+    z-index: 100;
+}
+
+.loader,
+.loader:after {
+  display: none;
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.loader {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-left: 1.1em solid #ffffff;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }

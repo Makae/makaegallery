@@ -1,12 +1,14 @@
 <?php
 if(!defined('DOC_ROOT'))
     die();
+  $has_gallery_output = false;
 ?>
 
 <div class="row">
 <? foreach($galleries as $gallery):
     if(!Authentication::instance()->canAccess($gallery->getLevel()))
         continue; 
+      $has_gallery_output = true;
 ?>
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
@@ -19,4 +21,8 @@ if(!defined('DOC_ROOT'))
     </div>
   </div>
   <? endforeach; ?>
+  <? if(!$has_gallery_output): ?>
+  <p>Um die Gallerien zu betrachten musst Du dich anmelden:</p>
+  <a href="<?= WWW_ROOT . '/login' ?>" class="btn btn-primary">Zur Anmeldung</a>  
+  <? endif; ?>
 </div>

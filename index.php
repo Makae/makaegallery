@@ -41,6 +41,11 @@ $auth = Authentication::instance();
 $auth->setUsers(unserialize(AUTH_USERS));
 $auth->setRestrictions(unserialize(AUTH_RESTRICTIONS));
 
+
+if(isset($_GET['logout']))   {
+    $auth->logout();
+}
+
 $route = Utils::getUriComponents();
 $view = isset($route[0]) ? $route[0] : 'list';
 
