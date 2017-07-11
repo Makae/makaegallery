@@ -24,7 +24,6 @@ foreach($galleries as $gallery) {
 <? foreach($gallery_data as $gallery): ?>
 <h3><?= $gallery['name'] ?></h3>
 <ul class="processing-progress">
-    <li>Processing progress</li>
     <? foreach($gallery['images'] as $img): ?>
     <li data-minify-img="<?= urlencode($img['imgid']) ?>"><?= $gallery['name'] . "::". basename($img['imgid']) ?><a href="#" class="manual-trigger btn btn-default" data-minify-img="<?= urlencode($img['imgid']) ?>">Execute now</a>
     </li> 

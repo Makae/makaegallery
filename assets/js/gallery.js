@@ -89,6 +89,7 @@ var gallery = {
     this.modal.find('.modal-control__next').on('click', function() {
       self.nextImage();
     });
+
   },
 
   showModal : function(imgidx) {
