@@ -67,7 +67,16 @@ class Gallery {
             }
         }
 
+        usort($list, 'Gallery::_sort');
+
         return $list;
+    }
+
+    private static function _sort($a, $b) {
+        if ($a['imgid'] == $b['imgid']) {
+            return 0;
+        }
+        return ($a['imgid'] < $b['imgid']) ? -1 : 1;
     }
 
     public function processImage($image) {
