@@ -44,7 +44,7 @@ class Convert {
         $n_width  = round($o_width * $factor);
         $n_height = round($o_height * $factor);
 
-        $sep = DIRECTORY_SEPARATOR == '\\' ? '\\\\' : '\/';
+        $sep = DIRECTORY_SEPARATOR == '\\' ? '\\\\' : '/';
         if(is_null($targetpath)) {
             $tmp = str_replace('\\', '/', $filepath);
             $targetpath = preg_replace("/(.*)\/([^\/]+)(\.[^\.]+)$/i", "$1{prefix}" . $sep . "$2-{width}-{height}-{quality}$3", $tmp);
