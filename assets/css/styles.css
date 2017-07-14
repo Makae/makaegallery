@@ -86,6 +86,15 @@ li.error a.btn {
     left: 0;
     bottom: 0;
     right: 0;
+    opacity: 1;
+
+     -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.modal.loading img {
+    opacity: 0;
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
@@ -98,6 +107,13 @@ li.error a.btn {
     color: #ccc;
     padding: 10px 0;
     height: 150px;
+}
+
+.modal-infos {
+    top: 20px;
+    color: white;
+    text-align: center;
+    font-size: 1.5em;
 }
 
 .modal-control {
@@ -133,6 +149,38 @@ li.error a.btn {
 
 .modal-control__next {
     right: 0;
+}
+
+.modal-control__magnify,
+.modal-control__play {
+    top: auto;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -0.9em;
+    height: auto;
+    line-height: 1em;
+    font-size: 44px;
+}
+
+.modal-control__magnify {
+    top: 10px;
+    bottom: auto;
+    height: auto;
+}
+
+.modal-control__magnify,
+.modal-control__magnify:link,
+.modal-control__magnify:hover,
+.modal-control__magnify:active,
+.modal-control__magnify:visited {
+    text-decoration: none;
+}
+
+.modal-control__info {
+    height: auto;
+    top: 0;
+    width: 100%;
+    text-align:center;
 }
 
 .at-start .modal-control__prev,
@@ -198,6 +246,7 @@ li.error a.btn {
   width: 10em;
   height: 10em;
 }
+
 .loader {
   margin: 60px auto;
   font-size: 10px;

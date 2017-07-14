@@ -29,9 +29,10 @@ for($idx = 0; $idx < count($images); $idx++) {
     <div class="col-sm-4 column-<?= $idx+1 ?>">
         <? foreach($col as $idx => $image): ?>
         <div class="image-holder" data-imgidx="<?= $image['imgidx'] ?>">
-            <img src="<?= $image['thumbnail_url'] ?>" data-modalimage="<?= $image['optimized_url'] ?>" alt="<?= $gallery->getTitle(); ?>" />
+            <img src="<?= $image['thumbnail_url'] ?>" data-modalimage="<?= $image['optimized_url'] ?>" data-bigimage="<?= $image['original_url'] ?>" alt="<?= $gallery->getTitle(); ?>" />
         </div>
         <? endforeach; ?>
     </div>
 <? endforeach; ?>
 </div>
+<div class="loadmore btn btn-primary">Mehr anzeigen</div>

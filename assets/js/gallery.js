@@ -1,7 +1,7 @@
 var gallery = {
   item_template : 
         '<div class="image-holder" data-imgidx="%imgidx%">' +
-            '<img src="%imgsrc%" data-modalimage="%modalimage%" alt="%alttext%" />' +
+            '<img src="%imgsrc%" data-modalimage="%modalimage%" data-bigimage="%bigimage%" alt="%alttext%"  />' +
         '</div>',
 
   gallery : null,
@@ -14,6 +14,8 @@ var gallery = {
   images : {},
   pointer : 0,
   imgidx: -1,
+  interval_time: 5000,
+  interval: null,
 
   init : function() {
     this.bind();
@@ -38,6 +40,24 @@ var gallery = {
     this.prepareModal();
     this.bindImages();
     this.endlessScroll();
+
+    $('.loadmore').on('click', function() {
+      self.loadMore();
+    });
+
+    $(document).on('keyup', function(e) {
+      if(e.keyCode == 27) {
+        self.modal.hide();
+      }
+
+      if(e.keyCode == 37) {
+        self.prevImage();
+      }
+
+      if(e.keyCode == 39) {
+        self.nextImage();
+      }
+    });
   },
 
   bindImages : function() {
@@ -68,16 +88,20 @@ var gallery = {
     '<div id="the-modal" class="modal">' +
       '<div class="loader"> </div>' +
       '<span class="close">&times;</span>' +
+      '<div class="modal-infos"><span class="modal-x">x</span> von <span class="modal-y">y</span></div>' +
       '<img class="modal-content" id="modal_image">' +
       '<div class="modal-caption"></div>' +
       '<div class="modal-control modal-control__prev">&#8249;</div>' +
       '<div class="modal-control modal-control__next">&#8250;</div>' +
+      '<div class="modal-control modal-control__play">&#9654;</div>' +
+      '<a href="#" target="_blank" class="modal-control modal-control__magnify">&#65291;</a>' +
     '</div>';
     $(html).appendTo('body');
     this.modal = $('#the-modal');
     this.modal_image = $('#the-modal img');
     this.modal_caption = $('#the-modal caption');
     this.modal_close = $('#the-modal .close');
+
     this.modal_close.on('click', function() {
       self.modal.hide();
     });
@@ -88,6 +112,20 @@ var gallery = {
 
     this.modal.find('.modal-control__next').on('click', function() {
       self.nextImage();
+    });
+
+    this.modal.find('.modal-control__play').on('click', function() {
+      if(self.interval) {
+        window.clearInterval(self.interval);
+        $(this).html("&#9654;");
+        self.interval = null;
+        return;
+      }
+
+      $(this).html("&#10074;&#10074;");
+      self.interval = window.setInterval(function() {
+        self.nextImage();
+      }, self.interval_time);
     });
 
   },
@@ -105,6 +143,7 @@ var gallery = {
     var self = this;
     var $img = $('[data-imgidx="' + this.imgidx +'"] > img');
     var imgsrc = $img.data('modalimage');
+    var bigsrc = $img.data('bigimage');
     var caption = $img.data('alt');
 
     this.modal.addClass("loading");
@@ -126,6 +165,11 @@ var gallery = {
     } else {
       this.modal.removeClass('at-end');
     }
+
+
+    this.modal.find('.modal-control__magnify').attr('href', bigsrc);
+    this.modal.find('.modal-x').text(this.imgidx + 1);
+    this.modal.find('.modal-y').text(this.images.length);
 
 
     var idxloaded = Math.min(this.imgidx + 4, this.images.length - 1);
@@ -176,8 +220,10 @@ var gallery = {
     for(var i = 0; i < images.length; i++) {
       var imgsrc = images[i].thumbnail_url;
       var modalsrc = images[i].optimized_url;
-     
+      var bigsrc = images[i].original_url;
+
       html = this.item_template.replace('%imgsrc%', imgsrc);
+      html = html.replace('%bigimage%', bigsrc);
       html = html.replace('%modalimage%', modalsrc);
       html = html.replace('%imgidx%', images[i].imgidx);
       html = html.replace('%alttext%', caption);
@@ -211,6 +257,7 @@ var gallery = {
     if($('.alloaded').length)
       return;
     $("<div class='alloaded alert alert-success'>Keine weitern Bilder</div>").appendTo('body');
+    $('.loadmore').remove();
   }
 
 };
