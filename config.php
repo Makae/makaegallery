@@ -2,7 +2,9 @@
 // FIND SERVER ROOT PATH EXTENSION
 $root = str_replace("\\", "/", $_SERVER['DOCUMENT_ROOT']);
 $dir = str_replace("\\", "/", dirname($_SERVER['SCRIPT_NAME']));
+$dir = $dir == '/' ? '' : $dir;
 $ext = str_replace($root, '', $dir);
+
 if(substr($ext, strlen($ext)-1) != '/') {
   $ext.="/";
 }
@@ -14,10 +16,12 @@ if($ext == '/') {
 if(file_exists('config-env.php')) {
     require_once('config-env.php');
 }
-
+    
 // GETTING PLACES
 define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'].$ext);
-define('WWW_ROOT', $ext);
+define('WWW_BASE', '//' . $_SERVER['SERVER_NAME'] . '/');
+define('WWW_ROOT', $ext . '/');
+
 define('WWW_ASSETS', WWW_ROOT . 'assets/');
 define('WWW_GALLERY_ROOT', WWW_ROOT . 'gallery/');
 
@@ -26,9 +30,7 @@ define('GALLERY_ROOT', ROOT . 'galleries' . DIRECTORY_SEPARATOR);
 define('PARTS', ROOT . 'parts' . DIRECTORY_SEPARATOR);
 
 define('CONVERT_DEFAULT_PREFIX', DIRECTORY_SEPARATOR . 'resized');
-
 define('TESTDIR', ROOT . 'tests' . DIRECTORY_SEPARATOR);
-
 define('DOING_AJAX', isset($_REQUEST['ajax']));
 
 @define('SALT', 'asdöfhöç2b4(&jwbj vyk sprog');

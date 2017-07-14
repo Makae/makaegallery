@@ -5,5 +5,5 @@ if(!defined('DOC_ROOT'))
 
 <div>
     Die Seite konnte leider nicht gefunden werden.
-    <a href="<?= WWW_ROOT ?>">Zurück auf die Startseite</a>
+    <a href="<?= WWW_BASE ?>">Zurück auf die Startseite</a>
 </div>

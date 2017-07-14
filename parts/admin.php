@@ -18,9 +18,9 @@ foreach($galleries as $gallery) {
 }
 ?>
 
-<a id="minify-button" href="<?= WWW_ROOT. "admin?minify_galleries=1" ?>" class="btn btn-primary" >Minify Galleries</a>
+<a id="minify-button" href="<?= WWW_BASE. "admin?minify_galleries=1" ?>" class="btn btn-primary" >Minify Galleries</a>
 
-<a id="clear-button" href="<?= WWW_ROOT. "admin?clear_minified=1" ?>" class="btn btn-danger" >Clear Minified Images</a>
+<a id="clear-button" href="<?= WWW_BASE. "admin?clear_minified=1" ?>" class="btn btn-danger" >Clear Minified Images</a>
 
 <? foreach($gallery_data as $gallery): ?>
 <h3><?= $gallery['name'] ?></h3>

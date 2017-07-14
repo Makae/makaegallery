@@ -15,12 +15,12 @@ if(!defined('DOC_ROOT'))
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
           <div class="container">
-            <a href="<?= WWW_ROOT . 'list' ?>" class="btn btn-primary">Zur Übersicht</a>
+            <a href="<?= WWW_BASE . 'list' ?>" class="btn btn-primary">Zur Übersicht</a>
             <? if(Authentication::isLoggedIn()): ?>
-            <a href="<?= WWW_ROOT . 'list?logout=true' ?>" class="btn btn-default pull-right">Abmelden</a>
+            <a href="<?= WWW_BASE . 'list?logout=true' ?>" class="btn btn-default pull-right">Abmelden</a>
             <? else: ?>
-            <form action="<?= WWW_ROOT . 'login' ?>" method="POST" class="pull-right">
-            <input type="hidden" value="<?= WWW_ROOT . 'list' ?>" name="redirect" />
+            <form action="<?= WWW_BASE . 'login' ?>" method="POST" class="pull-right">
+            <input type="hidden" value="<?= WWW_BASE . 'list' ?>" name="redirect" />
             <input type="submit" value="Anmelden" class="btn btn-default" />
             </form>
             <? endif; ?>

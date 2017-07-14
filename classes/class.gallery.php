@@ -115,9 +115,10 @@ class Gallery {
     }
 
     private function getFileURL($path) {
+        $path = str_replace('//', '/', $path);
         $path = str_replace(ROOT, WWW_ROOT, $path);
         $path = str_replace('\\', '/', $path);
-        return str_replace(' ', '%20', $path);
+        return WWW_BASE . str_replace(' ', '%20', $path);
     }
 
     private function loadProcessed() {

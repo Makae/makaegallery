@@ -23,6 +23,6 @@ if(!defined('DOC_ROOT'))
   <? endforeach; ?>
   <? if(!$has_gallery_output): ?>
   <p>Um die Gallerien zu betrachten musst Du dich anmelden:</p>
-  <a href="<?= WWW_ROOT . '/login' ?>" class="btn btn-primary">Zur Anmeldung</a>  
+  <a href="<?= WWW_BASE . '/login' ?>" class="btn btn-primary">Zur Anmeldung</a>  
   <? endif; ?>
 </div>
