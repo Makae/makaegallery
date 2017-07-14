@@ -19,7 +19,6 @@ for($idx = 0; $idx < count($images); $idx++) {
         $image['loaded'] = true;
     }
 }
-
 ?>
 <script src="<?= WWW_ASSETS ?>js/event_buffer.js"></script>
 <script src="<?= WWW_ASSETS ?>js/gallery.js"></script>

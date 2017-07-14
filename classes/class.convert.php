@@ -26,11 +26,13 @@ class Convert {
         list($o_width, $o_height) = getImageSize($filepath);
         
         $to_width = false;
+
         if($resize['m'] == 'to_smaller') {
             $to_width = ($o_width < $o_height) ? true : false;
         } else if ($resize['m'] == 'worh') {
             $to_width = $resize['w'] ? true : false;
         }
+        
         if($to_width) {
             $factor = $resize['w'] / $o_width;
         } else if(!$to_width && $resize['h']) {

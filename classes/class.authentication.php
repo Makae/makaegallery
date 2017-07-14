@@ -21,6 +21,7 @@ class Authentication {
     public function urlAllowed($url) {
         $state = true;
         foreach($this->restrictions as $r_path => $level) {
+            $r_path = WWW_ROOT === '' ? '/' . $r_path : $r_path;
             if(strpos($r_path, $url) === 0) {
                 $state = $this->canAccess($level);
             }
