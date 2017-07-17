@@ -16,6 +16,6 @@ if(!defined('DOC_ROOT'))
 <form method="POST">
     <label for="name">Name: </label> <input type="text" name="name" value="<?= $username ?>" /> <br/>
     <label for="password">Passwort: </label> <input type="password" name="password" /> <br/>
-    <input type="submit" name="login" />
+    <input type="submit" name="login" value="Anmelden" />
     <input type="hidden" name="redirect" value="<?= urlencode($redirect) ?>" />
 </form>
