@@ -5,29 +5,35 @@ $dir = str_replace("\\", "/", dirname($_SERVER['SCRIPT_NAME']));
 $dir = $dir == '/' ? '' : $dir;
 $ext = str_replace($root, '', $dir);
 
-if(substr($ext, strlen($ext)-1) != '/') {
-  $ext.="/";
+if(substr($ext, strlen($ext) - 1) == '/') {
+  $ext = substr($ext, 0, -1);
 }
 
-if($ext == '/') {
-    $ext = '';
+if(substr($ext, 0, 1) == '/') {
+  $ext = substr($ext, 1);
+}
+
+$domain = $_SERVER['SERVER_NAME'];
+if(!preg_match('/^https?:\/\/.*/', $domain)) {
+    $domain = '//' . $domain;
 }
 
 if(file_exists('config-env.php')) {
     require_once('config-env.php');
 }
-    
+
 // GETTING PLACES
-define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'].$ext);
-define('WWW_BASE', '//' . $_SERVER['SERVER_NAME'] . '/');
-define('WWW_ROOT', $ext . '/');
-
-define('WWW_ASSETS', WWW_ROOT . 'assets/');
-define('WWW_GALLERY_ROOT', WWW_ROOT . 'gallery/');
-
+define('SUB_ROOT', str_replace('/', DIRECTORY_SEPARATOR, $ext));
+define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . SUB_ROOT . DIRECTORY_SEPARATOR);
 define('ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR );
 define('GALLERY_ROOT', ROOT . 'galleries' . DIRECTORY_SEPARATOR);
 define('PARTS', ROOT . 'parts' . DIRECTORY_SEPARATOR);
+
+define('WWW_SUB_ROOT', $ext);
+define('WWW_ROOT', $domain . '/');
+define('WWW_BASE', $domain . '/' . WWW_SUB_ROOT . '/');
+define('WWW_ASSETS', WWW_BASE . 'assets/');
+define('WWW_GALLERY_ROOT', WWW_BASE . 'gallery/');
 
 define('CONVERT_DEFAULT_PREFIX', DIRECTORY_SEPARATOR . 'resized');
 define('TESTDIR', ROOT . 'tests' . DIRECTORY_SEPARATOR);
@@ -54,10 +60,10 @@ define('DOING_AJAX', isset($_REQUEST['ajax']));
 )));
 
 @define('AUTH_RESTRICTIONS', serialize(array(
-    WWW_ROOT . 'admin' => 0,
-    WWW_ROOT . 'view/photobox' => 1,
+    WWW_BASE . 'admin' => 0,
+    WWW_BASE . 'view/photobox' => 1,
     WWW_GALLERY_ROOT . 'photobox' => 1,
-    WWW_ROOT . 'view' => 2
+    WWW_BASE . 'view' => 2
 )));
 
 @define('PROCESS_CONFIG_THUMB', serialize(array(

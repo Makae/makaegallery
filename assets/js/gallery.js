@@ -1,6 +1,7 @@
 var gallery = {
   item_template : 
-        '<div class="image-holder" data-imgidx="%imgidx%">' +
+        '<div class="image-holder loading" style="padding-bottom: %padding%%;" data-imgidx="%imgidx%">' +
+            '<span class="loader loader-black"></span>' +
             '<img src="%imgsrc%" data-modalimage="%modalimage%" data-bigimage="%bigimage%" alt="%alttext%"  />' +
         '</div>',
 
@@ -9,10 +10,15 @@ var gallery = {
   modal_image: null,
   modal_caption: null,
   modal_close: null,
+  load_more_requested: false,
   perload : {},
   columns : {},
   images : {},
   pointer : 0,
+  enqueue_pointer : -1,
+  currently_loading: 0,
+  max_parallel_load: 5,
+  tobe_loaded : [],
   imgidx: -1,
   interval_time: 5000,
   interval: null,
@@ -20,12 +26,22 @@ var gallery = {
   init : function() {
     this.bind();
 
-    for(var i = 0; i < this.images.length; i++) {
-      if(!this.images[i].loaded) {
-        this.pointer = i;
-        break;
+    var load_images = [];
+
+    for(var ptr = 0; ptr < this.images.length; ptr++) {
+      if(this.images[ptr].doload) {
+        this.pointer = ptr;
+        this.images[ptr].loaded = true;
+       
+        load_images.push(this.images[ptr]);
+        if(ptr >= this.images.length) {
+          this.allLoaded();
+          break;
+        }
       }
     }
+
+    this.loadImages(load_images);
   },
 
   bind : function() {
@@ -188,6 +204,7 @@ var gallery = {
 
   endlessScroll : function() {
     var self = this;
+    
     $(window).on('scroll', evt_buffer(function(e) {
       var cheight = $('body').innerHeight();
       var top = $(window).scrollTop() + window.innerHeight;
@@ -209,36 +226,78 @@ var gallery = {
       this.images[ptr].loaded = true;
       load_images.push(this.images[ptr]);
     }
+
     this.loadImages(load_images);
   },
 
   loadImages : function(images) {
-    var html = '';
-    var caption = $($('[data-modalimage]')[0]).attr('alt');
-
-    startcolumnidx = this.getSmallestColumn();
-    for(var i = 0; i < images.length; i++) {
-      var imgsrc = images[i].thumbnail_url;
-      var modalsrc = images[i].optimized_url;
-      var bigsrc = images[i].original_url;
-
-      html = this.item_template.replace('%imgsrc%', imgsrc);
-      html = html.replace('%bigimage%', bigsrc);
-      html = html.replace('%modalimage%', modalsrc);
-      html = html.replace('%imgidx%', images[i].imgidx);
-      html = html.replace('%alttext%', caption);
-      
-      columnidx = (startcolumnidx + i) % this.columns + 1;
-      $(html).appendTo($(".column-" + columnidx));
-      
-      this.pointer++;
+    var self = this;
+    
+    if(images && images.length) {
+      this.enqueueImages(images);
     }
+    
+    if(this.max_parallel_load <= this.currently_loading) {
+      return;
+    }
+
+    this.currently_loading++;
+    
+    var img = this.getNextEnqueued();
+    if(!img) {
+      this.currently_loading--;
+      return;
+    }
+
+    var html = '';
+    var caption = $($('[data-title]')[0]).attr('data-title');
+
+    var startcolumnidx = this.getSmallestColumn();
+    var imgsrc   = img.thumbnail_url;
+    var modalsrc = img.optimized_url;
+    var bigsrc   = img.original_url;
+    var padding  = (img['dimensions']['height'] / img['dimensions']['width']) * 100;
+
+    html = this.item_template.replace('%imgsrc%', imgsrc);
+    html = html.replace('%bigimage%', bigsrc);
+    html = html.replace('%modalimage%', modalsrc);
+    html = html.replace('%imgidx%', img.imgidx);
+    html = html.replace('%alttext%', caption);
+    html = html.replace('%padding%', padding);
+    
+    columnidx = (startcolumnidx + this.enqueue_pointer) % this.columns  + 1;
+    
+    $html = $(html);
+    $html.find('img').on('load', function() {
+      self.currently_loading--;
+      $(this).closest('.image-holder').removeClass('loading').addClass('loaded');
+      self.loadImages();
+    }).on('error', function() {
+      self.currently_loading--;
+      self.loadImages();
+    });
+
+    $html.appendTo($(".column-" + columnidx));
 
     this.bindImages();
 
-    if(this.pointer + 1 == this.images.length) {
+    if(this.enqueue_pointer + 1 == this.images.length) {
       this.allLoaded();
     }
+
+    if(this.max_parallel_load > this.currently_loading) {
+      this.loadImages();
+    }
+  },
+
+  enqueueImages : function(images) {
+    this.tobe_loaded = this.tobe_loaded.concat(images);
+  },
+
+  getNextEnqueued : function() {
+    if(this.tobe_loaded.length == this.enqueue_pointer)
+      return null;
+    return this.tobe_loaded[++this.enqueue_pointer];
   },
 
   getSmallestColumn : function() {

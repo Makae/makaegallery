@@ -35,12 +35,16 @@ class Gallery {
     }
 
     public function getLink() {
-        return WWW_ROOT . 'view/' . $this->getIdentifier();
+        return WWW_BASE . 'view/' . $this->getIdentifier();
     }
 
-    public function getImageList($process=true, $nopaths=false) {
+    public function getImageList($process=true, $nopaths=false, $flush=false) {
         $list = [];
         $pattern = '/^.*\.(jpg|jpeg|bmp|png)$/';
+
+        if(!$flush && ($cached = Utils::getCache($this->getResizeFolder() . '.cache'))) {
+            return $cached;
+        }
 
         $iterator = new \DirectoryIterator($this->folder);
         foreach($iterator as $fileInfo) {
@@ -49,7 +53,7 @@ class Gallery {
             }
 
             if($fileInfo->isFile() && preg_match($pattern, $fileInfo->getPathname())) {
-                $original = $fileInfo->getPathname();
+                $original = str_replace('\/', DIRECTORY_SEPARATOR, $fileInfo->getPathname());
 
                 $list[] = [
                     'imgid' => $this->getIdentifier() . '|' . basename($original),
@@ -58,17 +62,25 @@ class Gallery {
                 ];
             }
         }
+        
         foreach($list as &$image) {
             if($process) {
                 $image = $this->processImage($image);
             }
+            
+            list($o_width, $o_height) = getImageSize($image['original_path']);
+            $image['dimensions'] = [
+                'width' => $o_width,
+                'height' => $o_height
+            ];
+
             if($nopaths) {
                 unset($image['original_path']);
             }
         }
 
         usort($list, 'Gallery::_sort');
-
+        Utils::setCache($this->getResizeFolder() . '.cache', $list);
         return $list;
     }
 
@@ -80,7 +92,6 @@ class Gallery {
     }
 
     public function processImage($image) {
-        
         if(!file_exists($this->getResizeFolder())) {
             mkdir($this->getResizeFolder());
         }
@@ -98,7 +109,7 @@ class Gallery {
     }
 
     public function clearResized() {
-        Utils::rmDir($this->folder . DIRECTORY_SEPARATOR . 'resized');
+        Utils::rmDir($this->getResizeFolder());
     }
 
     public function getResizeFolder() {
@@ -116,9 +127,12 @@ class Gallery {
 
     private function getFileURL($path) {
         $path = str_replace('//', '/', $path);
-        $path = str_replace(ROOT, WWW_ROOT, $path);
+        $path = str_replace('\/', '/', $path);
+
+        $path = str_replace(ROOT, WWW_BASE, $path);
         $path = str_replace('\\', '/', $path);
-        return WWW_BASE . str_replace(' ', '%20', $path);
+
+        return str_replace(' ', '%20', $path);
     }
 
     private function loadProcessed() {

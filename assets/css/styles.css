@@ -33,13 +33,26 @@ li.error a.btn {
 }
 
 .image-holder {
+    position: relative;
     padding: 8px 1px;
+}
+
+.image-holder.loaded {
+    padding-bottom:8px !important;
 }
 
 .image-holder img {
     max-width: 100%;
     cursor: pointer;
 }
+
+.image-holder.loading img {
+    display: none;
+}
+
+body .image-holder.loaded img {
+    display: block;
+} 
 
 .image-holder:hover {
     z-index:100;
@@ -56,6 +69,15 @@ li.error a.btn {
 
 .gallery img:hover {
     opacity: 1.0;
+}
+
+.loadmore {
+    display: block;
+    margin: 0 auto;
+    width: 148px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 12px;
 }
 
 /* The Modal (background) */
@@ -262,6 +284,11 @@ li.error a.btn {
   -webkit-animation: load8 1.1s infinite linear;
   animation: load8 1.1s infinite linear;
 }
+
+.loader.loader-black {
+  border-left: 1.1em solid #0e0e0e;
+}
+
 @-webkit-keyframes load8 {
   0% {
     -webkit-transform: rotate(0deg);

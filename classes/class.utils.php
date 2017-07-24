@@ -43,21 +43,23 @@ abstract class Utils {
 
     public static function getUriComponents($url=null) {
         $url = is_null($url) ?  $_SERVER["REQUEST_URI"] : $url;
-        preg_match_all("/(.*)(\?.+)/", $url, $uri, PREG_PATTERN_ORDER);
+        $url = str_replace('/' . WWW_SUB_ROOT . '/', '', $url);
+        preg_match_all("/(.*)(\?.+)?/", $url, $uri, PREG_PATTERN_ORDER);
+        
         if(count($uri[0]) > 0) {
           $uri = $uri[1][0];
         } else {
           $uri = $_SERVER['REQUEST_URI'];
         }
-        if(WWW_ROOT != '/') {
-          $uri = str_replace(WWW_ROOT, "",$uri);
-        }
+
+        
         $uri = explode("/", $uri);
         foreach($uri as $k => $v) {
           if($v == '') {
             unset($uri[$k]);
           }
         }
+
         return array_values($uri);
     }
 
@@ -79,5 +81,23 @@ abstract class Utils {
       $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
       $domainName = $_SERVER['HTTP_HOST'];
       return $protocol.$domainName;
+    }
+
+    public static function unTrailingSlashIt($url) {
+      if(substr($url, 0, -1) == '/') {
+        return substr($url, 0, -1);
+      }
+      return $url;
+    }
+
+    public static function setCache($path, $data) {
+      file_put_contents($path, serialize($data));
+    }
+
+    public static function getCache($path) {
+      if(!file_exists($path)) {
+        return false;
+      }
+      return unserialize(file_get_contents($path));
     }
 }
