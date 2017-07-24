@@ -10,7 +10,7 @@ if(DOING_AJAX) {
 
 $gallery_data = array();
 foreach($galleries as $gallery) {
-    $images = $gallery->getImageList(false);
+    $images = $gallery->getImageList(false, true, false);
     $gallery_data[] = array(
         'name' => $gallery->getIdentifier(),
         'images' => $images

@@ -232,7 +232,6 @@ var gallery = {
 
   loadImages : function(images) {
     var self = this;
-    
     if(images && images.length) {
       this.enqueueImages(images);
     }

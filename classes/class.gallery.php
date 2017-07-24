@@ -38,11 +38,12 @@ class Gallery {
         return WWW_BASE . 'view/' . $this->getIdentifier();
     }
 
-    public function getImageList($process=true, $nopaths=false, $flush=false) {
+    public function getImageList($process=true, $nopaths=false, $cache_prefix=false) {
         $list = [];
         $pattern = '/^.*\.(jpg|jpeg|bmp|png)$/';
 
-        if(!$flush && ($cached = Utils::getCache($this->getResizeFolder() . '.cache'))) {
+        $cache_path = $this->getResizeFolder() . $cache_prefix . '.cache';
+        if($cache_prefix && ($cached = Utils::getCache($cache_path))) {
             return $cached;
         }
 
@@ -80,7 +81,8 @@ class Gallery {
         }
 
         usort($list, 'Gallery::_sort');
-        Utils::setCache($this->getResizeFolder() . '.cache', $list);
+        if($cache_prefix)
+            Utils::setCache($cache_path, $list);
         return $list;
     }
 
@@ -116,8 +118,8 @@ class Gallery {
         return  $this->folder . DIRECTORY_SEPARATOR . 'resized';
     }
 
-    public function getImage($imageid) {
-        $list = $this->getImageList(false);
+    public function getImage($imageid, $cache_prefix='getImage') {
+        $list = $this->getImageList(false, false, $cache_prefix);
         foreach($list as $img) {
             if($img['imgid'] == $imageid)
                 return $img;
@@ -135,16 +137,4 @@ class Gallery {
         return str_replace(' ', '%20', $path);
     }
 
-    private function loadProcessed() {
-        $cache = $this->folder . DIRECTORY_SEPARATOR . 'processed.cache';
-        if(!file_exists($cache)) {
-            return [];
-        }
-        return file_get_contents($cache);
-    }
-
-    private function saveProcessed($data) {
-        $cache = $this->folder . DIRECTORY_SEPARATOR . 'processed.cache';
-        file_put_contents($cache, serialize($data));
-    }
 }

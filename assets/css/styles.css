@@ -34,11 +34,14 @@ li.error a.btn {
 
 .image-holder {
     position: relative;
-    padding: 8px 1px;
+    box-sizing: border-box;
+    margin: 8px 1px;
+    background-color: #f0f0f0;
 }
 
 .image-holder.loaded {
-    padding-bottom:8px !important;
+    padding-bottom: 0px !important;
+    background-color: transparent;
 }
 
 .image-holder img {
