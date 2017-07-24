@@ -2,6 +2,10 @@ body {
     padding: 24px;
 }
 
+label {
+ min-width: 85px;
+}
+
 nav .btn {
     margin-top: 8px;
 }
