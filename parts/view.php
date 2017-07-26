@@ -4,7 +4,7 @@ if(!defined('DOC_ROOT'))
 $components = Utils::getUriComponents();
 $gallery_id = $components[1];
 $gallery = Utils::getGallery($gallery_id);
-$images = $gallery->getImageList(true, true);
+$images = $gallery->getImageList(true, true, 'g_list');
 
 
 $columns = array_fill(0, GALLERY_COLUMNS, []);

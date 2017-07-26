@@ -30,6 +30,10 @@ class Gallery {
         return isset($this->meta['description']) ? $this->meta['description'] : '';
     }
 
+    public function getRefText() {
+        return isset($this->meta['ref_text']) ? $this->meta['ref_text'] : '<br />';
+    }
+
     public function getLevel() {
         return isset($this->meta['level']) ? $this->meta['level'] : 0;
     }

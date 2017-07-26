@@ -3,7 +3,8 @@
 @define('GALLERY_CONFIGURATION', serialize(array(
     'photobox' => array(
         'title' => 'Bilder aus der Photobox',
-        'description' => 'Die beschte Biuder het\'s gäh',
+        'description' => 'Die beschte Biuder het\'s gäh.',
+        'ref_text' => 'Bilder von <b>Corinne Ritter</b>. Vielen Dank.',
         'level' => 1
     ),
     'public' => array(

@@ -16,6 +16,7 @@ if(!defined('DOC_ROOT'))
       <div class="caption">
         <h3><?= $gallery->getTitle(); ?></h3>
         <p><?= $gallery->getDescription(); ?></p>
+        <p><?= $gallery->getRefText(); ?></p>
         <p><a href="<?= $gallery->getLink(); ?>" class="btn btn-primary" role="button">Jetzt anschauen</a></p>
       </div>
     </div>
