@@ -350,8 +350,10 @@ body .image-holder.loaded img {
   display: none !important;
 }
 
-.ui-focus {
+.ui-focus,
+.ui-page-active {
  -moz-box-shadow: none !important;
  -webkit-box-shadow: none !important;
  box-shadow: none !important;
+ outline: none !important;
 }
