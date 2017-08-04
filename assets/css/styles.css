@@ -3,9 +3,6 @@ body {
     padding-top: 84px;
 }
 
-.ui-loader {
-    display: none !important;
-}
 
 label {
  min-width: 85px;
@@ -345,4 +342,16 @@ body .image-holder.loaded img {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+
+/* JQUERY MOBILE FIXES */
+.ui-loader {
+  display: none !important;
+}
+
+.ui-focus {
+ -moz-box-shadow: none !important;
+ -webkit-box-shadow: none !important;
+ box-shadow: none !important;
 }
