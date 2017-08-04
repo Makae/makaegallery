@@ -8,7 +8,16 @@ if(!defined('DOC_ROOT'))
         <link rel="stylesheet" href="//yandex.st/bootstrap/3.1.1/css/bootstrap.min.css">
         <!-- CUSTOM STYLES -->
         <link rel="stylesheet" href="<?= WWW_ASSETS ?>css/styles.css">
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script>
+        $(document).on("mobileinit", function(){
+            $.mobile.ajaxEnabled=false;
+            $.mobile.loadingMessage = false;
+            $.mobile.page.prototype.options.keepNative = "select,input";
+            $.mobile.loader.prototype.options.disabled = true;
+        });            
+        </script>
+        <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
         <script src="<?= WWW_ASSETS ?>js/libs/tilt.jquery.min.js"></script>
         <script src="<?= WWW_ASSETS ?>js/service.js"></script>
     </head>

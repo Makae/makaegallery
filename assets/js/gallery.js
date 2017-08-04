@@ -64,6 +64,7 @@ var gallery = {
     $(document).on('keyup', function(e) {
       if(e.keyCode == 27) {
         self.modal.hide();
+        window.clearInterval(self.interval);
       }
 
       if(e.keyCode == 37) {
@@ -74,6 +75,7 @@ var gallery = {
         self.nextImage();
       }
     });
+
   },
 
   bindImages : function() {
@@ -109,7 +111,7 @@ var gallery = {
       '<div class="modal-caption"></div>' +
       '<div class="modal-control modal-control__prev">&#8249;</div>' +
       '<div class="modal-control modal-control__next">&#8250;</div>' +
-      '<div class="modal-control modal-control__play">&#9654;</div>' +
+      '<div class="modal-control modal-control__play play"></div>' +
       '<a href="#" target="_blank" class="modal-control modal-control__magnify">&#65291;</a>' +
     '</div>';
     $(html).appendTo('body');
@@ -133,16 +135,24 @@ var gallery = {
     this.modal.find('.modal-control__play').on('click', function() {
       if(self.interval) {
         window.clearInterval(self.interval);
-        $(this).html("&#9654;");
+        $(this).addClass('play').html("");
         self.interval = null;
         return;
       }
 
-      $(this).html("&#10074;&#10074;");
+      $(this).removeClass('play').html("&#10074;&#10074;");
       self.interval = window.setInterval(function() {
         self.nextImage();
       }, self.interval_time);
     });
+
+     this.modal.on('swiperight', function(e) {
+      self.prevImage();
+     });
+
+     this.modal.on('swipeleft', function(e) {
+      self.nextImage();
+     });
 
   },
 

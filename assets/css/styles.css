@@ -1,5 +1,10 @@
 body {
     padding: 24px;
+    padding-top: 84px;
+}
+
+.ui-loader {
+    display: none !important;
 }
 
 label {
@@ -14,6 +19,7 @@ body > .container {
     padding-top: 40px;
 }
 
+.gallery-button,
 .processing-progress .btn {
     display: inline-block;
     margin-left: 8px;
@@ -154,7 +160,7 @@ body .image-holder.loaded img {
     
     line-height: 100vh;
     font-size: 100px;
-    color: #fff;
+    color: #f5f5f5;
     opacity: 0.85;
     background-color: transparent;
     cursor: pointer;
@@ -169,15 +175,18 @@ body .image-holder.loaded img {
 
 .modal-control:hover {
     opacity: 1;
-    background-color: rgba(121, 121, 121, 0.22);
+    color: rgba(255, 255, 255, 1);
 }
 
 .modal-control__prev {
     left: 0;
+    min-width: 20vw;
 }
 
 .modal-control__next {
     right: 0;
+    text-align: right;
+    min-width: 20vw;
 }
 
 .modal-control__magnify,
@@ -189,6 +198,23 @@ body .image-holder.loaded img {
     height: auto;
     line-height: 1em;
     font-size: 44px;
+}
+
+.modal-control__magnify:hover,
+.modal-control__play:hover {
+    background: none;
+}
+
+.modal-control__play.play {
+  left: 50%;
+  bottom: 32px;
+  margin-left: -9px;
+  padding: 0 !important;
+  width: 0; 
+  height: 0; 
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 30px solid #ffffff;
 }
 
 .modal-control__magnify {
@@ -217,6 +243,9 @@ body .image-holder.loaded img {
     display: none;
 }
 
+
+
+
 /* Add Animation - Zoom in the Modal */
 .modal-content, .modal-caption { 
     -webkit-animation-name: zoom;
@@ -241,16 +270,17 @@ body .image-holder.loaded img {
     top: 15px;
     right: 35px;
     padding: 20px;
-    color: #f1f1f1;
+    color: #fafafa;
     font-size: 40px;
     font-weight: bold;
     transition: 0.3s;
     z-index: 100000;
+    opacity: 0.95;
 }
 
 .close:hover,
 .close:focus {
-    color: #bbb;
+    color: #fafafa;
     text-decoration: none;
     cursor: pointer;
 }

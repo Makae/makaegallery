@@ -21,6 +21,18 @@ var admin = {
       })
     });
 
+    $(".minify-gallery-button").on('click', function(e) {
+      e.preventDefault();
+      $(this).closest('.gallery-wrapper').find('li[data-minify-img]').each(function() {
+        var imgid = $(this).data('minify-img');
+        var $this = $(this);
+        $this.addClass("start");
+        admin.minifyImg(imgid, function() {
+          $this.removeClass("start").addClass("done");
+        });
+      })
+    });
+
     $("#clear-button").on('click', function(e) {
       e.preventDefault();
       self.service.request({
@@ -28,6 +40,25 @@ var admin = {
           method : 'POST',
           data : {ajax: true, action: 'clear_minified'},
           success : function(request) {
+            $('.processing-progress li.done').removeClass('done');
+          },
+          error : function() {
+
+          }
+        });
+    });
+
+
+    $(".clear-gallery-button").on('click', function(e) {
+      e.preventDefault();
+      var galleryid = $(this).data('gallery-id');
+      var _this = this;
+      self.service.request({
+          url : window.location.pathname,
+          method : 'POST',
+          data : {ajax: true, action: 'clear_minified', galleryid: galleryid},
+          success : function(request) {
+            $(_this).closest('.gallery-wrapper').find('li.done').removeClass('done');
           },
           error : function() {
 

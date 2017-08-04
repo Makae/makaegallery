@@ -25,10 +25,12 @@ abstract class Utils {
       return rmdir($dir);
     }
 
-    public static function clearMinifiedImages() {
+    public static function clearMinifiedImages($gallery_id) {
       global $galleries;
       foreach($galleries as $gallery) {
-        $gallery->clearResized();
+        if(is_null($gallery_id) || $gallery->getIdentifier() == $gallery_id) {
+          $gallery->clearResized();
+        }
       }
     }
 
@@ -92,6 +94,13 @@ abstract class Utils {
 
     public static function setCache($path, $data) {
       file_put_contents($path, serialize($data));
+    }
+
+    public static function clearCache($path) {
+      if(!file_exists($path)) {
+        return;
+      }
+      unlink($path);
     }
 
     public static function getCache($path) {
