@@ -80,7 +80,7 @@ class Gallery {
 
 
     private function getImageListFromDir($path) {
-        $pattern = '/^.*\.(jpg|jpeg|bmp|png)$/';
+        $pattern = '/^.*\.(jpg|jpeg|bmp|png)$/i';
 
         $iterator = new \DirectoryIterator($path);
         foreach($iterator as $fileInfo) {
