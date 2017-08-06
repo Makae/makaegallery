@@ -226,7 +226,7 @@ var gallery = {
   },
 
   loadMore : function(only_if_not_enqueued) {
-    if(only_if_not_enqueued && this.enqueue_pointer + 1 >= this.tobe_loaded.length) {
+    if(only_if_not_enqueued && this.enqueue_pointer + 1 < this.tobe_loaded.length) {
       return;
     }
     var load_images = [];
