@@ -11,7 +11,10 @@ if(!defined('DOC_ROOT'))
         <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
         <script>
         $(document).on("mobileinit", function(){
+            $.mobile.autoInitializePage=false;
+            $.mobile.activePageClass='';
             $.mobile.ajaxEnabled=false;
+            $.mobile.linkBindingEnabled=false;
             $.mobile.loadingMessage = false;
             $.mobile.page.prototype.options.keepNative = "select,input";
             $.mobile.loader.prototype.options.disabled = true;

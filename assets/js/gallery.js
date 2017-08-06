@@ -11,37 +11,46 @@ var gallery = {
   modal_caption: null,
   modal_close: null,
   load_more_requested: false,
+  hash : {},
   perload : {},
   columns : {},
+  col_heights : {1:0, 2:0, 3:0},
   images : {},
   pointer : 0,
   enqueue_pointer : -1,
   currently_loading: 0,
-  max_parallel_load: 5,
+  max_parallel_load: 9,
+  num_load_more: 15,
+  num_per_page: 66,
+  total_pages: -1,
   tobe_loaded : [],
   imgidx: -1,
   interval_time: 8000,
   interval: null,
+  page_iamges_loaded: 0,
 
   init : function() {
     this.bind();
+    this.loadHash();
 
-    var load_images = [];
+    this.total_pages = Math.ceil(this.images.length / this.num_per_page);
 
-    for(var ptr = 0; ptr < this.images.length; ptr++) {
-      if(this.images[ptr].doload) {
-        this.pointer = ptr;
-        this.images[ptr].loaded = true;
-       
-        load_images.push(this.images[ptr]);
-        if(ptr >= this.images.length) {
-          this.allLoaded();
-          break;
-        }
-      }
+    this.setCurrentPage(this.hash.page);
+
+  },
+
+  loadHash: function() {
+    this.hash = {};
+    var sets = window.location.hash.substr(1).split("+");
+    for(var i in sets) {
+      var set = sets[i].split("=");
+      this.hash[set[0]] = set[1];
     }
 
-    this.loadImages(load_images);
+    if(!this.hash['page']) {
+      this.hash['page'] = 1;
+    }
+    this.hash.page = parseInt(this.hash.page);
   },
 
   bind : function() {
@@ -74,6 +83,14 @@ var gallery = {
       if(e.keyCode == 39) {
         self.nextImage();
       }
+    });
+
+    $(".load-prev-page").on('click', function() {
+      self.prevPage();
+    });
+
+    $(".load-next-page").on('click', function() {
+      self.nextPage();
     });
 
   },
@@ -140,8 +157,8 @@ var gallery = {
         return;
       }
 
-      var callaback = function() {
-        if(this.modal.hasClass('loading')) {
+      var callback = function() {
+        if(self.modal.hasClass('loading')) {
           window.clearInterval(self.interval);
           self.interval = window.setInterval(callback);
         }
@@ -170,13 +187,14 @@ var gallery = {
   updateModalImage : function(imgidx) {
     if(imgidx < 0 || imgidx >= this.images.length)
       return;
+
     this.imgidx = imgidx;
 
     var self = this;
-    var $img = $('[data-imgidx="' + this.imgidx +'"] > img');
-    var imgsrc = $img.data('modalimage');
-    var bigsrc = $img.data('bigimage');
-    var caption = $img.data('alt');
+    var image = this.images[this.imgidx];
+    var imgsrc = image.optimized_url;
+    var bigsrc = image.original_url;
+    var caption = $(".gallery").data('title');
 
     this.modal.addClass("loading");
     this.modal_image.on('load', function() {
@@ -203,11 +221,6 @@ var gallery = {
     this.modal.find('.modal-x').text(this.imgidx + 1);
     this.modal.find('.modal-y').text(this.images.length);
 
-
-    var idxloaded = Math.min(this.imgidx + 4, this.images.length - 1);
-    if(!$('[data-imgidx="' + idxloaded + '"]').length) {
-      this.loadMore();
-    }
   },
 
   prevImage : function() {
@@ -235,19 +248,37 @@ var gallery = {
     if(only_if_not_enqueued && this.enqueue_pointer + 1 < this.tobe_loaded.length) {
       return;
     }
-    var load_images = [];
-    for(var i = 0; i < this.perload; i++) {
-      var ptr = this.pointer + i;
-      if(ptr >= this.images.length) {
-        this.allLoaded(); 
-       break;
-      }
-      this.images[ptr].loaded = true;
-      load_images.push(this.images[ptr]);
-    }
-    this.pointer = ptr;
 
+    var load_images = [];
+    var pointer_start = this.pointer;
+    for(var ptr = 0; ptr < this.num_load_more; ptr++) {
+      this.pointer =  pointer_start + ptr;
+
+      if(this.pointer >= this.max_pointer) {
+        this.allPageLoaded();
+        break;
+      }
+
+      if(this.pointer >= this.images.length) {
+        this.allLoaded();
+        break;
+      }
+      // console.log(this.pointer, this.num_per_page);
+      this.images[this.pointer].loaded = true;
+      
+      load_images.push(this.images[this.pointer])
+    }
+    this.pointer++;
+    // console.log("--" + load_images.length);
     this.loadImages(load_images);
+  },
+
+  clearImages : function() {
+    $(".row.gallery>div").empty();
+    this.col_heights = {1:0, 2:0, 3:0};
+    for(var i = 0; i < this.images.length; i++) {
+      this.images[i].loaded = false;
+    }
   },
 
   loadImages : function(images) {
@@ -271,7 +302,6 @@ var gallery = {
     var html = '';
     var caption = $($('[data-title]')[0]).attr('data-title');
 
-    var startcolumnidx = this.getSmallestColumn();
     var imgsrc   = img.thumbnail_url;
     var modalsrc = img.optimized_url;
     var bigsrc   = img.original_url;
@@ -284,24 +314,32 @@ var gallery = {
     html = html.replace('%alttext%', caption);
     html = html.replace('%padding%', padding);
     
-    columnidx = (startcolumnidx + this.enqueue_pointer) % this.columns  + 1;
-    
     $html = $(html);
     $html.find('img').on('load', function() {
       self.currently_loading--;
       $(this).closest('.image-holder').removeClass('loading').addClass('loaded');
       self.loadImages();
+      
+      self.page_images_loaded++;
+      self.updatePageProgress();
     }).on('error', function() {
       self.currently_loading--;
       self.loadImages();
+      
+      self.page_images_loaded++;
+      self.updatePageProgress();
     });
 
-    $html.appendTo($(".column-" + columnidx));
+    var column = this.getSmallestColumn();
+
+    this.addColumnHeight(column, img.dimensions.height);
+
+    $html.appendTo($(".column-" + column));
 
     this.bindImages();
 
-    if(this.enqueue_pointer + 1 == this.images.length) {
-      this.allLoaded();
+    if(this.enqueue_pointer + 1 == this.images.length) 
+{      this.allLoaded();
     }
 
     if(this.max_parallel_load > this.currently_loading) {
@@ -310,32 +348,94 @@ var gallery = {
   },
 
   enqueueImages : function(images) {
-    this.tobe_loaded = this.tobe_loaded.concat(images);
+      this.tobe_loaded = this.tobe_loaded.concat(images);
   },
 
   getNextEnqueued : function() {
-    if(this.tobe_loaded.length == this.enqueue_pointer)
+    if(this.tobe_loaded.length <= this.enqueue_pointer)
       return null;
-    return this.tobe_loaded[++this.enqueue_pointer];
+
+    var elm = this.tobe_loaded[++this.enqueue_pointer];
+    if(elm) {
+      return elm;
+    }
+    this.enqueue_pointer--;
+    return null;
+  },
+
+  updatePageProgress : function() {
+    // console.log("loaded:" + this.page_images_loaded);
+    var progress = 100 * Math.min(1, (this.page_images_loaded / this.num_per_page)) + '%';
+    $('.progressbar').css('width', progress);
   },
 
   getSmallestColumn : function() {
-    var c1 = $(".column-1").innerHeight();
-    var c2 = $(".column-2").innerHeight();
-    var c3 = $(".column-3").innerHeight();
-    if(c1 < c2 && c1 < c3) {
+    var c1 = parseInt(this.getColHeight(1));
+    var c2 = parseInt(this.getColHeight(2));
+    var c3 = parseInt(this.getColHeight(3));
+    
+    if(c1 <= c2 && c1 <= c3) {
       return 1;
-    } else if(c2 < c3 && c2 < c1) {
+    } else if(c2 <= c3 && c2 <= c1) {
       return 2;
     }
     return 3;
   },
 
+  getColHeight : function(col_idx) {
+      return parseInt(this.col_heights[col_idx]);
+    },
+
+  addColumnHeight : function(c_idx, height) {
+    this.col_heights[c_idx] = this.getColHeight(c_idx) + height;
+  },
+
+  prevPage : function() {
+    window.location.hash = '#page=' + parseInt(this.current_page - 1);
+    this.setCurrentPage(parseInt(this.current_page - 1));
+  },
+
+  nextPage : function() {
+    window.location.hash = '#page=' + parseInt(this.current_page + 1);
+    this.setCurrentPage(parseInt(this.current_page + 1));
+  },
+
+  setCurrentPage : function(page) {
+    this.current_page = page;
+    this.pointer =  (this.current_page - 1 ) * this.num_per_page;
+    this.max_pointer = Math.min(this.images.length - 1, (this.current_page) * this.num_per_page);
+    // console.log(this.max_pointer - this.pointer);
+    this.page_images_loaded = 0;
+    this.clearImages();
+    this.loadMore();
+    
+    if(this.current_page >= this.total_pages) {
+      $(".load-next-page").css('display', 'none');
+    } else {
+      $(".load-next-page").css('display', 'inline-block');
+    }
+
+    if(this.current_page == 1) {
+      $(".load-prev-page").css('display', 'none');
+    } else {
+      $(".load-prev-page").css('display', 'inline-block');
+    }
+
+    $(".pagex").html(page);
+    $(".ofy").html(this.total_pages);
+
+  },
+
   allLoaded : function() {
     if($('.alloaded').length)
       return;
+
     $("<div class='alloaded alert alert-success'>Keine weitern Bilder</div>").appendTo('body');
-    $('.loadmore').remove();
+    $('.loadmore,.load-next-page').css('display', 'none');
+  },
+
+  allPageLoaded : function() {
+    $('.loadmore').css('display', 'none');
   }
 
 };

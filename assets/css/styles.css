@@ -1,6 +1,5 @@
 body {
-    padding: 24px;
-    padding-top: 84px;
+    padding: 84px 24px;
 }
 
 
@@ -282,6 +281,21 @@ body .image-holder.loaded img {
     cursor: pointer;
 }
 
+.progressbar {
+    position: absolute;
+    left:0;
+    width: 0%;
+    height: 3px;
+    background-color: #357ebd;
+    transition: width 0.5s ease;
+}
+
+.pagexofy {
+    top: 16px;
+    left: 50%;
+    position: absolute;
+    margin-left: -26px;
+}
 
 .loading .loader {
     position: absolute;

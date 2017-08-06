@@ -15,7 +15,6 @@ for($idx = 0; $idx < count($images); $idx++) {
     if( $idx < min(GALLERY_IMAGES_PER_LOAD, count($images))) {
         $column_idx = floor($idx % GALLERY_COLUMNS);
         $columns[$column_idx][] = $image;
-        $image['doload'] = true;
     }
 }
 ?>
@@ -38,3 +37,11 @@ for($idx = 0; $idx < count($images); $idx++) {
 <? endforeach; ?>
 </div>
 <div class="loadmore btn btn-primary">Mehr anzeigen</div>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container clearfix">
+    <div class="progressbar"></div>
+    <div class="btn btn-primary load-prev-page pull-left">Vorherige Seite</div>
+    <span class="pagexofy"><span class="pagex">X</span> von <span class="ofy">X</span></span>
+    <div class="btn btn-primary load-next-page pull-right">Nächste Seite</div>
+  </div>
+</nav>
