@@ -230,12 +230,13 @@ var gallery = {
     for(var i = 0; i < this.perload; i++) {
       var ptr = this.pointer + i;
       if(ptr >= this.images.length) {
-        this.allLoaded();
-        break;
+        this.allLoaded(); 
+       break;
       }
       this.images[ptr].loaded = true;
       load_images.push(this.images[ptr]);
     }
+    this.pointer = ptr;
 
     this.loadImages(load_images);
   },
