@@ -406,6 +406,7 @@ var gallery = {
     this.max_pointer = Math.min(this.images.length - 1, (this.current_page) * this.num_per_page);
     // console.log(this.max_pointer - this.pointer);
     this.page_images_loaded = 0;
+    this.currently_loading = 0;
     this.clearImages();
     this.loadMore();
     
