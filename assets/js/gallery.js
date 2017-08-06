@@ -20,7 +20,7 @@ var gallery = {
   max_parallel_load: 5,
   tobe_loaded : [],
   imgidx: -1,
-  interval_time: 5000,
+  interval_time: 8000,
   interval: null,
 
   init : function() {
@@ -140,10 +140,16 @@ var gallery = {
         return;
       }
 
-      $(this).removeClass('play').html("&#10074;&#10074;");
-      self.interval = window.setInterval(function() {
+      var callaback = function() {
+        if(this.modal.hasClass('loading')) {
+          window.clearInterval(self.interval);
+          self.interval = window.setInterval(callback);
+        }
         self.nextImage();
-      }, self.interval_time);
+      };
+
+      $(this).removeClass('play').html("&#10074;&#10074;");
+      self.interval = window.setInterval(callback, self.interval_time);
     });
 
      this.modal.on('swiperight', function(e) {
