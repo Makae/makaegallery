@@ -35,6 +35,13 @@ foreach (glob(GALLERY_ROOT . "/*") as $dirname) {
         );
     }
     $galleries[] = new Gallery($dirname, $meta);
+    usort($galleries, function($a, $b) {
+        if($a->getOrder() == $b->getOrder()) {
+            return 0;
+        }
+
+        return $a->getOrder() < $b->getOrder() ? -1 : 1;
+    });
 }
 
 $auth = Authentication::instance();

@@ -37,6 +37,10 @@ class Gallery {
         return isset($this->meta['ref_text']) ? $this->meta['ref_text'] : '<br />';
     }
 
+    public function getOrder() {
+        return isset($this->meta['order']) ? $this->meta['order'] : 20;
+    }
+
     public function getLevel() {
         return isset($this->meta['level']) ? $this->meta['level'] : 0;
     }
