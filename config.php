@@ -31,7 +31,7 @@ define('PARTS', ROOT . 'parts' . DIRECTORY_SEPARATOR);
 
 define('WWW_SUB_ROOT', $ext);
 define('WWW_ROOT', $domain . '/');
-define('WWW_BASE', $domain . '/' . WWW_SUB_ROOT . '/');
+define('WWW_BASE', $domain . '/' . (WWW_SUB_ROOT === "" ? "" :WWW_SUB_ROOT . '/'));
 define('WWW_ASSETS', WWW_BASE . 'assets/');
 define('WWW_GALLERY_ROOT', WWW_BASE . 'gallery/');
 
@@ -63,7 +63,8 @@ define('DOING_AJAX', isset($_REQUEST['ajax']));
     WWW_BASE . 'admin' => 0,
     WWW_BASE . 'view/photobox' => 1,
     WWW_GALLERY_ROOT . 'photobox' => 1,
-    WWW_BASE . 'view' => 2
+    WWW_BASE . 'view' => 2,
+    WWW_BASE . 'login' => 2
 )));
 
 @define('PROCESS_CONFIG_THUMB', serialize(array(
