@@ -21,6 +21,11 @@
         'level' => 0,
     ),
     array(
+        'name' => 'jum_admin',
+        'password' => '23b43d87f5dac4cad8b2252ab8f77d82',
+        'level' => 0,
+    ),
+    array(
         'name' => 'photobox',
         'password' => '4041ed306863ddde6c9ebf2c2676edb7',
         'level' => 1,

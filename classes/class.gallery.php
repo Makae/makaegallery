@@ -1,9 +1,9 @@
 <?php
+namespace ch\makae\makaegallery;
 
 class Gallery {
     const CACHE_KEY = 'gallery';
 
-    private $images = array();
     private $identifier;
     private $folder;
     private $optimizer;
@@ -46,7 +46,7 @@ class Gallery {
     }
 
     public function getLink() {
-        return WWW_BASE . 'view/' . $this->getIdentifier();
+        return WWW_BASE . '/view/' . $this->getIdentifier();
     }
 
     public function getImageList($process=true, $meta=true) {

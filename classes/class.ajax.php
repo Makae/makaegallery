@@ -1,14 +1,27 @@
 <?php
 
-class AJAX {
+namespace ch\makae\makaegallery;
 
-    public function admin() {
-        call_user_func_array(array('AJAX', 'admin_action_' . $_REQUEST['action']), $_REQUEST);
+class AJAX
+{
+    private $makaeGallery;
+
+    public function __construct($makaeGallery)
+    {
+        $this->makaeGallery = $makaeGallery;
     }
 
-    public static function admin_action_clear_minified($params) {
+
+    public function admin()
+    {
+        call_user_func_array(array($this, 'admin_action_' . $_REQUEST['action']), $_REQUEST);
+    }
+
+    public function admin_action_clear_minified($params)
+    {
+
         $gallery = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
-        Utils::clearMinifiedImages($gallery);
+        Utils::clearMinifiedImages($this->makaeGallery, $gallery);
         echo json_encode(array(
             'status' => 'success',
             'msg' => 'Gallery ' . $gallery . ' cleared',
@@ -17,11 +30,12 @@ class AJAX {
         exit();
     }
 
-    public static function admin_action_minify_image($params) {
+    public function admin_action_minify_image($params)
+    {
         $imgid = urldecode($_REQUEST['imageid']);
         list($gallery_id, $photo_id) = explode('|', $imgid);
 
-        $gallery = Utils::getGallery($gallery_id);
+        $gallery = $this->makaeGallery->getGallery($gallery_id);
         $image = $gallery->getImage($imgid);
         $image = $gallery->processImage($image);
         $image = $gallery->addImageMeta($image);
@@ -30,7 +44,7 @@ class AJAX {
         unset($image['original_path']);
 
         header('Content-Type: text/json');
-        if(is_null($image)) {
+        if (is_null($image)) {
             echo json_encode(array(
                 'status' => 'error',
                 'msg' => 'Could not find image'

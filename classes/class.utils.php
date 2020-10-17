@@ -1,4 +1,5 @@
 <?php
+namespace ch\makae\makaegallery;
 
 abstract class Utils {
 
@@ -23,24 +24,6 @@ abstract class Utils {
       }
 
       return rmdir($dir);
-    }
-
-    public static function clearMinifiedImages($gallery_id) {
-      global $galleries;
-      foreach($galleries as $gallery) {
-        if(is_null($gallery_id) || $gallery->getIdentifier() == $gallery_id) {
-          $gallery->clearResized();
-        }
-      }
-    }
-
-    public static function getGallery($gallery_id) {
-      global $galleries;
-      foreach($galleries as $gallery) {
-        if($gallery->getIdentifier() == $gallery_id)
-          return $gallery;
-      }
-      return null;
     }
 
     public static function getUriComponents($url=null) {

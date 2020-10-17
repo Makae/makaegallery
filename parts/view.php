@@ -18,8 +18,8 @@ for($idx = 0; $idx < count($images); $idx++) {
     }
 }
 ?>
-<script src="<?= WWW_ASSETS ?>js/event_buffer.js"></script>
-<script src="<?= WWW_ASSETS ?>js/gallery.js"></script>
+<script src="<?= WWW_ASSETS ?>/js/event_buffer.js"></script>
+<script src="<?= WWW_ASSETS ?>/js/gallery.js"></script>
 
 <div class="row gallery" data-title="<?= $gallery->getTitle() ?>" data-imgidx="<?= $imgidx ?>" data-columns="<?= GALLERY_COLUMNS ?>" data-images="<?= urlencode(json_encode($images)); ?>" data-perload="<?= GALLERY_IMAGES_PER_LOAD ?>" >
 <? foreach($columns as $idx => $col): ?>

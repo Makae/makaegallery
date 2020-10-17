@@ -1,75 +1,51 @@
 <?php
+
+use ch\makae\makaegallery\AJAX;
+use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\MakaeGallery;
+use ch\makae\makaegallery\Utils;
+
+
 require_once('./config.php');
+require_once('./loader.php');
 
-session_start();
-
-foreach (glob("classes/trait.*.php") as $filename)
-    require $filename;
-
-foreach (glob("classes/class.*.php") as $filename)
-    require $filename;
+load_dependencies();
 
 /*include_once('./tests/tests.php');*/
+global $SessionProvider;
+global $MakaeGallery;
+global $AJAX;
+global $Authentication;
+$SessionProvider = new \ch\makae\makaegallery\SessionProvider();
+$MakaeGallery = new MakaeGallery(
+    GALLERY_ROOT,
+    unserialize(GALLERY_CONFIGURATION)
+);
+$AJAX = new AJAX($MakaeGallery);
+$Authentication = new Authentication($SessionProvider, SALT, unserialize(AUTH_USERS), unserialize(AUTH_RESTRICTIONS));
 
-global $galleries;
-
-$galleries = [];
-$g_metas = unserialize(GALLERY_CONFIGURATION);
-foreach (glob(GALLERY_ROOT . "/*") as $dirname) {
-    if(!is_dir($dirname)) {
-        continue;
-    }
-
-    if(strpos($dirname, '.') === 0) {
-        continue;
-    }
-
-    $folder = basename($dirname);
-    if(isset($g_metas[$folder])) {
-        $meta = $g_metas[$folder];
-    } else {
-        $meta = array(
-            'title' => $folder,
-            'description' => $folder,
-            'level' => 0
-        );
-    }
-    $galleries[] = new Gallery($dirname, $meta);
-    usort($galleries, function($a, $b) {
-        if($a->getOrder() == $b->getOrder()) {
-            return 0;
-        }
-
-        return $a->getOrder() < $b->getOrder() ? -1 : 1;
-    });
-}
-
-$auth = Authentication::instance();
-$auth->setUsers(unserialize(AUTH_USERS));
-$auth->setRestrictions(unserialize(AUTH_RESTRICTIONS));
-
-
-if(isset($_GET['logout']))   {
-    $auth->logout();
+if (isset($_GET['logout'])) {
+    $Authentication->logout();
 }
 
 $route = Utils::getUriComponents();
 $view = isset($route[0]) ? $route[0] : 'list';
 
-if(!Authentication::instance()->urlAllowed($_SERVER['REQUEST_URI'])) {
+if (!$Authentication->urlAllowed($_SERVER['REQUEST_URI'])) {
     $redirect = $_SERVER['REQUEST_URI'];
     $view = 'login';
 }
 
+
 ob_start();
-if(!file_exists(PARTS . $view .'.php')) {
-    include_once(PARTS .'404.php');
+if (!file_exists(PARTS . DIRECTORY_SEPARATOR . $view . '.php')) {
+    include_once(PARTS . DIRECTORY_SEPARATOR . '404.php');
 } else {
-    include_once(PARTS . $view .'.php');
+    include_once(PARTS . DIRECTORY_SEPARATOR . $view . '.php');
 }
 $view_output = ob_get_clean();
-if(!DOING_AJAX)
-    include_once(PARTS . 'header.php');
+if (!DOING_AJAX)
+    include_once(PARTS . DIRECTORY_SEPARATOR . 'header.php');
 echo $view_output;
-if(!DOING_AJAX)
-    include_once(PARTS . 'footer.php');
+if (!DOING_AJAX)
+    include_once(PARTS . DIRECTORY_SEPARATOR . 'footer.php');

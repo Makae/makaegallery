@@ -1,8 +1,7 @@
 <?php
+namespace ch\makae\makaegallery;
 
-class Convert {
-    use Singleton;
-
+class Converter {
     const MODE_TO_WIDTH = 'width';
 
     public function optimizeImages($filepaths, $width, $quality) {
