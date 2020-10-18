@@ -4,9 +4,11 @@ namespace ch\makae\makaegallery;
 
 class Authentication
 {
-    const PUBLIC_USER_LEVEL = 100;
+    const USER_LEVEL_ADMIN = 0;
+    const USER_LEVEL_USER = 1;
+    const USER_LEVEL_GUEST = 2;
+    const USER_LEVEL_PUBLIC = 100;
 
-    private $sessionProvider;
     private $salt;
     private $users;
     private $restrictions;
@@ -19,21 +21,20 @@ class Authentication
         $this->restrictions = $restrictions;
     }
 
-    public function urlAllowed($url)
+    public function routeAllowed($path)
     {
         $state = false;
         foreach ($this->restrictions as $r_path => $level) {
-            if (strpos($url, $r_path) === 0) {
+            if (strpos($path, $r_path) === 0) {
                 $state = $this->canAccess($level);
             }
         }
-
         return $state;
     }
 
     public function canAccess($level)
     {
-        if ($this->userLevel() <= $level) {
+        if ($this->getUserLevel() <= $level) {
             return true;
         }
         return false;
@@ -46,15 +47,22 @@ class Authentication
 
     public function isAdmin()
     {
-        return $this->isLoggedIn() && $this->sessionProvider->get('user')['level'] === 0;
+        return $this->isLoggedIn() && $this->sessionProvider->get('user')['level'] === Authentication::USER_LEVEL_ADMIN;
     }
 
-    public function userLevel()
+    public function getUserLevel()
     {
         if (!$this->isLoggedIn())
-            return Authentication::PUBLIC_USER_LEVEL;
+            return Authentication::USER_LEVEL_PUBLIC;
 
         return $this->sessionProvider->get('user')['level'];
+    }
+
+    public function getUser() {
+        if(!$this->sessionProvider->has('user')) {
+            return null;
+        }
+        return $this->sessionProvider->get('user');
     }
 
     public function login($name, $password)
@@ -63,6 +71,7 @@ class Authentication
         foreach ($this->users as $user) {
             if ($user['name'] == $name && $user['password'] === $password) {
                 $this->sessionProvider->set('user', $user);
+                return true;
             }
         }
         return false;

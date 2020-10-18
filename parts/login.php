@@ -1,5 +1,5 @@
 <?php
-global $Authentication;
+global $App;
 
 if (!defined('DOC_ROOT')) {
     die();
@@ -8,7 +8,7 @@ $username = isset($_REQUEST['name']) ? htmlentities($_REQUEST['name']) : '';
 $redirect = isset($redirect) ? $redirect : WWW_BASE . '/list';
 $redirect = isset($_REQUEST['redirect']) ? urldecode($_REQUEST['redirect']) : $redirect;
 if (isset($_REQUEST['name'])) {
-    $success = $Authentication->login($username, $_REQUEST['password']);
+    $success = $App->getAuth()->login($username, $_REQUEST['password']);
     if ($success) {
         header("Location: " . $redirect);
         exit();

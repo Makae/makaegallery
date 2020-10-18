@@ -6,7 +6,7 @@ class Processor {
     private $config;
     private $converter;
 
-    public function __construct($converter, $name, $config) {
+    public function __construct(Converter $converter, $name, $config) {
         $this->converter = $converter;
         $this->name = $name;
         $this->config = $config;

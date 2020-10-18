@@ -1,51 +1,34 @@
 <?php
 
-use ch\makae\makaegallery\AJAX;
+use ch\makae\makaegallery\AjaxRequestHandler;
+use ch\makae\makaegallery\App;
 use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\Converter;
 use ch\makae\makaegallery\MakaeGallery;
-use ch\makae\makaegallery\Utils;
+use ch\makae\makaegallery\PartsLoader;
+use ch\makae\makaegallery\Processor;
+use ch\makae\makaegallery\SessionProvider;
 
-
-require_once('./config.php');
 require_once('./loader.php');
-
 load_dependencies();
+require_once('./config.php');
 
-/*include_once('./tests/tests.php');*/
-global $SessionProvider;
-global $MakaeGallery;
-global $AJAX;
-global $Authentication;
-$SessionProvider = new \ch\makae\makaegallery\SessionProvider();
-$MakaeGallery = new MakaeGallery(
+global $App;
+$sessionProvider = new SessionProvider();
+$converter = new Converter();
+$makaeGallery = new MakaeGallery(
     GALLERY_ROOT,
-    unserialize(GALLERY_CONFIGURATION)
+    unserialize(GALLERY_CONFIGURATION),
+    new Processor($converter, "optimized", unserialize(PROCESS_CONFIG_NORMAL)),
+    new Processor($converter, "thumb", unserialize(PROCESS_CONFIG_THUMB))
 );
-$AJAX = new AJAX($MakaeGallery);
-$Authentication = new Authentication($SessionProvider, SALT, unserialize(AUTH_USERS), unserialize(AUTH_RESTRICTIONS));
+$ajax = new AjaxRequestHandler($makaeGallery, DOING_AJAX);
+$App = new App(
+    $sessionProvider,
+    new Authentication($sessionProvider, SALT, unserialize(AUTH_USERS), unserialize(AUTH_RESTRICTIONS)),
+    $makaeGallery,
+    $ajax,
+    new PartsLoader(PARTS_DIR, SUB_ROOT, $ajax));
 
-if (isset($_GET['logout'])) {
-    $Authentication->logout();
-}
+$App->processRequest($_SERVER['REQUEST_URI'], $_GET);
 
-$route = Utils::getUriComponents();
-$view = isset($route[0]) ? $route[0] : 'list';
-
-if (!$Authentication->urlAllowed($_SERVER['REQUEST_URI'])) {
-    $redirect = $_SERVER['REQUEST_URI'];
-    $view = 'login';
-}
-
-
-ob_start();
-if (!file_exists(PARTS . DIRECTORY_SEPARATOR . $view . '.php')) {
-    include_once(PARTS . DIRECTORY_SEPARATOR . '404.php');
-} else {
-    include_once(PARTS . DIRECTORY_SEPARATOR . $view . '.php');
-}
-$view_output = ob_get_clean();
-if (!DOING_AJAX)
-    include_once(PARTS . DIRECTORY_SEPARATOR . 'header.php');
-echo $view_output;
-if (!DOING_AJAX)
-    include_once(PARTS . DIRECTORY_SEPARATOR . 'footer.php');

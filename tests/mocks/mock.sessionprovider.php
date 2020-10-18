@@ -18,7 +18,7 @@ class SessionProviderMock implements ISessionProvider
 
     public function set($key, $value)
     {
-        $this->session['key'] = $value;
+        $this->session[$key] = $value;
     }
 
     public function get($key)

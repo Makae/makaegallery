@@ -10,11 +10,14 @@ class Gallery {
     private $thumbnailer;
     private $meta;
 
-    public function __construct($folder, $meta) {
+    public function __construct($folder, $meta, Processor $optimizer, Processor $thumbnailer) {
         $this->folder = $folder;
         $this->identifier = basename($folder);
         $this->meta = $meta;
         $this->cache = $this->getCache();
+
+        $this->optimizer = $optimizer;
+        $this->thumbnailer = $thumbnailer;
     }
 
     public function getIdentifier() {
@@ -119,14 +122,6 @@ class Gallery {
 
         if(!file_exists($this->getResizeFolder())) {
             mkdir($this->getResizeFolder());
-        }
-
-        if(is_null($this->optimizer)) {
-            $this->optimizer = new Processor("optimized", unserialize(PROCESS_CONFIG_NORMAL));
-        }
-
-        if(is_null($this->thumbnailer)){
-            $this->thumbnailer = new Processor("thumb", unserialize(PROCESS_CONFIG_THUMB));
         }
         
         $optimized   = $this->optimizer->process($image);

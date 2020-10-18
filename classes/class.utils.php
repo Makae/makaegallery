@@ -29,6 +29,8 @@ abstract class Utils {
     public static function getUriComponents($url=null) {
         $url = is_null($url) ?  $_SERVER["REQUEST_URI"] : $url;
         $url = str_replace('/' . WWW_SUB_ROOT . '/', '', $url);
+        $url = preg_replace('/([^?]+).*/', '$1', $url);
+        $url = preg_replace('/(.*)\.php/', '$1', $url);
         preg_match_all("/(.*)(\?.+)?/", $url, $uri, PREG_PATTERN_ORDER);
         
         if(count($uri[0]) > 0) {

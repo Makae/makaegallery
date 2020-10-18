@@ -2,16 +2,17 @@
 if (!defined('DOC_ROOT'))
     die();
 $has_gallery_output = false;
-global $MakaeGallery;
-global $Authentication;
+global $App;
 
+$galleries = $App->getMakaeGallery()->getGalleries();
 ?>
 <div class="row">
-    <? foreach ($MakaeGallery->getGalleries() as $gallery):
-        if (!$Authentication->canAccess($gallery->getLevel()))
+    <?php foreach ($galleries as $gallery):
+
+        if (!$gallery->canAccess($gallery->getLevel()))
             continue;
         $has_gallery_output = true;
-        ?>
+    ?>
         <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
                 <img src="<?= $gallery->getCover(); ?>" alt="<?= $gallery->getTitle(); ?>"/>
@@ -24,9 +25,12 @@ global $Authentication;
                 </div>
             </div>
         </div>
-    <? endforeach; ?>
-    <? if (!$has_gallery_output): ?>
+    <?php endforeach; ?>
+    <?php if (count($galleries) === 0): ?>
+        <p>Es sind keine Gallerien vorhanden. Bitte lege welche an.</p>
+    <?php endif; ?>
+    <?php if (!$has_gallery_output && count($galleries) !== 0): ?>
         <p>Um die Gallerien zu betrachten musst Du dich anmelden:</p>
         <a href="<?= WWW_BASE . '/login' ?>" class="btn btn-primary">Zur Anmeldung</a>
-    <? endif; ?>
+    <?php endif; ?>
 </div>

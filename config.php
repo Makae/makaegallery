@@ -1,6 +1,8 @@
 <?php
 // FIND SERVER ROOT PATH EXTENSION
 
+use ch\makae\makaegallery\Authentication;
+
 $root = str_replace("\\", "/", $_SERVER['DOCUMENT_ROOT']);
 $dir = str_replace("\\", "/", dirname($_SERVER['SCRIPT_NAME']));
 $dir = $dir == '/' ? '' : $dir;
@@ -29,13 +31,13 @@ define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . SUB_ROOT);
 define('ROOT', dirname(__FILE__));
 define('GALLERY_FOLDER', 'galleries');
 define('GALLERY_ROOT', ROOT . DIRECTORY_SEPARATOR . GALLERY_FOLDER);
-define('PARTS', ROOT . DIRECTORY_SEPARATOR . 'parts');
+define('PARTS_DIR', ROOT . DIRECTORY_SEPARATOR . 'parts');
 
 define('WWW_SUB_ROOT', $subFolder);
 define('WWW_ROOT', $domain);
 define('WWW_BASE', $domain . (WWW_SUB_ROOT === "" ? "" : '/' . WWW_SUB_ROOT));
 define('WWW_ASSETS', WWW_BASE . '/assets');
-define('WWW_GALLERY_ROOT', WWW_BASE . '/' . GALLERY_FOLDER);
+define('WWW_GALLERY_ROOT', WWW_SUB_ROOT . '/' . GALLERY_FOLDER);
 
 define('CONVERT_DEFAULT_PREFIX', DIRECTORY_SEPARATOR . 'resized');
 define('TESTDIR', ROOT . 'tests' . DIRECTORY_SEPARATOR);
@@ -47,26 +49,27 @@ define('DOING_AJAX', isset($_REQUEST['ajax']));
     array(
         'name' => 'radmin',
         'password' => '1f5153edc921f1eee2e7916fdf98f0c6',
-        'level' => 0,
+        'level' => Authentication::USER_LEVEL_ADMIN,
     ),
     array(
         'name' => 'photobox',
         'password' => '4041ed306863ddde6c9ebf2c2676edb7',
-        'level' => 1,
+        'level' => Authentication::USER_LEVEL_USER,
     ),
     array(
         'name' => 'besucher',
         'password' => '35b91af1d068598b2269aaf6cb56bfee',
-        'level' => 2,
+        'level' => Authentication::USER_LEVEL_GUEST,
     )
 )));
 
 @define('AUTH_RESTRICTIONS', serialize(array(
-    WWW_SUB_ROOT . '/admin' => 0,
-    WWW_SUB_ROOT . '/view/photobox' => 1,
-    WWW_GALLERY_ROOT . '/photobox' => 1,
-    WWW_SUB_ROOT . '/view' => 2,
-    WWW_SUB_ROOT . '/login' => 2
+    'admin' => Authentication::USER_LEVEL_ADMIN,
+    'view/photobox' => Authentication::USER_LEVEL_USER,
+    'galleries/photobox' => Authentication::USER_LEVEL_USER,
+    'view' => Authentication::USER_LEVEL_GUEST,
+    'login' => Authentication::USER_LEVEL_PUBLIC,
+    'list' => Authentication::USER_LEVEL_PUBLIC
 )));
 
 @define('PROCESS_CONFIG_THUMB', serialize(array(

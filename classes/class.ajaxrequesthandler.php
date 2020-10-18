@@ -2,15 +2,21 @@
 
 namespace ch\makae\makaegallery;
 
-class AJAX
+class AjaxRequestHandler
 {
     private $makaeGallery;
+    private $active;
 
-    public function __construct($makaeGallery)
+    public function __construct($makaeGallery, $active=false)
     {
+        $this->active = $active;
         $this->makaeGallery = $makaeGallery;
     }
 
+    public function isAjaxRequest()
+    {
+        return $this->active;
+    }
 
     public function admin()
     {

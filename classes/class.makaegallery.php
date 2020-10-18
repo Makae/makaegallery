@@ -4,13 +4,19 @@ namespace ch\makae\makaegallery;
 
 class MakaeGallery
 {
-    private $galleries = [];
-    private $galleryRoot = "";
+    private $galleries;
+    private $galleryRoot;
+    private $optimizer;
+    private $thumbnailer;
 
-    public function __construct($galleryRoot, $galleryMetas)
+    public function __construct($galleryRoot, $galleryMetas, Processor $optimizer, Processor $thumbnailer)
     {
         $this->galleryRoot = $galleryRoot;
         $this->galleryMetas = $galleryMetas;
+
+        $this->optimizer = $optimizer;
+        $this->thumbnailer = $thumbnailer;
+
         $this->galleries = $this->loadGalleries();
     }
 
@@ -20,13 +26,18 @@ class MakaeGallery
         foreach ($this->getGalleryDirs() as $dirname) {
             $folder = basename($dirname);
             if (isset($this->galleryMetas[$folder])) {
-                $galleries[] = new Gallery($dirname, $this->galleryMetas[$folder]);
+                $galleries[] = new Gallery(
+                    $dirname,
+                    $this->galleryMetas[$folder],
+                    $this->optimizer,
+                    $this->thumbnailer);
             } else {
-                $galleries[] = new Gallery($dirname, array(
+                $galleries[] = new Gallery($dirname, [
                     'title' => $folder,
                     'description' => $folder,
-                    'level' => 0
-                ));
+                    'level' => 0],
+                    $this->optimizer,
+                    $this->thumbnailer);
             }
         }
 

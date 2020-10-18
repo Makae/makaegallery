@@ -2,15 +2,14 @@
 if (!defined('DOC_ROOT'))
     die();
 
-global $MakaeGallery;
+global $App;
 
 if (DOING_AJAX) {
-    global $AJAX;
-    $AJAX->admin();
+    $App->getAjax()->admin();
 }
 
 $gallery_data = array();
-foreach ($MakaeGallery->getGalleries() as $gallery) {
+foreach ($App->getMakaeGallery()->getGalleries() as $gallery) {
     $images = $gallery->getImageList(false, false);
     $gallery_data[] = array(
         'name' => $gallery->getIdentifier(),
