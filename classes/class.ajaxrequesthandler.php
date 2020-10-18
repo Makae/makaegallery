@@ -25,13 +25,25 @@ class AjaxRequestHandler
 
     public function admin_action_clear_minified($params)
     {
-
         $gallery = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
         $this->makaeGallery->clearMinifiedImages($gallery);
         echo json_encode(array(
             'status' => 'success',
             'msg' => 'Gallery ' . $gallery . ' cleared',
             'galleryid' => $gallery
+        ));
+        exit();
+    }
+
+    public function admin_action_update_image_list($params)
+    {
+        $gallery = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
+        $diff = $this->makaeGallery->updateImageList($gallery);
+        echo json_encode(array(
+            'status' => 'success',
+            'msg' => 'Gallery ' . $gallery . ' updated',
+            'galleryid' => $gallery,
+            'diff' => $diff
         ));
         exit();
     }

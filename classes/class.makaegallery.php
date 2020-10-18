@@ -65,6 +65,15 @@ class MakaeGallery
         }
     }
 
+    public function updateImageList($gallery_id) {
+        $gallery = $this->getGallery($gallery_id);
+        if($gallery === null) {
+            return null;
+        }
+
+        return $gallery->updateImageList();
+    }
+
     public function getGallery($gallery_id)
     {
         foreach ($this->getGalleries() as $gallery) {
