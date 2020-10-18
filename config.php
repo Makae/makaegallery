@@ -91,6 +91,6 @@ define('DOING_AJAX', isset($_REQUEST['ajax']));
 
 @define('GALLERY_CONFIGURATION', serialize(array()));
 
-@define('GALLERY_DEFAULT_COVER', WWW_ASSETS . 'images/default_cover.jpg');
+@define('GALLERY_DEFAULT_COVER', WWW_ASSETS . '/images/default_cover.jpg');
 @define('GALLERY_COLUMNS', 3);
 @define('GALLERY_IMAGES_PER_LOAD', 27);

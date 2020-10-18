@@ -254,7 +254,7 @@ var gallery = {
     for(var ptr = 0; ptr < this.num_load_more; ptr++) {
       this.pointer =  pointer_start + ptr;
 
-      if(this.pointer >= this.max_pointer) {
+      if(this.pointer > this.max_pointer) {
         this.allPageLoaded();
         break;
       }
@@ -402,11 +402,12 @@ var gallery = {
 
   setCurrentPage : function(page) {
     this.current_page = page;
-    this.pointer =  (this.current_page - 1 ) * this.num_per_page;
-    this.max_pointer = Math.min(this.images.length - 1, (this.current_page) * this.num_per_page);
+    this.pointer =  (this.current_page - 1) * this.num_per_page;
+    this.max_pointer = Math.min(this.images.length - 1, this.current_page * this.num_per_page - 1);
     // console.log(this.max_pointer - this.pointer);
     this.page_images_loaded = 0;
     this.currently_loading = 0;
+
     this.clearImages();
     this.loadMore();
     
@@ -431,7 +432,7 @@ var gallery = {
     if($('.alloaded').length)
       return;
 
-    $("<div class='alloaded alert alert-success'>Keine weitern Bilder</div>").appendTo('body');
+    $("<div class='alloaded alert alert-success'>Keine weiteren Bilder</div>").appendTo('body');
     $('.loadmore,.load-next-page').css('display', 'none');
   },
 

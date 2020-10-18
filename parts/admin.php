@@ -22,7 +22,7 @@ foreach ($App->getMakaeGallery()->getGalleries() as $gallery) {
 
 <a id="clear-button" href="<?= WWW_BASE . "/admin?clear_minified=1" ?>" class="btn btn-danger">Clear Minified Images</a>
 
-<? foreach ($gallery_data as $gallery): ?>
+<?php foreach ($gallery_data as $gallery): ?>
     <div class="gallery-wrapper">
         <h3><?= $gallery['name'] ?></h3>
         <div class="control-wrapper clearfix">
@@ -32,14 +32,14 @@ foreach ($App->getMakaeGallery()->getGalleries() as $gallery) {
                class="gallery-button clear-gallery-button btn btn-danger pull-left">Clear this gallery</a>
         </div>
         <ul class="processing-progress" data-gallery="<?= $gallery['name'] ?>">
-            <? foreach ($gallery['images'] as $img): ?>
+            <?php foreach ($gallery['images'] as $img): ?>
                 <li data-minify-img="<?= urlencode($img['imgid']) ?>"><?= basename($img['imgid']) ?><a href="#"
                                                                                                        class="manual-trigger btn btn-default"
                                                                                                        data-minify-img="<?= urlencode($img['imgid']) ?>">Execute
                         now</a>
                 </li>
-            <? endforeach; ?>
+            <?php endforeach; ?>
         </ul>
     </div>
-<? endforeach; ?>
+<?php endforeach; ?>
 <script src="<?= WWW_ASSETS ?>/js/admin.js"></script>

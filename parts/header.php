@@ -1,7 +1,8 @@
 <?php
 if(!defined('DOC_ROOT'))
     die();
-global $Authentication;
+global $App;
+
 ?><!DOCTYPE html>
 <html lang="de">
     <head>
@@ -29,14 +30,14 @@ global $Authentication;
         <nav class="navbar navbar-default navbar-fixed-top">
           <div class="container">
             <a href="<?= WWW_BASE . '/list' ?>" class="btn btn-primary">Zur Übersicht</a>
-            <? if(Authentication::isLoggedIn()): ?>
+            <?php if($App->getAuth()->isLoggedIn()): ?>
             <a href="<?= WWW_BASE . '/list?logout=true' ?>" class="btn btn-default pull-right">Abmelden</a>
-            <? else: ?>
+            <?php else: ?>
             <form action="<?= WWW_BASE . '/login' ?>" method="POST" class="pull-right">
             <input type="hidden" value="<?= WWW_BASE . '/list' ?>" name="redirect" />
             <input type="submit" value="Anmelden" class="btn btn-default" />
             </form>
-            <? endif; ?>
+            <?php endif; ?>
           </div>
         </nav>
         <div class="container">

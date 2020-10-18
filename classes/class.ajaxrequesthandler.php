@@ -7,7 +7,7 @@ class AjaxRequestHandler
     private $makaeGallery;
     private $active;
 
-    public function __construct($makaeGallery, $active=false)
+    public function __construct(MakaeGallery $makaeGallery, $active=false)
     {
         $this->active = $active;
         $this->makaeGallery = $makaeGallery;
@@ -27,7 +27,7 @@ class AjaxRequestHandler
     {
 
         $gallery = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
-        Utils::clearMinifiedImages($this->makaeGallery, $gallery);
+        $this->makaeGallery->clearMinifiedImages($gallery);
         echo json_encode(array(
             'status' => 'success',
             'msg' => 'Gallery ' . $gallery . ' cleared',

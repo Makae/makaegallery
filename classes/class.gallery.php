@@ -53,8 +53,6 @@ class Gallery {
     }
 
     public function getImageList($process=true, $meta=true) {
-        $list = [];
-
         if(is_null($this->cache)) {
             $this->cache = $this->getImageListFromDir($this->folder);
         }
@@ -70,7 +68,7 @@ class Gallery {
 
         }
 
-        usort($this->cache, 'Gallery::_sort');
+        usort($this->cache, [$this, 'sort']);
 
         $this->updateCache();
 
@@ -108,7 +106,7 @@ class Gallery {
         return $list;
     }
 
-    private static function _sort($a, $b) {
+    private static function sort($a, $b) {
         if ($a['imgid'] == $b['imgid']) {
             return 0;
         }

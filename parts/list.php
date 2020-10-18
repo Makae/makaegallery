@@ -9,7 +9,7 @@ $galleries = $App->getMakaeGallery()->getGalleries();
 <div class="row">
     <?php foreach ($galleries as $gallery):
 
-        if (!$gallery->canAccess($gallery->getLevel()))
+        if (!$App->getAuth()->canAccess($gallery->getLevel()))
             continue;
         $has_gallery_output = true;
     ?>
