@@ -34,6 +34,8 @@ class MakaeGallery
             } else {
                 $galleries[] = new Gallery($dirname, [
                     'title' => $folder,
+                    'root_dir' => ROOT,
+                    'url_base' => WWW_BASE,
                     'description' => $folder,
                     'level' => 0],
                     $this->optimizer,

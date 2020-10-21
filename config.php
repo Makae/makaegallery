@@ -39,7 +39,6 @@ define('WWW_BASE', $domain . (WWW_SUB_ROOT === "" ? "" : '/' . WWW_SUB_ROOT));
 define('WWW_ASSETS', WWW_BASE . '/assets');
 define('WWW_GALLERY_ROOT', WWW_SUB_ROOT . '/' . GALLERY_FOLDER);
 
-define('CONVERT_DEFAULT_PREFIX', DIRECTORY_SEPARATOR . 'resized');
 define('TESTDIR', ROOT . 'tests' . DIRECTORY_SEPARATOR);
 define('DOING_AJAX', isset($_REQUEST['ajax']));
 

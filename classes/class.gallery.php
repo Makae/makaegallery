@@ -63,6 +63,7 @@ class Gallery
         return WWW_BASE . '/view/' . $this->getIdentifier();
     }
 
+
     public function getImageList($process = true, $meta = true)
     {
         if (is_null($this->cache)) {
@@ -106,7 +107,7 @@ class Gallery
                 $list[] = [
                     'imgid' => $this->getIdentifier() . '|' . basename($original),
                     'original_path' => $original,
-                    'original_url' => $this->getFileURL($original)
+                    'original_url' => $this->getImageUrl($original)
                 ];
             }
         }
@@ -135,8 +136,8 @@ class Gallery
         $thumbnailed = $this->thumbnailer->process($image);
 
         $image['processed'] = true;
-        $image['optimized_url'] = $this->getFileURL($optimized[1]);
-        $image['thumbnail_url'] = $this->getFileURL($thumbnailed[1]);
+        $image['optimized_url'] = $this->getImageUrl($optimized[1]);
+        $image['thumbnail_url'] = $this->getImageUrl($thumbnailed[1]);
 
         return $image;
     }
@@ -239,12 +240,12 @@ class Gallery
         }
     }
 
-    private function getFileURL($path)
+    private function getImageUrl($path)
     {
         $path = str_replace('//', '/', $path);
         $path = str_replace('\/', '/', $path);
 
-        $path = str_replace(ROOT, WWW_BASE, $path);
+        $path = str_replace($this->meta['root_dir'], $this->meta['url_base'], $path);
         $path = str_replace('\\', '/', $path);
 
         return str_replace(' ', '%20', $path);

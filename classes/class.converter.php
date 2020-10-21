@@ -3,6 +3,7 @@ namespace ch\makae\makaegallery;
 
 class Converter {
     const MODE_TO_WIDTH = 'width';
+    const CONVERT_DEFAULT_PREFIX = 'resized';
 
     public function optimizeImages($filepaths, $width, $quality) {
         $list = array();
@@ -14,8 +15,7 @@ class Converter {
 
     // Only resizable to with (at the moment)
     public function resize($filepath, $resize, $targetpath=null, $skip_existing=true) {
-
-        $resize['prefix'] = isset($resize['prefix']) ? $resize['prefix'] : CONVERT_DEFAULT_PREFIX;
+        $resize['prefix'] = isset($resize['prefix']) ? $resize['prefix'] : static::CONVERT_DEFAULT_PREFIX;
         $resize['w'] = isset($resize['w']) ? $resize['w'] : null;
         $resize['h'] = isset($resize['h']) ? $resize['h'] : null;
         $resize['q'] = isset($resize['q']) ? $resize['q'] : 80;
@@ -49,7 +49,7 @@ class Converter {
             $targetpath = preg_replace("/(.*)\/([^\/]+)(\.[^\.]+)$/i", "$1{prefix}" . $sep . "$2-{width}-{height}-{quality}$3", $tmp);
             $targetpath = str_replace('/', DIRECTORY_SEPARATOR, $targetpath);
         }
-        $targetpath = str_replace('{prefix}',  $resize['prefix'], $targetpath);
+        $targetpath = str_replace('{prefix}',  DIRECTORY_SEPARATOR . $resize['prefix'], $targetpath);
         $targetpath = str_replace('{width}',   $n_width, $targetpath);
         $targetpath = str_replace('{height}',  $n_width, $targetpath);
         $targetpath = str_replace('{quality}', $resize['q'], $targetpath);
