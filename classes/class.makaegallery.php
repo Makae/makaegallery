@@ -5,53 +5,14 @@ namespace ch\makae\makaegallery;
 class MakaeGallery
 {
     private $galleries;
-    private $galleryRoot;
-    private $optimizer;
-    private $thumbnailer;
+    private $galleryConverter;
 
-    public function __construct($galleryRoot, $galleryMetas, Processor $optimizer, Processor $thumbnailer)
+    public function __construct(GalleryLoader $galleryLoader, GalleryConverter $galleryConverter)
     {
-        $this->galleryRoot = $galleryRoot;
-        $this->galleryMetas = $galleryMetas;
-
-        $this->optimizer = $optimizer;
-        $this->thumbnailer = $thumbnailer;
-
-        $this->galleries = $this->loadGalleries();
+        $this->galleries = $galleryLoader->loadGalleries();
+        $this->galleryConverter = $galleryConverter;
     }
 
-    private function loadGalleries()
-    {
-        $galleries = [];
-        foreach ($this->getGalleryDirs() as $dirname) {
-            $folder = basename($dirname);
-            if (isset($this->galleryMetas[$folder])) {
-                $galleries[] = new Gallery(
-                    $dirname,
-                    $this->galleryMetas[$folder],
-                    $this->optimizer,
-                    $this->thumbnailer);
-            } else {
-                $galleries[] = new Gallery($dirname, [
-                    'title' => $folder,
-                    'root_dir' => ROOT,
-                    'url_base' => WWW_BASE,
-                    'description' => $folder,
-                    'level' => 0],
-                    $this->optimizer,
-                    $this->thumbnailer);
-            }
-        }
-
-        usort($galleries, function ($a, $b) {
-            if ($a->getOrder() == $b->getOrder()) {
-                return 0;
-            }
-            return $a->getOrder() < $b->getOrder() ? -1 : 1;
-        });
-
-        return $galleries;
-    }
 
     public function getGalleries()
     {
@@ -85,15 +46,101 @@ class MakaeGallery
         return null;
     }
 
-    private function getGalleryDirs()
+
+    private function prepareImage($image, $process, $meta)
     {
-        return array_filter(glob($this->galleryRoot . "/*"), function ($dirname) {
-            if (!is_dir($dirname) || strpos($dirname, '.') === 0) {
-                return false;
-            }
-            return true;
-        });
+        if ($process) {
+            $image = $this->processImage($image);
+        }
+
+        if ($meta) {
+            $image = $this->addImageMeta($image);
+        }
+        return $image;
     }
+
+
+    public function processImage($image)
+    {
+        if (isset($image['processed'])) {
+            return $image;
+        }
+
+        if (!file_exists($this->getResizeFolder())) {
+            mkdir($this->getResizeFolder());
+        }
+
+        $optimized = $this->optimizer->process($image);
+        $thumbnailed = $this->thumbnailer->process($image);
+
+        $image['processed'] = true;
+        $image['optimized_url'] = $this->getImageUrl($optimized[1]);
+        $image['thumbnail_url'] = $this->getImageUrl($thumbnailed[1]);
+
+        return $image;
+    }
+
+    public function addImageMeta($image)
+    {
+        if (isset($image['meta_added'])) {
+            return $image;
+        }
+
+        $image['meta_added'] = true;
+        list($o_width, $o_height) = getImageSize($image['original_path']);
+        $image['dimensions'] = [
+            'width' => $o_width,
+            'height' => $o_height
+        ];
+        return $image;
+    }
+
+    public function clearResized()
+    {
+        Utils::rmDir($this->getResizeFolder());
+        $this->clearCache();
+    }
+
+    public function getCacheDifference()
+    {
+        $oldImages = $this->asImageMap($this->getCache());
+        $newImages = $this->asImageMap($this->getImageListFromDir($this->folder));
+
+        $oldImageKeys = array_keys($oldImages);
+        $newImageKeys = array_keys($newImages);
+
+        $removedImageKeys = array_diff($oldImageKeys, $newImageKeys);
+        $addedImageKeys = array_diff($newImageKeys, $oldImageKeys);
+
+        $diff = [
+            'added' => [],
+            'removed' => []
+        ];
+        foreach ($addedImageKeys as $key) {
+            $diff['added'][] = $newImages[$key];
+        }
+        foreach ($removedImageKeys as $key) {
+            $diff['removed'][] = $oldImages[$key];
+        }
+        return $diff;
+    }
+
+    private function asImageMap($array)
+    {
+        $map = [];
+
+        foreach ($array as $img) {
+            $map[$img['id']] = $img;
+        }
+
+        return $map;
+    }
+
+    public function getResizeFolder()
+    {
+        return $this->folder . DIRECTORY_SEPARATOR . 'resized';
+    }
+
 
 
 }

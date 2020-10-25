@@ -1,41 +1,40 @@
 <?php
 namespace ch\makae\makaegallery;
 
-class Converter {
-    const MODE_TO_WIDTH = 'width';
-    const CONVERT_DEFAULT_PREFIX = 'resized';
+class GalleryConverter {
+    const MODE_TO_SMALLER = 'to_smaller';
+    const MODE_WIDTH_OR_HEIGHT = 'worh';
 
-    public function optimizeImages($filepaths, $width, $quality) {
-        $list = array();
-        foreach($filepaths as $filepath) {
-            $list[] = $this->resize($filepath, array());
-        }
-        return $list;
+    private $configs = [];
+
+    public function __construct(array $configs)
+    {
+        $this->configs = $configs;
     }
 
-    // Only resizable to with (at the moment)
-    public function resize($filepath, $resize, $targetpath=null, $skip_existing=true) {
-        $resize['prefix'] = isset($resize['prefix']) ? $resize['prefix'] : static::CONVERT_DEFAULT_PREFIX;
-        $resize['w'] = isset($resize['w']) ? $resize['w'] : null;
-        $resize['h'] = isset($resize['h']) ? $resize['h'] : null;
-        $resize['q'] = isset($resize['q']) ? $resize['q'] : 80;
-        $resize['m'] = isset($resize['m']) ? $resize['m'] : 'worh';
-        $resize['q'] = min(max($resize['q'], 10), 1000);
+    public function convertTo($configKey, $filepath, $targetpath=null, $skip_existing=true) {
+        if(!array_key_exists($configKey, $this->configs)) {
+            throw new \Exception("Can not find $configKey in processors.");
+        }
+        $this->resize($filepath, $this->configs[$configKey], $targetpath, $skip_existing);
+    }
 
+    // Only resizable to width (at the moment)
+    public function resize($filepath, ConversionConfig $config, $targetpath=null, $skip_existing=true) {
         list($o_width, $o_height) = getImageSize($filepath);
         
         $to_width = false;
 
-        if($resize['m'] == 'to_smaller') {
-            $to_width = ($o_width < $o_height) ? true : false;
-        } else if ($resize['m'] == 'worh') {
-            $to_width = $resize['w'] ? true : false;
+        if($config->getResizeMode() == GalleryConverter::MODE_TO_SMALLER) {
+            $to_width = $o_width < $o_height;
+        } else if ($config->getResizeMode() == GalleryConverter::MODE_WIDTH_OR_HEIGHT) {
+            $to_width = $config->getWidth() ? true : false;
         }
         
         if($to_width) {
-            $factor = $resize['w'] / $o_width;
-        } else if(!$to_width && $resize['h']) {
-            $factor = $resize['h'] / $o_height;
+            $factor = $config->getWidth() / $o_width;
+        } else if(!$to_width && $config->getHeight()) {
+            $factor = $config->getHeight() / $o_height;
         } else {
             $factor = 1;
         }
@@ -46,13 +45,13 @@ class Converter {
         $sep = DIRECTORY_SEPARATOR == '\\' ? '\\\\' : '/';
         if(is_null($targetpath)) {
             $tmp = str_replace('\\', '/', $filepath);
-            $targetpath = preg_replace("/(.*)\/([^\/]+)(\.[^\.]+)$/i", "$1{prefix}" . $sep . "$2-{width}-{height}-{quality}$3", $tmp);
+            $targetpath = preg_replace("/(.*)\/([^\/]+)(\.[^\.]+)$/i", "$1" . $sep . "{prefix}$2-{width}-{height}-{quality}$3", $tmp);
             $targetpath = str_replace('/', DIRECTORY_SEPARATOR, $targetpath);
         }
-        $targetpath = str_replace('{prefix}',  DIRECTORY_SEPARATOR . $resize['prefix'], $targetpath);
+        $targetpath = str_replace('{prefix}',  $config->getPrefix(), $targetpath);
         $targetpath = str_replace('{width}',   $n_width, $targetpath);
-        $targetpath = str_replace('{height}',  $n_width, $targetpath);
-        $targetpath = str_replace('{quality}', $resize['q'], $targetpath);
+        $targetpath = str_replace('{height}',  $n_height, $targetpath);
+        $targetpath = str_replace('{quality}', $config->getQuality(), $targetpath);
 
         if($n_targetpath = preg_replace("/(.*)(\.[^\.]+)$/i", "$1.jpg", $targetpath)) {
             $targetpath = $n_targetpath;
@@ -81,7 +80,7 @@ class Converter {
             $o_height);
 
 
-        $this->saveImage($n_img, $targetpath, $resize['q']);
+        $this->saveImage($n_img, $targetpath, $config['q']);
         imagedestroy($n_img);
         return array(
             $filepath,

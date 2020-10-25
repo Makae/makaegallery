@@ -3,10 +3,11 @@
 use ch\makae\makaegallery\AjaxRequestHandler;
 use ch\makae\makaegallery\App;
 use ch\makae\makaegallery\Authentication;
-use ch\makae\makaegallery\Converter;
+use ch\makae\makaegallery\GalleryConverter;
+use ch\makae\makaegallery\GalleryLoader;
 use ch\makae\makaegallery\MakaeGallery;
 use ch\makae\makaegallery\PartsLoader;
-use ch\makae\makaegallery\Processor;
+use ch\makae\makaegallery\ConversionConfig;
 use ch\makae\makaegallery\SessionProvider;
 
 require_once('./loader.php');
@@ -15,12 +16,18 @@ require_once('./config.php');
 
 global $App;
 $sessionProvider = new SessionProvider();
-$converter = new Converter();
+$galleryLoader = new GalleryLoader(GALLERY_ROOT,
+    unserialize(GALLERY_CONFIGURATION)
+);
+$galleryConverter = new GalleryConverter(
+    [
+        "optimized" => ConversionConfig::fromArray(unserialize(PROCESS_CONFIG_NORMAL)),
+        "thumb" => ConversionConfig::fromArray(unserialize(PROCESS_CONFIG_THUMB))
+    ]
+);
 $makaeGallery = new MakaeGallery(
-    GALLERY_ROOT,
-    unserialize(GALLERY_CONFIGURATION),
-    new Processor($converter, "optimized", unserialize(PROCESS_CONFIG_NORMAL)),
-    new Processor($converter, "thumb", unserialize(PROCESS_CONFIG_THUMB))
+    $galleryLoader,
+    $galleryConverter
 );
 $ajax = new AjaxRequestHandler($makaeGallery, DOING_AJAX);
 $App = new App(

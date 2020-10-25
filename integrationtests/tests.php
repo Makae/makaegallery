@@ -1,8 +1,8 @@
 <?php
 // JPG TESTS
-use ch\makae\makaegallery\Converter;
+use ch\makae\makaegallery\GalleryConverter;
 
-$converter = new Converter();
+$converter = new GalleryConverter();
 $converter->resize(
     TESTDIR . 'gallery' . DIRECTORY_SEPARATOR . 'test-1.jpg',
     array(

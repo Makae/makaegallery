@@ -8,19 +8,14 @@ class Gallery
 
     private $identifier;
     private $folder;
-    private $optimizer;
-    private $thumbnailer;
     private $meta;
 
-    public function __construct($folder, $meta, Processor $optimizer, Processor $thumbnailer)
+    public function __construct($folder, $meta)
     {
         $this->folder = $folder;
         $this->identifier = basename($folder);
         $this->meta = $meta;
         $this->cache = $this->getCache();
-
-        $this->optimizer = $optimizer;
-        $this->thumbnailer = $thumbnailer;
     }
 
     public function getIdentifier()
@@ -64,26 +59,21 @@ class Gallery
     }
 
 
-    public function getImageList($process = true, $meta = true)
+    public function getImageList()
     {
         if (is_null($this->cache)) {
             $this->cache = $this->getImageListFromDir($this->folder);
         }
 
-        foreach ($this->cache as &$image) {
-            $image = $this->prepareImage($image, $process, $meta);
-        }
-
         usort($this->cache, [$this, 'sort']);
 
         $this->updateCache();
-
         return $this->cache;
     }
 
-    public function getPublicImageList($process = true, $meta = true)
+    public function getPublicImageList()
     {
-        $list = $this->getImageList($process, $meta);
+        $list = $this->getImageList();
         foreach ($list as &$image) {
             unset($image['original_path']);
         }
@@ -122,101 +112,9 @@ class Gallery
         return ($a['imgid'] < $b['imgid']) ? -1 : 1;
     }
 
-    public function processImage($image)
+    public function getImage($imageid)
     {
-        if (isset($image['processed'])) {
-            return $image;
-        }
-
-        if (!file_exists($this->getResizeFolder())) {
-            mkdir($this->getResizeFolder());
-        }
-
-        $optimized = $this->optimizer->process($image);
-        $thumbnailed = $this->thumbnailer->process($image);
-
-        $image['processed'] = true;
-        $image['optimized_url'] = $this->getImageUrl($optimized[1]);
-        $image['thumbnail_url'] = $this->getImageUrl($thumbnailed[1]);
-
-        return $image;
-    }
-
-    public function addImageMeta($image)
-    {
-        if (isset($image['meta_added'])) {
-            return $image;
-        }
-
-        $image['meta_added'] = true;
-        list($o_width, $o_height) = getImageSize($image['original_path']);
-        $image['dimensions'] = [
-            'width' => $o_width,
-            'height' => $o_height
-        ];
-        return $image;
-    }
-
-    public function clearResized()
-    {
-        Utils::rmDir($this->getResizeFolder());
-        $this->clearCache();
-    }
-
-    public function updateImageList()
-    {
-        $diff = $this->getCacheDifference();
-        // TODO: return diff and reprocess images which are new.
-        foreach($diff['new'] as $newImg) {
-
-        }
-        // refresh cache
-        return $diff;
-    }
-
-    public function getCacheDifference()
-    {
-        $oldImages = $this->asImageMap($this->getCache());
-        $newImages = $this->asImageMap($this->getImageListFromDir($this->folder));
-
-        $oldImageKeys = array_keys($oldImages);
-        $newImageKeys = array_keys($newImages);
-
-        $removedImageKeys = array_diff($oldImageKeys, $newImageKeys);
-        $addedImageKeys = array_diff($newImageKeys, $oldImageKeys);
-
-        $diff = [
-            'added' => [],
-            'removed' => []
-        ];
-        foreach ($addedImageKeys as $key) {
-            $diff['added'][] = $newImages[$key];
-        }
-        foreach ($removedImageKeys as $key) {
-            $diff['removed'][] = $oldImages[$key];
-        }
-        return $diff;
-    }
-
-    private function asImageMap($array)
-    {
-        $map = [];
-
-        foreach ($array as $img) {
-            $map[$img['id']] = $img;
-        }
-
-        return $map;
-    }
-
-    public function getResizeFolder()
-    {
-        return $this->folder . DIRECTORY_SEPARATOR . 'resized';
-    }
-
-    public function getImage($imageid, $process = false, $meta = false)
-    {
-        $list = $this->getImageList($process, $meta, true, true);
+        $list = $this->getImageList();
         foreach ($list as $img) {
             if ($img['imgid'] == $imageid) {
                 return $img;
@@ -225,7 +123,7 @@ class Gallery
         return null;
     }
 
-    public function setImageData($new_image, $update_cache = true)
+    public function setImageData($new_image)
     {
         $list = $this->getImageList(false, false);
         foreach ($list as $idx => $img) {
@@ -235,9 +133,7 @@ class Gallery
         }
 
         $this->cache = $list;
-        if ($update_cache) {
-            $this->updateCache();
-        }
+        $this->updateCache();
     }
 
     private function getImageUrl($path)
@@ -277,16 +173,5 @@ class Gallery
         Utils::setCache($cache_path, $data);
     }
 
-    private function prepareImage($image, $process, $meta)
-    {
-        if ($process) {
-            $image = $this->processImage($image);
-        }
-
-        if ($meta) {
-            $image = $this->addImageMeta($image);
-        }
-        return $image;
-    }
 
 }
