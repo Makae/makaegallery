@@ -2,106 +2,62 @@
 
 namespace ch\makae\makaegallery;
 
+use DirectoryIterator;
+
 class Gallery
 {
     const CACHE_KEY = 'gallery';
 
     private $identifier;
     private $folder;
-    private $meta;
 
-    public function __construct($folder, $meta)
+    private string $cover;
+    private string $title;
+    private string $description;
+    private string $refText;
+    private int $order;
+    private int $level;
+
+    public function __construct(string $folder,
+                                ?string $title,
+                                string $description = '',
+                                string $cover = GALLERY_DEFAULT_COVER,
+                                string $refText = '',
+                                int $order = 10,
+                                int $level = Authentication::USER_LEVEL_ADMIN)
     {
         $this->folder = $folder;
         $this->identifier = basename($folder);
-        $this->meta = $meta;
-        $this->cache = $this->getCache();
+        $this->cover = $cover;
+        $this->title = $title ? $title : $this->identifier;
+        $this->description = $description;
+        $this->refText = $refText;
+        $this->order = $order;
+        $this->level = $level;
+
+        $this->imageList = $this->getCache();
     }
 
-    public function getIdentifier()
+    private function getCache()
     {
-        return $this->identifier;
-    }
-
-    public function getCover()
-    {
-        return isset($this->meta['cover']) ? $this->meta['cover'] : GALLERY_DEFAULT_COVER;
-    }
-
-    public function getTitle()
-    {
-        return isset($this->meta['title']) ? $this->meta['title'] : $this->identifier;
-    }
-
-    public function getDescription()
-    {
-        return isset($this->meta['description']) ? $this->meta['description'] : '';
-    }
-
-    public function getRefText()
-    {
-        return isset($this->meta['ref_text']) ? $this->meta['ref_text'] : '<br />';
-    }
-
-    public function getOrder()
-    {
-        return isset($this->meta['order']) ? $this->meta['order'] : 20;
-    }
-
-    public function getLevel()
-    {
-        return isset($this->meta['level']) ? $this->meta['level'] : 0;
-    }
-
-    public function getLink()
-    {
-        return WWW_BASE . '/view/' . $this->getIdentifier();
-    }
-
-
-    public function getImageList()
-    {
-        if (is_null($this->cache)) {
-            $this->cache = $this->getImageListFromDir($this->folder);
+        $cache_path = $this->folder . DIRECTORY_SEPARATOR . Gallery::CACHE_KEY . '.cache';
+        if ($cached = Utils::getCache($cache_path)) {
+            return $cached;
         }
-
-        usort($this->cache, [$this, 'sort']);
-
-        $this->updateCache();
-        return $this->cache;
+        return null;
     }
 
-    public function getPublicImageList()
+    public static function fromArray($folder, $meta)
     {
-        $list = $this->getImageList();
-        foreach ($list as &$image) {
-            unset($image['original_path']);
-        }
-        return $list;
-    }
+        return new Gallery(
+            $folder,
+            isset($meta['title']) ? $meta['title'] : null,
+            isset($meta['description']) ? $meta['description'] : null,
+            isset($meta['cover']) ? $meta['cover'] : null,
+            isset($meta['refText']) ? $meta['refText'] : null,
+            isset($meta['order']) ? $meta['order'] : null,
+            isset($meta['level']) ? $meta['level'] : null);
 
-
-    private function getImageListFromDir($path)
-    {
-        $pattern = '/^.*\.(jpg|jpeg|bmp|png)$/i';
-
-        $iterator = new \DirectoryIterator($path);
-        foreach ($iterator as $fileInfo) {
-            if ($fileInfo->isDot() || $fileInfo->isDir()) {
-                continue;
-            }
-
-            if ($fileInfo->isFile() && preg_match($pattern, $fileInfo->getPathname())) {
-                $original = str_replace('\/', DIRECTORY_SEPARATOR, $fileInfo->getPathname());
-
-                $list[] = [
-                    'imgid' => $this->getIdentifier() . '|' . basename($original),
-                    'original_path' => $original,
-                    'original_url' => $this->getImageUrl($original)
-                ];
-            }
-        }
-        return $list;
     }
 
     private static function sort($a, $b)
@@ -110,6 +66,36 @@ class Gallery
             return 0;
         }
         return ($a['imgid'] < $b['imgid']) ? -1 : 1;
+    }
+
+    public function getCover()
+    {
+        return $this->cover;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function getRefText()
+    {
+        return $this->refText;
+    }
+
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    public function getLevel()
+    {
+        return $this->level;
     }
 
     public function getImage($imageid)
@@ -123,54 +109,90 @@ class Gallery
         return null;
     }
 
-    public function setImageData($new_image)
+    public function getImageList()
     {
-        $list = $this->getImageList(false, false);
-        foreach ($list as $idx => $img) {
-            if ($img['imgid'] == $new_image['imgid']) {
-                $list[$idx] = $new_image;
+        if (is_null($this->imageList)) {
+            $this->imageList = $this->loadImageListFromDir($this->folder);
+            $this->updateCacheFile();
+        }
+        return $this->imageList;
+    }
+
+    private function loadImageListFromDir($path)
+    {
+        $iterator = new DirectoryIterator($path);
+        $paths = [];
+        foreach ($iterator as $fileInfo) {
+            if ($fileInfo->isDot() || $fileInfo->isDir()) {
+                continue;
+            }
+            if ($fileInfo->isFile()) {
+                $paths[] = $fileInfo->getPathname();
             }
         }
-
-        $this->cache = $list;
-        $this->updateCache();
+        $this->addImages($paths);
+        return $this->imageList;
     }
 
-    private function getImageUrl($path)
+    private function loadImageFromPath($path)
     {
-        $path = str_replace('//', '/', $path);
-        $path = str_replace('\/', '/', $path);
-
-        $path = str_replace($this->meta['root_dir'], $this->meta['url_base'], $path);
-        $path = str_replace('\\', '/', $path);
-
-        return str_replace(' ', '%20', $path);
-    }
-
-    private function getCache()
-    {
-        $cache_path = $this->folder . DIRECTORY_SEPARATOR . Gallery::CACHE_KEY . '.cache';
-        if ($cached = Utils::getCache($cache_path)) {
-            return $cached;
+        static $pattern = '/^.*\.(jpg|jpeg|bmp|png)$/i';
+        if (preg_match($pattern, $path)) {
+            $original = str_replace('\/', DIRECTORY_SEPARATOR, $path);
+            return [
+                'imgid' => $this->getIdentifier() . '|' . basename($original),
+                'path' => $original,
+            ];
         }
-        return null;
     }
 
-    public function clearCache()
+    public function getIdentifier()
     {
-        $cache_path = $this->folder . DIRECTORY_SEPARATOR . Gallery::CACHE_KEY . '.cache';
-        Utils::clearCache($cache_path);
+        return $this->identifier;
     }
 
-    public function updateCache()
+    public function updateCacheFile()
     {
-        $this->setCache($this->cache);
+        $this->setCache($this->imageList);
     }
 
     private function setCache($data)
     {
         $cache_path = $this->folder . DIRECTORY_SEPARATOR . Gallery::CACHE_KEY . '.cache';
         Utils::setCache($cache_path, $data);
+    }
+
+    public function mergeImageData($imgid, $data)
+    {
+        $list = $this->getImageList();
+        foreach ($list as $idx => $img) {
+            if ($imgid === $img['imgid']) {
+                $list[$idx] = array_merge($list[$idx], $data);
+            }
+        }
+
+        $this->imageList = $list;
+        $this->updateCacheFile();
+    }
+
+    public function addImages(array $paths)
+    {
+        foreach ($paths as $path) {
+            $this->imageList[] = $this->loadImageFromPath($path);
+        }
+        usort($this->imageList, [$this, 'sort']);
+        $this->updateCacheFile();
+    }
+
+    public function addImage($path)
+    {
+        $this->addImages([$path]);
+    }
+
+    public function clearCache()
+    {
+        $cache_path = $this->folder . DIRECTORY_SEPARATOR . Gallery::CACHE_KEY . '.cache';
+        Utils::clearCache($cache_path);
     }
 
 

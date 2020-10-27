@@ -13,12 +13,6 @@ class MakaeGallery
         $this->galleryConverter = $galleryConverter;
     }
 
-
-    public function getGalleries()
-    {
-        return $this->galleries;
-    }
-
     public function clearMinifiedImages($gallery_id)
     {
         foreach ($this->getGalleries() as $gallery) {
@@ -28,9 +22,15 @@ class MakaeGallery
         }
     }
 
-    public function updateImageList($gallery_id) {
+    public function getGalleries()
+    {
+        return $this->galleries;
+    }
+
+    public function updateImageList($gallery_id)
+    {
         $gallery = $this->getGallery($gallery_id);
-        if($gallery === null) {
+        if ($gallery === null) {
             return null;
         }
 
@@ -46,59 +46,24 @@ class MakaeGallery
         return null;
     }
 
-
-    private function prepareImage($image, $process, $meta)
+    public function getPublicImageList()
     {
-        if ($process) {
-            $image = $this->processImage($image);
+        $list = $this->getImageList();
+        foreach ($list as &$image) {
+            unset($image['original_path']);
         }
-
-        if ($meta) {
-            $image = $this->addImageMeta($image);
-        }
-        return $image;
-    }
-
-
-    public function processImage($image)
-    {
-        if (isset($image['processed'])) {
-            return $image;
-        }
-
-        if (!file_exists($this->getResizeFolder())) {
-            mkdir($this->getResizeFolder());
-        }
-
-        $optimized = $this->optimizer->process($image);
-        $thumbnailed = $this->thumbnailer->process($image);
-
-        $image['processed'] = true;
-        $image['optimized_url'] = $this->getImageUrl($optimized[1]);
-        $image['thumbnail_url'] = $this->getImageUrl($thumbnailed[1]);
-
-        return $image;
-    }
-
-    public function addImageMeta($image)
-    {
-        if (isset($image['meta_added'])) {
-            return $image;
-        }
-
-        $image['meta_added'] = true;
-        list($o_width, $o_height) = getImageSize($image['original_path']);
-        $image['dimensions'] = [
-            'width' => $o_width,
-            'height' => $o_height
-        ];
-        return $image;
+        return $list;
     }
 
     public function clearResized()
     {
         Utils::rmDir($this->getResizeFolder());
         $this->clearCache();
+    }
+
+    public function getResizeFolder()
+    {
+        return $this->folder . DIRECTORY_SEPARATOR . 'resized';
     }
 
     public function getCacheDifference()
@@ -136,11 +101,63 @@ class MakaeGallery
         return $map;
     }
 
-    public function getResizeFolder()
+    private function prepareImage($image, $process, $meta)
     {
-        return $this->folder . DIRECTORY_SEPARATOR . 'resized';
+        if ($process) {
+            $image = $this->processImage($image);
+        }
+
+        if ($meta) {
+            $image = $this->addImageMeta($image);
+        }
+        return $image;
     }
 
+    public function processImage($image)
+    {
+        if (isset($image['processed'])) {
+            return $image;
+        }
+
+        if (!file_exists($this->getResizeFolder())) {
+            mkdir($this->getResizeFolder());
+        }
+
+        $optimized = $this->optimizer->process($image);
+        $thumbnailed = $this->thumbnailer->process($image);
+
+        $image['processed'] = true;
+        $image['optimized_url'] = $this->getImageUrl($optimized[1]);
+        $image['thumbnail_url'] = $this->getImageUrl($thumbnailed[1]);
+
+        return $image;
+    }
+
+    private function getImageUrl($path)
+    {
+        $path = str_replace('//', '/', $path);
+        $path = str_replace('\/', '/', $path);
+
+        $path = str_replace($this->meta['root_dir'], $this->meta['url_base'], $path);
+        $path = str_replace('\\', '/', $path);
+
+        return str_replace(' ', '%20', $path);
+    }
+
+    public function addImageMeta($image)
+    {
+        if (isset($image['meta_added'])) {
+            return $image;
+        }
+
+        $image['meta_added'] = true;
+        list($o_width, $o_height) = getImageSize($image['original_path']);
+        $image['dimensions'] = [
+            'width' => $o_width,
+            'height' => $o_height
+        ];
+        return $image;
+    }
 
 
 }
