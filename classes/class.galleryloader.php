@@ -7,9 +7,6 @@ class GalleryLoader
     private $galleryRoot;
     private $galleryMetas;
 
-    private $optimizer;
-    private $thumbnailer;
-
     public function __construct($galleryRoot, $galleryMetas)
     {
         $this->galleryRoot = $galleryRoot;

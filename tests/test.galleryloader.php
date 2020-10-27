@@ -3,9 +3,7 @@ require_once('../loader.php');
 
 load_test_dependencies('../');
 
-use ch\makae\makaegallery\GalleryConverter;
 use ch\makae\makaegallery\GalleryLoader;
-use ch\makae\makaegallery\ConversionConfig;
 use PHPUnit\Framework\TestCase;
 
 class GalleryLoaderTest extends TestCase

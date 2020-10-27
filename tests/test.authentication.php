@@ -29,19 +29,19 @@ class AuthenticationTest extends TestCase
     ];
     private $SALT = 'asdöfhöç2b4(&jwbj vyk sprog';
 
+    public function test_login_validCredentials_isLoggedIn()
+    {
+        $auth = $this->getAuthenticationMock([]);
+        $auth->login("admin", "123456");
+        $this->assertTrue($auth->isLoggedIn());
+    }
+
     private function getAuthenticationMock($paths = [])
     {
         return new Authentication(
             new SessionProviderMock(),
             $this->SALT,
             $this->users, $paths);
-    }
-
-    public function test_login_validCredentials_isLoggedIn()
-    {
-        $auth = $this->getAuthenticationMock([]);
-        $auth->login("admin", "123456");
-        $this->assertTrue($auth->isLoggedIn());
     }
 
     public function test_login_invalidCredentials_isNotLoggedIn()
@@ -75,7 +75,8 @@ class AuthenticationTest extends TestCase
         $this->assertEquals(Authentication::USER_LEVEL_PUBLIC, $auth->getUserLevel());
     }
 
-    public function test_canAccess_asAdmin_allLevelAccessible() {
+    public function test_canAccess_asAdmin_allLevelAccessible()
+    {
         $auth = $this->getAuthenticationMock();
         $auth->login("admin", "123456");
         $this->assertTrue($auth->canAccess(Authentication::USER_LEVEL_PUBLIC));
@@ -84,7 +85,8 @@ class AuthenticationTest extends TestCase
         $this->assertTrue($auth->canAccess(Authentication::USER_LEVEL_ADMIN));
     }
 
-    public function test_canAccess_asGuest_guestOrBelowAccessible() {
+    public function test_canAccess_asGuest_guestOrBelowAccessible()
+    {
         $auth = $this->getAuthenticationMock();
         $auth->login("guest", "123456");
         $this->assertTrue($auth->canAccess(Authentication::USER_LEVEL_PUBLIC));
@@ -93,14 +95,14 @@ class AuthenticationTest extends TestCase
         $this->assertFalse($auth->canAccess(Authentication::USER_LEVEL_ADMIN));
     }
 
-    public function test_canAccess_notLoggedIn_onlyPublicAccessible() {
+    public function test_canAccess_notLoggedIn_onlyPublicAccessible()
+    {
         $auth = $this->getAuthenticationMock();
         $this->assertTrue($auth->canAccess(Authentication::USER_LEVEL_PUBLIC));
         $this->assertFalse($auth->canAccess(Authentication::USER_LEVEL_GUEST));
         $this->assertFalse($auth->canAccess(Authentication::USER_LEVEL_USER));
         $this->assertFalse($auth->canAccess(Authentication::USER_LEVEL_ADMIN));
     }
-
 
 
 }

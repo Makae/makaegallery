@@ -71,22 +71,22 @@ define('DOING_AJAX', isset($_REQUEST['ajax']));
     'list' => Authentication::USER_LEVEL_PUBLIC
 )));
 
-@define('PROCESS_CONFIG_THUMB', serialize(array(
+@define('PROCESS_CONFIG_THUMB', serialize([
     'w' => 450,
     'q' => 80
-)));
+]));
 
-@define('PROCESS_CONFIG_NORMAL', serialize(array(
+@define('PROCESS_CONFIG_NORMAL', serialize([
     'w' => 800,
     'h' => 800,
     'q' => 80,
     'm' => 'tosmaller'
-)));
+]));
 
-@define('PROCESS_CONFIG_ORIGINALS', serialize(array(
+@define('PROCESS_CONFIG_ORIGINALS', serialize([
     'q' => 80,
     'm' => 'none'
-)));
+]));
 
 @define('GALLERY_CONFIGURATION', serialize(array()));
 
