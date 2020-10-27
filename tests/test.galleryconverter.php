@@ -32,9 +32,9 @@ class GalleryConverterTest extends TestCase
         $this->assertTrue(file_exists(static::$folder . DIRECTORY_SEPARATOR . 'resized-first-800-1200-80.jpg'));
 
         $resultOptimized = $galleryConverter->convertTo("quality", static::$folder . DIRECTORY_SEPARATOR . 'first.jpg');
-        $this->assertEquals($resultOptimized->getWidth(), 3800);
-        $this->assertEquals($resultOptimized->getHeight(), 5700);
-        $this->assertTrue(file_exists(static::$folder . DIRECTORY_SEPARATOR . 'resized-first-3800-5700-75.jpg'));
+        $this->assertEquals($resultOptimized->getWidth(), 1080);
+        $this->assertEquals($resultOptimized->getHeight(), 1620);
+        $this->assertTrue(file_exists(static::$folder . DIRECTORY_SEPARATOR . 'resized-first-1080-1620-75.jpg'));
     }
 
     public function test_convertTo_withSpecialTargetpath_works()
@@ -59,8 +59,8 @@ class GalleryConverterTest extends TestCase
         $this->assertTrue(file_exists(static::$folder . DIRECTORY_SEPARATOR . 'resized-first-800-1200-80.jpg'));
 
         $resultOptimized = $galleryConverter->convertTo("quality", static::$folder . DIRECTORY_SEPARATOR . 'first.jpg');
-        $this->assertEquals($resultOptimized->getWidth(), 3800);
-        $this->assertEquals($resultOptimized->getHeight(), 5700);
-        $this->assertTrue(file_exists(static::$folder . DIRECTORY_SEPARATOR . 'optimized' . DIRECTORY_SEPARATOR . 'resized-first-3800-5700-75.jpg'));
+        $this->assertEquals($resultOptimized->getWidth(), 1080);
+        $this->assertEquals($resultOptimized->getHeight(), 1620);
+        $this->assertTrue(file_exists(static::$folder . DIRECTORY_SEPARATOR . 'optimized' . DIRECTORY_SEPARATOR . 'resized-first-1080-1620-75.jpg'));
     }
 }
