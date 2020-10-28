@@ -3,9 +3,9 @@
 use ch\makae\makaegallery\AjaxRequestHandler;
 use ch\makae\makaegallery\App;
 use ch\makae\makaegallery\Authentication;
-use ch\makae\makaegallery\GalleryConverter;
+use ch\makae\makaegallery\ImageConverter;
 use ch\makae\makaegallery\GalleryLoader;
-use ch\makae\makaegallery\MakaeGallery;
+use ch\makae\makaegallery\GalleryRepository;
 use ch\makae\makaegallery\PartsLoader;
 use ch\makae\makaegallery\ConversionConfig;
 use ch\makae\makaegallery\SessionProvider;
@@ -19,13 +19,13 @@ $sessionProvider = new SessionProvider();
 $galleryLoader = new GalleryLoader(GALLERY_ROOT,
     unserialize(GALLERY_CONFIGURATION)
 );
-$galleryConverter = new GalleryConverter(
+$galleryConverter = new ImageConverter(
     [
         "optimized" => ConversionConfig::fromArray(unserialize(PROCESS_CONFIG_NORMAL)),
         "thumb" => ConversionConfig::fromArray(unserialize(PROCESS_CONFIG_THUMB))
     ]
 );
-$makaeGallery = new MakaeGallery(
+$makaeGallery = new GalleryRepository(
     $galleryLoader,
     $galleryConverter
 );

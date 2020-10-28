@@ -2,6 +2,7 @@
 // FIND SERVER ROOT PATH EXTENSION
 
 use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\ImageConverter;
 
 $root = str_replace("\\", "/", $_SERVER['DOCUMENT_ROOT']);
 $dir = str_replace("\\", "/", dirname($_SERVER['SCRIPT_NAME']));
@@ -72,20 +73,21 @@ define('DOING_AJAX', isset($_REQUEST['ajax']));
 )));
 
 @define('PROCESS_CONFIG_THUMB', serialize([
-    'w' => 450,
-    'q' => 80
+    'width' => 450,
+    'quality' => 80,
+    'mode' => ImageConverter::RESIZE_MODE_TO_DEFINED_DIMENSION
 ]));
 
 @define('PROCESS_CONFIG_NORMAL', serialize([
-    'w' => 800,
-    'h' => 800,
-    'q' => 80,
-    'm' => 'tosmaller'
+    'width' => 800,
+    'height' => 800,
+    'quality' => 80,
+    'mode' => ImageConverter::RESIZE_MODE_TO_SMALLER
 ]));
 
 @define('PROCESS_CONFIG_ORIGINALS', serialize([
-    'q' => 80,
-    'm' => 'none'
+    'quality' => 80,
+    'mode' => ImageConverter::RESIZE_MODE_NO_RESIZE
 ]));
 
 @define('GALLERY_CONFIGURATION', serialize(array()));

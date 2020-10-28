@@ -7,7 +7,7 @@ class AjaxRequestHandler
     private $makaeGallery;
     private $active;
 
-    public function __construct(MakaeGallery $makaeGallery, $active=false)
+    public function __construct(GalleryRepository $makaeGallery, $active=false)
     {
         $this->active = $active;
         $this->makaeGallery = $makaeGallery;

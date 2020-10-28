@@ -8,12 +8,12 @@ class ConversionConfig
     private ?int $width = null;
     private ?int $height = null;
     private int $quality = 80;
-    private string $resizeMode = GalleryConverter::RESIZE_MODE_TO_DEFINED_DIMENSION;
+    private string $resizeMode = ImageConverter::RESIZE_MODE_TO_DEFINED_DIMENSION;
     private ?string $subDir = null;
 
     public function __construct(?int $width, ?int $height, int $quality, string $resizeMode, ?string $subDir = null)
     {
-        if($resizeMode !== GalleryConverter::RESIZE_MODE_NO_RESIZE && $width === null && $height === null) {
+        if($resizeMode !== ImageConverter::RESIZE_MODE_NO_RESIZE && $width === null && $height === null) {
             throw new \InvalidArgumentException("Can not define a config without with or height. Only `no_resize` configs are allowed to do that.");
         }
         $this->width = $width;
@@ -26,11 +26,11 @@ class ConversionConfig
     public static function fromArray(array $config)
     {
         return new ConversionConfig(
-            isset($config['w']) ? $config['w'] : null,
-            isset($config['h']) ? $config['h'] : null,
-            isset($config['q']) ? min(max($config['q'], 10), 100) : 80,
-            isset($config['m']) ? $config['m'] : GalleryConverter::RESIZE_MODE_TO_DEFINED_DIMENSION,
-            isset($config['s']) ? $config['s'] : null
+            isset($config['width']) ? $config['width'] : null,
+            isset($config['height']) ? $config['height'] : null,
+            isset($config['quality']) ? min(max($config['quality'], 10), 100) : 80,
+            isset($config['mode']) ? $config['mode'] : ImageConverter::RESIZE_MODE_TO_DEFINED_DIMENSION,
+            isset($config['subDir']) ? $config['subDir'] : null
         );
     }
 

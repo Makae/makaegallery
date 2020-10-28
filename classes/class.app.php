@@ -15,7 +15,7 @@ class App
     public function __construct(
         ISessionProvider $sessionProvider,
         Authentication $authentication,
-        MakaeGallery $makaeGallery,
+        GalleryRepository $makaeGallery,
         AjaxRequestHandler $ajax,
         PartsLoader $partsLoader)
     {

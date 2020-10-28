@@ -16,20 +16,21 @@ class GalleryLoader
     public function loadGalleries()
     {
         $galleries = [];
+        $defaults = [
+            'cover' => GALLERY_DEFAULT_COVER,
+            'level' => 0
+        ];
         foreach ($this->getGalleryDirs() as $dirname) {
             $folder = basename($dirname);
             if (isset($this->galleryMetas[$folder])) {
-                $galleries[] = Gallery::fromArray(
-                    $dirname,
-                    $this->galleryMetas[$folder]
-                );
+                $galleryArgs = array_merge($defaults, $this->galleryMetas[$folder]);
             } else {
-                $galleries[] = Gallery::fromArray($dirname, [
-                        'title' => $folder,
-                        'description' => $folder,
-                        'level' => 0]
-                );
+                $galleryArgs = array_merge($defaults, ['title' => $folder, 'description' => $folder]);
             }
+            $galleries[] = Gallery::fromArray(
+                str_replace($folder, '\/', DIRECTORY_SEPARATOR),
+                $galleryArgs
+            );
         }
 
         usort($galleries, function ($a, $b) {

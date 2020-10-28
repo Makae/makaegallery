@@ -6,11 +6,9 @@ use DirectoryIterator;
 
 class Gallery
 {
-    const CACHE_KEY = 'gallery';
 
-    private $identifier;
-    private $folder;
-
+    private string $identifier;
+    private string $folder;
     private string $cover;
     private string $title;
     private string $description;
@@ -21,7 +19,7 @@ class Gallery
     public function __construct(string $folder,
                                 ?string $title,
                                 string $description = '',
-                                string $cover = GALLERY_DEFAULT_COVER,
+                                string $cover = '',
                                 string $refText = '',
                                 int $order = 10,
                                 int $level = Authentication::USER_LEVEL_ADMIN)
@@ -34,17 +32,6 @@ class Gallery
         $this->refText = $refText;
         $this->order = $order;
         $this->level = $level;
-
-        $this->imageList = $this->getCache();
-    }
-
-    private function getCache()
-    {
-        $cache_path = $this->folder . DIRECTORY_SEPARATOR . Gallery::CACHE_KEY . '.cache';
-        if ($cached = Utils::getCache($cache_path)) {
-            return $cached;
-        }
-        return null;
     }
 
     public static function fromArray($folder, $meta)
@@ -53,10 +40,10 @@ class Gallery
             $folder,
             isset($meta['title']) ? $meta['title'] : null,
             isset($meta['description']) ? $meta['description'] : null,
-            isset($meta['cover']) ? $meta['cover'] : null,
-            isset($meta['refText']) ? $meta['refText'] : null,
-            isset($meta['order']) ? $meta['order'] : null,
-            isset($meta['level']) ? $meta['level'] : null);
+            isset($meta['cover']) ? $meta['cover'] : GALLERY_DEFAULT_COVER,
+            isset($meta['refText']) ? $meta['refText'] : '',
+            isset($meta['order']) ? $meta['order'] : 10,
+            isset($meta['level']) ? $meta['level'] : Authentication::USER_LEVEL_ADMIN);
 
     }
 
@@ -66,6 +53,11 @@ class Gallery
             return 0;
         }
         return ($a['imgid'] < $b['imgid']) ? -1 : 1;
+    }
+
+    public function getFolder(): string
+    {
+        return $this->folder;
     }
 
     public function getCover()
@@ -111,11 +103,7 @@ class Gallery
 
     public function getImageList()
     {
-        if (is_null($this->imageList)) {
-            $this->imageList = $this->loadImageListFromDir($this->folder);
-            $this->updateCacheFile();
-        }
-        return $this->imageList;
+        return $this->loadImageListFromDir($this->folder);
     }
 
     private function loadImageListFromDir($path)
@@ -132,6 +120,14 @@ class Gallery
         }
         $this->addImages($paths);
         return $this->imageList;
+    }
+
+    private function addImages(array $paths)
+    {
+        foreach ($paths as $path) {
+            $this->imageList[] = $this->loadImageFromPath($path);
+        }
+        usort($this->imageList, [$this, 'sort']);
     }
 
     private function loadImageFromPath($path)
@@ -151,49 +147,9 @@ class Gallery
         return $this->identifier;
     }
 
-    public function updateCacheFile()
-    {
-        $this->setCache($this->imageList);
-    }
-
-    private function setCache($data)
-    {
-        $cache_path = $this->folder . DIRECTORY_SEPARATOR . Gallery::CACHE_KEY . '.cache';
-        Utils::setCache($cache_path, $data);
-    }
-
-    public function mergeImageData($imgid, $data)
-    {
-        $list = $this->getImageList();
-        foreach ($list as $idx => $img) {
-            if ($imgid === $img['imgid']) {
-                $list[$idx] = array_merge($list[$idx], $data);
-            }
-        }
-
-        $this->imageList = $list;
-        $this->updateCacheFile();
-    }
-
-    public function addImages(array $paths)
-    {
-        foreach ($paths as $path) {
-            $this->imageList[] = $this->loadImageFromPath($path);
-        }
-        usort($this->imageList, [$this, 'sort']);
-        $this->updateCacheFile();
-    }
-
-    public function addImage($path)
+    private function addImage($path)
     {
         $this->addImages([$path]);
     }
-
-    public function clearCache()
-    {
-        $cache_path = $this->folder . DIRECTORY_SEPARATOR . Gallery::CACHE_KEY . '.cache';
-        Utils::clearCache($cache_path);
-    }
-
 
 }
