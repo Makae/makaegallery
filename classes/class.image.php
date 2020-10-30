@@ -7,25 +7,17 @@ class Image
 {
     private string $identifier;
     private string $source;
-    private ?string $image;
-    private ?string $thumbnail;
+    private ?string $originalUrl;
+    private ?string $optimizedUrl;
+    private ?string $thumbnailUrl;
 
-    public function __construct(string $identifier, string $source, string $image = null, string $thumbnail = null)
+    public function __construct(string $identifier, string $source, ?string $originalUrl = null, string $optimizedUrl = null, string $thumbnailUrl = null)
     {
         $this->identifier = $identifier;
         $this->source = $source;
-        $this->image = $image;
-        $this->thumbnail = $thumbnail;
-    }
-
-    public static function fromArray(array $image): Image
-    {
-        return new Image(
-            $image['id'],
-            $image['source'],
-            isset($image['image']) ? $image['image'] : null,
-            isset($image['thumbnail']) ? $image['thumbnail'] : null,
-        );
+        $this->originalUrl = $originalUrl;
+        $this->optimizedUrl = $optimizedUrl;
+        $this->thumbnailUrl = $thumbnailUrl;
     }
 
     public function getIdentifier(): string
@@ -38,32 +30,33 @@ class Image
         return $this->source;
     }
 
-    public function getImage(): ?string
+    public function getOptimizedUrl(): ?string
     {
-        return $this->image;
+        return $this->optimizedUrl;
     }
 
-    public function setImage(?string $image): void
+    public function setOptimizedUrl(?string $optimizedUrl): void
     {
-        $this->image = $image;
+        $this->optimizedUrl = $optimizedUrl;
     }
 
-    public function getThumbnail(): ?string
+    public function getThumbnailUrl(): ?string
     {
-        return $this->thumbnail;
+        return $this->thumbnailUrl;
     }
 
-    public function setThumbnail(?string $thumbnail): void
+    public function setThumbnailUrl(?string $thumbnailUrl): void
     {
-        $this->thumbnail = $thumbnail;
+        $this->thumbnailUrl = $thumbnailUrl;
     }
 
     public function __unserialize(array $data): void
     {
         $this->identifier = $data['id'];
         $this->source = $data['src'];
-        $this->image = $data['img'];
-        $this->thumbnail = $data['thumb'];
+        $this->originalUrl = $data['orig'];
+        $this->optimizedUrl = $data['optim'];
+        $this->thumbnailUrl = $data['thumb'];
     }
 
     public function __serialize(): array
@@ -71,9 +64,20 @@ class Image
         return [
             'id' => $this->identifier,
             'src' => $this->source,
-            'img' => $this->image,
-            'thumb' => $this->thumbnail
+            'orig' => $this->originalUrl,
+            'optim' => $this->optimizedUrl,
+            'thumb' => $this->thumbnailUrl
         ];
+    }
+
+    public function getOriginalUrl(): ?string
+    {
+        return $this->originalUrl;
+    }
+
+    public function setOriginalUrl(string $originalUrl)
+    {
+        $this->originalUrl = $originalUrl;
     }
 
 }

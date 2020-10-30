@@ -1,5 +1,6 @@
 <?php
 
+use ch\makae\makaegallery\Image;
 use ch\makae\makaegallery\Utils;
 
 if(!defined('DOC_ROOT'))
@@ -10,8 +11,15 @@ global $App;
 $components = Utils::getUriComponents();
 $gallery_id = $components[1];
 $gallery = $App->getMakaeGallery()->getGallery($gallery_id);
-$images = $gallery->getImages();
-
+$images = array_map(
+        fn(Image $image) => [
+               'thumbnail_url' => $image->getThumbnailUrl(),
+               'optimized_url' => $image->getOptimizedUrl(),
+               'original_url' => $image->getOptimizedUrl(),
+               'width' => $image->getWidth(),
+               'height' => $image->getHeight()
+        ],
+        $gallery->getImages());
 $columns = array_fill(0, GALLERY_COLUMNS, []);
 $imgidx = 0;
 

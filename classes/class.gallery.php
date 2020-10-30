@@ -145,7 +145,8 @@ class Gallery
         $path = str_replace('\/', DIRECTORY_SEPARATOR, $path);
         return new Image(
             $this->getIdentifier() . '|' . basename($path),
-            $path
+            $path,
+            null
         );
 
     }

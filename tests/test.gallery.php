@@ -22,7 +22,7 @@ class GalleryTest extends TestCase
         $images = $gallery->getImages();
         $this->assertTrue(count($images) >= 2);
         $this->assertTrue(file_exists($images[0]->getSource()));
-        $this->assertNull($images[0]->getThumbnail());
-        $this->assertNull($images[0]->getImage());
+        $this->assertNull($images[0]->getThumbnailUrl());
+        $this->assertNull($images[0]->getOptimizedUrl());
     }
 }

@@ -84,12 +84,11 @@ class PublicGallery
     {
         array_walk($imageList, function (Image $image) {
             $optimizingResult = $this->converter->convertTo(self::PROCESSOR_OPTIMIZED_KEY, $image->getSource());
-
-
-            $image->setImage($this->getURLFromPath($optimizingResult->getConversionPath()));
-
             $thumbnailResult = $this->converter->convertTo(self::PROCESSOR_THUMBNAIL_KEY, $image->getSource());
-            $image->setThumbnail($this->getURLFromPath($thumbnailResult->getConversionPath()));
+
+            $image->setOriginalUrl($this->getURLFromPath($image->getSource()));
+            $image->setOptimizedUrl($this->getURLFromPath($optimizingResult->getConversionPath()));
+            $image->setThumbnailUrl($this->getURLFromPath($thumbnailResult->getConversionPath()));
             return true;
         });
         return $imageList;

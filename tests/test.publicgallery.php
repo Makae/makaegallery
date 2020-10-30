@@ -28,8 +28,9 @@ class PublicGalleryTest extends TestCase
         $gallery = GalleryHelper::getPublicGallery();
         $image = $gallery->getImage('testgallery|first.jpg');
         $this->assertTrue(file_exists($image->getSource()));
-        $this->assertEquals($image->getThumbnail(), 'https://makae.ch/tests/tests/galleries/testgallery/converted/resized-first-800-1200-80.jpg');
-        $this->assertEquals($image->getImage(), 'https://makae.ch/tests/tests/galleries/testgallery/converted/resized-first-1080-1620-75.jpg');
+        $this->assertEquals($image->getOriginalUrl(), 'https://makae.ch/tests/tests/galleries/testgallery/first.jpg');
+        $this->assertEquals($image->getThumbnailUrl(), 'https://makae.ch/tests/tests/galleries/testgallery/converted/resized-first-800-1200-80.jpg');
+        $this->assertEquals($image->getOptimizedUrl(), 'https://makae.ch/tests/tests/galleries/testgallery/converted/resized-first-1080-1620-75.jpg');
     }
 
     public function test_gettingCachedImages_returnsFromCache()
@@ -41,8 +42,8 @@ class PublicGalleryTest extends TestCase
         $gallery = GalleryHelper::getPublicGallery();
         $image = $gallery->getImage('testgallery|first.jpg');
         $this->assertTrue(file_exists($image->getSource()));
-        $this->assertEquals($image->getThumbnail(), 'https://makae.ch/tests/tests/galleries/testgallery/converted/resized-first-800-1200-80.jpg');
-        $this->assertEquals($image->getImage(), 'https://makae.ch/tests/tests/galleries/testgallery/converted/resized-first-1080-1620-75.jpg');
+        $this->assertEquals($image->getThumbnailUrl(), 'https://makae.ch/tests/tests/galleries/testgallery/converted/resized-first-800-1200-80.jpg');
+        $this->assertEquals($image->getOptimizedUrl(), 'https://makae.ch/tests/tests/galleries/testgallery/converted/resized-first-1080-1620-75.jpg');
 
     }
 
