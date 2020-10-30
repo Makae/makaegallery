@@ -5,6 +5,35 @@ namespace ch\makae\makaegallery;
 abstract class Utils
 {
 
+    public static function mapImagesToArray(array $images)
+    {
+        return array_map(
+            "\ch\makae\makaegallery\Utils::mapImageToArray",
+            $images);
+    }
+
+    public static function mapImageToArray(Image $image)
+    {
+        return [
+            'id' => $image->getIdentifier(),
+            'thumbnail_url' => $image->getThumbnailUrl(),
+            'optimized_url' => $image->getOptimizedUrl(),
+            'original_url' => $image->getOptimizedUrl(),
+            'dimensions' => ['width' => $image->getWidth(), 'height' => $image->getHeight()]
+        ];
+    }
+
+    public static function arraySearch(array $array, callable $comparitor) {
+        return array_filter(
+            $array,
+            function ($element) use ($comparitor) {
+                if ($comparitor($element)) {
+                    return $element;
+                }
+            }
+        );
+    }
+
     public static function rmDir($dir)
     {
         if (!file_exists($dir)) {
@@ -97,4 +126,5 @@ abstract class Utils
         }
         return $url;
     }
+
 }

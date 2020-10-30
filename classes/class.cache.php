@@ -48,4 +48,12 @@ class Cache
     {
         return $this->get() !== null;
     }
+
+    public function getOrElse($fallback)
+    {
+        if($this->exists()) {
+            return $this->get();
+        }
+        return $fallback;
+    }
 }

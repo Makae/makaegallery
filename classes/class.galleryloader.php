@@ -35,7 +35,7 @@ class GalleryLoader
                 $galleryArgs = array_merge($defaults, ['title' => $folder, 'description' => $folder]);
             }
             $galleries[] = Gallery::fromArray(
-                str_replace('\/', DIRECTORY_SEPARATOR, $folder),
+                str_replace('/', DIRECTORY_SEPARATOR, $this->galleryRoot . DIRECTORY_SEPARATOR . $folder),
                 $galleryArgs
             );
         }

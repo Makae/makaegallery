@@ -97,9 +97,6 @@ class ImageConverter
     {
         $dir = dirname($targetpath);
         if(strpos($dir, dirname($filepath)) !== 0) {
-            var_dump($dir);
-            var_dump($filepath);
-            die(var_dump(strpos($dir, dirname($filepath))));
             throw new \Exception("Targetpath: $targetpath is not in a (sub) folder of filepath-folder: $dir");
         }
         if(!file_exists($dir)) {
@@ -156,5 +153,18 @@ class ImageConverter
     public static function saveImage($img, $target, $quality)
     {
         imagejpeg($img, $target, $quality);
+    }
+
+    public function clear($basePath)
+    {
+        foreach($this->configs as $config) {
+            if(!$config->hasSubDir()) {
+                continue;
+            }
+            $dirToRemove = $basePath . DIRECTORY_SEPARATOR . $config->getSubDir();
+            if(file_exists($dirToRemove) && is_dir($dirToRemove)) {
+                Utils::rmDir($dirToRemove);
+            }
+        }
     }
 }

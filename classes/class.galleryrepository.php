@@ -12,14 +12,13 @@ class GalleryRepository
         foreach($galleryLoader->loadGalleries() as $gallery) {
             $this->galleries[] = new PublicGallery($gallery, $imageConverter, ROOT,WWW_BASE);
         }
-        $this->galleryConverter = $imageConverter;
     }
 
-    public function clearMinifiedImages($gallery_id)
+    public function clearProcessedImages($gallery_id)
     {
         foreach ($this->getGalleries() as $gallery) {
             if (is_null($gallery_id) || $gallery->getIdentifier() == $gallery_id) {
-                $gallery->clearResized();
+                $gallery->clearProcessed();
             }
         }
     }
@@ -85,24 +84,10 @@ class GalleryRepository
         return $image;
     }
 
-    public function processImage($image)
+    public function processImage($imgId)
     {
-        if (isset($image['processed'])) {
-            return $image;
-        }
-
-        if (!file_exists($this->getResizeFolder())) {
-            mkdir($this->getResizeFolder());
-        }
-
-        $optimized = $this->optimizer->process($image);
-        $thumbnailed = $this->thumbnailer->process($image);
-
-        $image['processed'] = true;
-        $image['optimized_url'] = $this->getImageUrl($optimized[1]);
-        $image['thumbnail_url'] = $this->getImageUrl($thumbnailed[1]);
-
-        return $image;
+        $gallery = $this->getGalleryByImageId($imgId);
+        return $gallery->processImageById($imgId);
     }
 
     private function getImageUrl($path)
@@ -129,6 +114,13 @@ class GalleryRepository
             'height' => $o_height
         ];
         return $image;
+    }
+
+    private function getGalleryByImageId(string $imgId) : PublicGallery
+    {
+        $galleryId = explode('|', $imgId)[0];
+        return $this->getGallery($galleryId);
+
     }
 
 

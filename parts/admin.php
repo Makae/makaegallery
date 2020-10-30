@@ -1,4 +1,7 @@
 <?php
+
+use ch\makae\makaegallery\Utils;
+
 if (!defined('DOC_ROOT'))
     die();
 
@@ -6,11 +9,12 @@ global $App;
 
 if (DOING_AJAX) {
     $App->getAjax()->admin();
+    return;
 }
 
 $gallery_data = array();
 foreach ($App->getMakaeGallery()->getGalleries() as $gallery) {
-    $images = $gallery->getImageList(false, false);
+    $images = Utils::mapImagesToArray($gallery->getImages(true, false));
     $gallery_data[] = array(
         'name' => $gallery->getIdentifier(),
         'images' => $images
@@ -33,9 +37,9 @@ foreach ($App->getMakaeGallery()->getGalleries() as $gallery) {
         </div>
         <ul class="processing-progress" data-gallery="<?= $gallery['name'] ?>">
             <?php foreach ($gallery['images'] as $img): ?>
-                <li data-minify-img="<?= urlencode($img['imgid']) ?>"><?= basename($img['imgid']) ?><a href="#"
+                <li data-minify-img="<?= urlencode($img['id']) ?>"><?= basename($img['id']) ?><a href="#"
                                                                                                        class="manual-trigger btn btn-default"
-                                                                                                       data-minify-img="<?= urlencode($img['imgid']) ?>">Execute
+                                                                                                       data-minify-img="<?= urlencode($img['id']) ?>">Execute
                         now</a>
                 </li>
             <?php endforeach; ?>

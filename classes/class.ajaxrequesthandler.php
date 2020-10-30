@@ -26,7 +26,7 @@ class AjaxRequestHandler
     public function admin_action_clear_minified($params)
     {
         $gallery = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
-        $this->makaeGallery->clearMinifiedImages($gallery);
+        $this->makaeGallery->clearProcessedImages($gallery);
         echo json_encode(array(
             'status' => 'success',
             'msg' => 'Gallery ' . $gallery . ' cleared',
@@ -51,15 +51,8 @@ class AjaxRequestHandler
     public function admin_action_minify_image($params)
     {
         $imgid = urldecode($_REQUEST['imageid']);
-        list($gallery_id, $photo_id) = explode('|', $imgid);
 
-        $gallery = $this->makaeGallery->getGallery($gallery_id);
-        $image = $gallery->getImage($imgid);
-        $image = $gallery->processImage($image);
-        $image = $gallery->addImageMeta($image);
-        $gallery->setImageData($image, true);
-
-        unset($image['original_path']);
+        $image = $this->makaeGallery->processImage($imgid);
 
         header('Content-Type: text/json');
         if (is_null($image)) {
@@ -73,7 +66,7 @@ class AjaxRequestHandler
         echo json_encode(array(
             'status' => 'success',
             'msg' => 'Image was converted',
-            'data' => $image
+            'data' => Utils::mapImageToArray($image)
         ));
         exit();
     }
