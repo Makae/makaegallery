@@ -71,7 +71,7 @@ class PublicGallery
     {
         $doCache = !$ignoreCache;
         if ($doCache && $this->cache->exists()) {
-            return $this->cache->get();
+            return $this->cache->get()['images'];
         }
         $images = $this->gallery->getImages();
         if($process) {
@@ -114,7 +114,7 @@ class PublicGallery
 
     public function clearProcessed()
     {
-        $this->converter->clear();
+        $this->converter->clear($this->gallery->getFolder());
         $this->cache->clear();
     }
 

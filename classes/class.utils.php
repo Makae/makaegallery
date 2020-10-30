@@ -18,7 +18,7 @@ abstract class Utils
             'id' => $image->getIdentifier(),
             'thumbnail_url' => $image->getThumbnailUrl(),
             'optimized_url' => $image->getOptimizedUrl(),
-            'original_url' => $image->getOptimizedUrl(),
+            'original_url' => $image->getOriginalUrl(),
             'dimensions' => ['width' => $image->getWidth(), 'height' => $image->getHeight()]
         ];
     }

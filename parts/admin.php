@@ -37,7 +37,7 @@ foreach ($App->getMakaeGallery()->getGalleries() as $gallery) {
         </div>
         <ul class="processing-progress" data-gallery="<?= $gallery['name'] ?>">
             <?php foreach ($gallery['images'] as $img): ?>
-                <li data-minify-img="<?= urlencode($img['id']) ?>"><?= basename($img['id']) ?><a href="#"
+                <li data-minify-img="<?= urlencode($img['id']) ?>"><?= explode('|', basename($img['id']))[1] ?><a href="#"
                                                                                                        class="manual-trigger btn btn-default"
                                                                                                        data-minify-img="<?= urlencode($img['id']) ?>">Execute
                         now</a>
