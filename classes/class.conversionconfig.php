@@ -4,15 +4,19 @@ namespace ch\makae\makaegallery;
 
 class ConversionConfig
 {
+    const DEFAULT_SUBDIR = 'converted';
     private string $prefix = 'resized-';
     private ?int $width = null;
     private ?int $height = null;
     private int $quality = 80;
     private string $resizeMode = ImageConverter::RESIZE_MODE_TO_DEFINED_DIMENSION;
-    private ?string $subDir = null;
+    private string $subDir = self::DEFAULT_SUBDIR;
 
-    public function __construct(?int $width, ?int $height, int $quality, string $resizeMode, ?string $subDir = null)
+    public function __construct(?int $width, ?int $height, int $quality, string $resizeMode, string $subDir = self::DEFAULT_SUBDIR)
     {
+        if($subDir === '' || strpos('.', $subDir) === 0 || strpos(DIRECTORY_SEPARATOR, $subDir) === 0) {
+            throw new \InvalidArgumentException("`$subDir` is an invalid Subdirectory!");
+        }
         if($resizeMode !== ImageConverter::RESIZE_MODE_NO_RESIZE && $width === null && $height === null) {
             throw new \InvalidArgumentException("Can not define a config without with or height. Only `no_resize` configs are allowed to do that.");
         }
@@ -30,7 +34,7 @@ class ConversionConfig
             isset($config['height']) ? $config['height'] : null,
             isset($config['quality']) ? min(max($config['quality'], 10), 100) : 80,
             isset($config['mode']) ? $config['mode'] : ImageConverter::RESIZE_MODE_TO_DEFINED_DIMENSION,
-            isset($config['subDir']) ? $config['subDir'] : null
+            isset($config['subDir']) ? $config['subDir'] : self::DEFAULT_SUBDIR
         );
     }
 

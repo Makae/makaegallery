@@ -3,37 +3,26 @@ require_once('../loader.php');
 
 load_test_dependencies('../');
 
-use ch\makae\makaegallery\Gallery;
+use ch\makae\makaegallery\tests\GalleryHelper;
 use PHPUnit\Framework\TestCase;
 
 class GalleryTest extends TestCase
 {
-    private static $folder = TEST_GALLERIES_FOLDER . DIRECTORY_SEPARATOR . 'testgallery';
-
     public function test_createGallery_works()
     {
-        $gallery = $this->getGallery();
+        $gallery = GalleryHelper::getGallery();
         $this->assertEquals($gallery->getTitle(), 'testgallery');
         $this->assertEquals($gallery->getDescription(), 'test description');
         $this->assertEquals($gallery->getLevel(), 0);
     }
 
-    private function getGallery()
-    {
-        return new Gallery(GalleryTest::$folder, [
-            'title' => 'testgallery',
-            'description' => 'test description',
-            'root_dir' => 'ROOT_DIR',
-            'url_base' => 'URL_BASE',
-            'level' => 0
-        ]);
-    }
-
     public function test_gettingImages_processesImages()
     {
-        $gallery = $this->getGallery();
-        $images = $gallery->getImageList();
-        $this->assertTrue(count($images) >= 3);
-        $this->assertTrue(file_exists($images[0]['original_path']));
+        $gallery = GalleryHelper::getGallery();
+        $images = $gallery->getImages();
+        $this->assertTrue(count($images) >= 2);
+        $this->assertTrue(file_exists($images[0]->getSource()));
+        $this->assertNull($images[0]->getThumbnail());
+        $this->assertNull($images[0]->getImage());
     }
 }

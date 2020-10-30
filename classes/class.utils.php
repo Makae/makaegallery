@@ -12,7 +12,7 @@ abstract class Utils
         }
 
         if (!is_dir($dir)) {
-            return unlink($dir);
+            return Utils::rmFile($dir);
         }
 
         foreach (scandir($dir) as $item) {
@@ -27,6 +27,19 @@ abstract class Utils
         }
 
         return rmdir($dir);
+    }
+
+    public static function rmFile($file)
+    {
+        if (!file_exists($file)) {
+            return true;
+        }
+
+        if (is_dir($file)) {
+            throw new \InvalidArgumentException("Can not delete a directory via this method");
+        }
+
+        return unlink($file);
     }
 
     public static function getUriComponents($url = null)

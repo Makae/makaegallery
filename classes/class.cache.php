@@ -30,7 +30,7 @@ class Cache
     public function set($data)
     {
         $this->value = $data;
-        file_put_contents($this->cacheFile, serialize($this->value));
+        file_put_contents($this->cacheFile, serialize($data));
     }
 
     public function get()

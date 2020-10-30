@@ -7,16 +7,23 @@ class PublicGallery
 {
     const CACHE_KEY = 'gallery.cache';
 
+    const PROCESSOR_OPTIMIZED_KEY = 'optimized';
+    const PROCESSOR_THUMBNAIL_KEY = 'thumbnail';
+
     private $basePath;
     private $baseUrl;
     private Cache $cache;
 
-    public function __construct(Gallery $gallery, ImageConverter $imageConverter, string $basePath, string $baseUrl)
+    private Gallery $gallery;
+    private ImageConverter $converter;
+
+    public function __construct(Gallery $gallery, ImageConverter $converter, string $basePath, string $baseUrl)
     {
         $this->gallery = $gallery;
-        $this->imageConverter = $imageConverter;
+        $this->converter = $converter;
         $this->basePath = $basePath;
         $this->baseUrl = $baseUrl;
+
         $this->cache = new Cache($this->gallery->getFolder() . DIRECTORY_SEPARATOR . PublicGallery::CACHE_KEY);
     }
 
@@ -50,29 +57,59 @@ class PublicGallery
         return $this->gallery->getLevel();
     }
 
-    public function getImage($imageid)
+    public function getImage($imageId)
     {
-        return $this->gallery->getImage($imageid);
+        foreach ($this->getImages() as $key => $image) {
+            if ($image->getIdentifier() === $imageId) {
+                return $image;
+            }
+        }
+        return null;
     }
 
-    public function getLink() {
+    public function getImages(): array
+    {
+        if ($this->cache->exists()) {
+            return $this->cache->get();
+        }
+
+        $images = $this->gallery->getImages();
+        $images = $this->convertImages($images);
+
+        $this->cache->set($images);
+        return $images;
+    }
+
+    private function convertImages($imageList)
+    {
+        array_walk($imageList, function (Image $image) {
+            $optimizingResult = $this->converter->convertTo(self::PROCESSOR_OPTIMIZED_KEY, $image->getSource());
+
+
+            $image->setImage($this->getURLFromPath($optimizingResult->getConversionPath()));
+
+            $thumbnailResult = $this->converter->convertTo(self::PROCESSOR_THUMBNAIL_KEY, $image->getSource());
+            $image->setThumbnail($this->getURLFromPath($thumbnailResult->getConversionPath()));
+            return true;
+        });
+        return $imageList;
+    }
+
+    private function getURLFromPath($path) {
+        $url = str_replace(BASE_PATH, BASE_URL, $path);
+        $url = str_replace(DIRECTORY_SEPARATOR, '/', $url);
+        return $url;
+    }
+
+    public function getLink()
+    {
         return $this->baseUrl . '/view/' . $this->getIdentifier();
     }
 
-    public function getImageList()
+    public function getIdentifier()
     {
-        if ($this->cache->exists()) {
-            return $this->cache->get()['imageList'];
-        }
-
-        $img_list = $this->gallery->getImageList();
-        $img_list = $this->convertImages($img_list);
-
-
-        $this->cache->set(['imageList' => $img_list]);
-        return $img_list;
+        return $this->gallery->getIdentifier();
     }
-
 
     public function clearResized()
     {
@@ -82,25 +119,7 @@ class PublicGallery
 
     public function getResizeFolder()
     {
-        return $this->folder . DIRECTORY_SEPARATOR . 'resized';
-    }
-
-    private function convertImages($img_list)
-    {
-        array_walk($img_list, function ($elm) {
-            $elm['src'] = str_replace($this->basePath, $this->baseUrl, $elm['path']);
-            $elm['thumb'] = $this->imageConverter->convertTo('thumb', $elm['path']);
-            $elm['optimized'] = $this->imageConverter->convertTo('optimized', $elm['path']);
-
-            unset($elm['path']);
-            return $elm;
-        });
-        return $img_list;
-    }
-
-    public function getIdentifier()
-    {
-        return $this->gallery->getIdentifier();
+        return $this->gallery->getFolder() . DIRECTORY_SEPARATOR . 'resized';
     }
 
 

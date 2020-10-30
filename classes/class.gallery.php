@@ -9,17 +9,18 @@ class Gallery
 
     private string $identifier;
     private string $folder;
-    private string $cover;
+    private ?string $cover;
     private string $title;
     private string $description;
     private string $refText;
     private int $order;
     private int $level;
+    private ?array $imageList = null;
 
     public function __construct(string $folder,
                                 ?string $title,
+                                ?string $cover = null,
                                 string $description = '',
-                                string $cover = '',
                                 string $refText = '',
                                 int $order = 10,
                                 int $level = Authentication::USER_LEVEL_ADMIN)
@@ -39,20 +40,19 @@ class Gallery
         return new Gallery(
             $folder,
             isset($meta['title']) ? $meta['title'] : null,
+            isset($meta['cover']) ? $meta['cover'] : null,
             isset($meta['description']) ? $meta['description'] : null,
-            isset($meta['cover']) ? $meta['cover'] : GALLERY_DEFAULT_COVER,
             isset($meta['refText']) ? $meta['refText'] : '',
             isset($meta['order']) ? $meta['order'] : 10,
             isset($meta['level']) ? $meta['level'] : Authentication::USER_LEVEL_ADMIN);
-
     }
 
     private static function sort($a, $b)
     {
-        if ($a['imgid'] == $b['imgid']) {
+        if ($a->getIdentifier() == $b->getIdentifier()) {
             return 0;
         }
-        return ($a['imgid'] < $b['imgid']) ? -1 : 1;
+        return ($a->getIdentifier() < $b->getIdentifier()) ? -1 : 1;
     }
 
     public function getFolder(): string
@@ -92,21 +92,25 @@ class Gallery
 
     public function getImage($imageid)
     {
-        $list = $this->getImageList();
+        $list = $this->getImages();
         foreach ($list as $img) {
-            if ($img['imgid'] == $imageid) {
+            if ($img->getIdentifier() == $imageid) {
                 return $img;
             }
         }
         return null;
     }
 
-    public function getImageList()
+    public function getImages($reload = false)
     {
-        return $this->loadImageListFromDir($this->folder);
+        if (!$reload && $this->imageList !== null) {
+            return $this->imageList;
+        }
+        $this->imageList = $this->loadImagesFromDirectory($this->folder);
+        return $this->imageList;
     }
 
-    private function loadImageListFromDir($path)
+    private function loadImagesFromDirectory($path)
     {
         $iterator = new DirectoryIterator($path);
         $paths = [];
@@ -118,28 +122,32 @@ class Gallery
                 $paths[] = $fileInfo->getPathname();
             }
         }
-        $this->addImages($paths);
-        return $this->imageList;
+
+        $imageList = [];
+        $this->addImages($paths, $imageList);
+        return $imageList;
     }
 
-    private function addImages(array $paths)
+    private function addImages(array $paths, array &$images)
     {
         foreach ($paths as $path) {
-            $this->imageList[] = $this->loadImageFromPath($path);
+            $images[] = $this->loadImageFromPath($path);
         }
-        usort($this->imageList, [$this, 'sort']);
+        usort($images, [$this, 'sort']);
     }
 
     private function loadImageFromPath($path)
     {
-        static $pattern = '/^.*\.(jpg|jpeg|bmp|png)$/i';
-        if (preg_match($pattern, $path)) {
-            $original = str_replace('\/', DIRECTORY_SEPARATOR, $path);
-            return [
-                'imgid' => $this->getIdentifier() . '|' . basename($original),
-                'path' => $original,
-            ];
+        if (!preg_match('/^.*\.(jpg|jpeg|bmp|png)$/i', $path)) {
+            return null;
         }
+
+        $path = str_replace('\/', DIRECTORY_SEPARATOR, $path);
+        return new Image(
+            $this->getIdentifier() . '|' . basename($path),
+            $path
+        );
+
     }
 
     public function getIdentifier()
@@ -149,7 +157,7 @@ class Gallery
 
     private function addImage($path)
     {
-        $this->addImages([$path]);
+        $this->addImages([$path], $this->imageList);
     }
 
 }

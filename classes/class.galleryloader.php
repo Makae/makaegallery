@@ -6,18 +6,25 @@ class GalleryLoader
 {
     private $galleryRoot;
     private $galleryMetas;
+    private ?string $defaultCover = null;
 
-    public function __construct($galleryRoot, $galleryMetas)
+    public function __construct($galleryRoot, $galleryMetas, ?string $defaultCover = null)
     {
         $this->galleryRoot = $galleryRoot;
         $this->galleryMetas = $galleryMetas;
+        $this->defaultCover = $defaultCover;
+    }
+
+    public function setDefaultCover(?string $cover)
+    {
+        $this->defaultCover = $cover;
     }
 
     public function loadGalleries()
     {
         $galleries = [];
         $defaults = [
-            'cover' => GALLERY_DEFAULT_COVER,
+            'cover' => $this->defaultCover,
             'level' => 0
         ];
         foreach ($this->getGalleryDirs() as $dirname) {
