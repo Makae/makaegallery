@@ -10,7 +10,7 @@ global $App;
 
 $components = Utils::getUriComponents();
 $gallery_id = $components[1];
-$gallery = $App->getMakaeGallery()->getGallery($gallery_id);
+$gallery = $App->getGalleryRepository()->getGallery($gallery_id);
 $images = Utils::mapImagesToArray($gallery->getImages());
 $columns = array_fill(0, GALLERY_COLUMNS, []);
 $imgidx = 0;

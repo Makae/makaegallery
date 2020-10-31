@@ -6,21 +6,29 @@ class App
 {
     const DEFAULT_VIEW = 'list';
 
-    private $sessionProvider;
-    private $makaeGallery;
-    private $partsLoader;
-    private $ajax;
-    private $auth;
+    private ISessionProvider $sessionProvider;
+    private GalleryRepository $galleryRepository;
+    private PartsLoader $partsLoader;
+    private AjaxRequestHandler $ajax;
+    private Authentication $auth;
+    private Security $security;
+
+    public function getSecurity(): Security
+    {
+        return $this->security;
+    }
 
     public function __construct(
         ISessionProvider $sessionProvider,
+        Security $security,
         Authentication $authentication,
-        GalleryRepository $makaeGallery,
+        GalleryRepository $galleryRepository,
         AjaxRequestHandler $ajax,
         PartsLoader $partsLoader)
     {
+        $this->security = $security;
         $this->sessionProvider = $sessionProvider;
-        $this->makaeGallery = $makaeGallery;
+        $this->galleryRepository = $galleryRepository;
         $this->auth = $authentication;
         $this->ajax = $ajax;
         $this->partsLoader = $partsLoader;
@@ -50,12 +58,12 @@ class App
         return $this->sessionProvider;
     }
 
-    public function getMakaeGallery()
+    public function getGalleryRepository()
     {
-        return $this->makaeGallery;
+        return $this->galleryRepository;
     }
 
-    public function getAjax()
+    public function getAjax() : AjaxRequestHandler
     {
         return $this->ajax;
     }
@@ -63,5 +71,15 @@ class App
     public function getAuth()
     {
         return $this->auth;
+    }
+
+    /**
+     * @param Security $security
+     * @return App
+     */
+    public function setSecurity(Security $security): App
+    {
+        $this->security = $security;
+        return $this;
     }
 }

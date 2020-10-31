@@ -25,7 +25,8 @@ class SessionProviderMockTest extends TestCase
         $this->assertEquals("value2", $mock->get("key"));
     }
 
-    public function test_remove_existingValue_shouldRemoveValueCompletely()
+    public
+    function test_remove_existingValue_shouldRemoveValueCompletely()
     {
         $mock = new SessionProviderMock();
         $mock->set("key", "value");
@@ -33,21 +34,24 @@ class SessionProviderMockTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_remove_inexistentValue_shouldRemoveValueCompletely()
+    public
+    function test_remove_inexistentValue_shouldRemoveValueCompletely()
     {
         $mock = new SessionProviderMock();
         $mock->remove("key");
         $this->assertTrue(true);
     }
 
-    public function test_has_existentValue_shouldReturnTrue()
+    public
+    function test_has_existentValue_shouldReturnTrue()
     {
         $mock = new SessionProviderMock();
         $mock->set('test', 'value');
         $this->assertTrue($mock->has('test'));
     }
 
-    public function test_has_inexistentValue_shouldReturnFalse()
+    public
+    function test_has_inexistentValue_shouldReturnFalse()
     {
         $mock = new SessionProviderMock();
         $this->assertFalse($mock->has('test'));

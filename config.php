@@ -40,6 +40,8 @@ define('WWW_BASE', $domain . (WWW_SUB_ROOT === "" ? "" : '/' . WWW_SUB_ROOT));
 define('WWW_ASSETS', WWW_BASE . '/assets');
 define('WWW_GALLERY_ROOT', WWW_SUB_ROOT . '/' . GALLERY_FOLDER);
 
+define('ALLOWED_IMAGE_TYPES', 'png,jpeg,bmp');
+
 define('TESTDIR', ROOT . 'tests' . DIRECTORY_SEPARATOR);
 define('DOING_AJAX', isset($_REQUEST['ajax']));
 

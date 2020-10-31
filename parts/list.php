@@ -4,7 +4,7 @@ if (!defined('DOC_ROOT'))
 $has_gallery_output = false;
 global $App;
 
-$galleries = $App->getMakaeGallery()->getGalleries();
+$galleries = $App->getGalleryRepository()->getGalleries();
 ?>
 <div class="row">
     <?php foreach ($galleries as $gallery):

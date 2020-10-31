@@ -31,7 +31,7 @@ $makaeGallery = new GalleryRepository(
     $galleryLoader,
     $galleryConverter
 );
-$ajax = new AjaxRequestHandler($makaeGallery, DOING_AJAX);
+$ajax = new AjaxRequestHandler($makaeGallery, $sessionProvider, DOING_AJAX);
 $App = new App(
     $sessionProvider,
     new Authentication($sessionProvider, SALT, unserialize(AUTH_USERS), unserialize(AUTH_RESTRICTIONS)),

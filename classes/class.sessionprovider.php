@@ -30,4 +30,9 @@ class SessionProvider implements ISessionProvider
     {
         return isset($_SESSION[$key]);
     }
+
+    public function getOrElse(string $identifier, $elseValue)
+    {
+        return $this->has($identifier) ? $this->get($identifier) : $elseValue;
+    }
 }

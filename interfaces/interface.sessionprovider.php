@@ -17,4 +17,6 @@ interface ISessionProvider
     public function remove($key);
 
     public function has($string);
+
+    public function getOrElse(string $identifier, $elseValue);
 }

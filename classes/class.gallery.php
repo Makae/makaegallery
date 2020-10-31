@@ -131,7 +131,11 @@ class Gallery
     private function addImages(array $paths, array &$images)
     {
         foreach ($paths as $path) {
-            $images[] = $this->loadImageFromPath($path);
+            $image = $this->loadImageFromPath($path);
+            if ($image === null) {
+                continue;
+            }
+            $images[] = $image;
         }
         usort($images, [$this, 'sort']);
     }
