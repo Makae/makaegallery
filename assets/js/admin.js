@@ -47,14 +47,14 @@ var admin = {
                 }
             });
         });
+
         $(".gallery-upload-button").on('click', function (e) {
             e.preventDefault();
             const token = $(".gallery-upload-button").data("token");
-            debugger;
             self.service.request({
                 url: window.location.pathname,
                 method: 'POST',
-                data: {ajax: true, token: token, action: 'upload', images: images},
+                data: {ajax: true, nonce: token, action: 'upload', images: images},
                 success: function (request) {
                     $('.processing-progress li.done').removeClass('done');
                 },

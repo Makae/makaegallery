@@ -9,6 +9,7 @@ use ch\makae\makaegallery\GalleryRepository;
 use ch\makae\makaegallery\ImageConverter;
 use ch\makae\makaegallery\PartsLoader;
 use ch\makae\makaegallery\PublicGallery;
+use ch\makae\makaegallery\Security;
 use ch\makae\makaegallery\SessionProvider;
 
 require_once('./loader.php');
@@ -34,6 +35,7 @@ $makaeGallery = new GalleryRepository(
 $ajax = new AjaxRequestHandler($makaeGallery, $sessionProvider, DOING_AJAX);
 $App = new App(
     $sessionProvider,
+    new Security($sessionProvider),
     new Authentication($sessionProvider, SALT, unserialize(AUTH_USERS), unserialize(AUTH_RESTRICTIONS)),
     $makaeGallery,
     $ajax,

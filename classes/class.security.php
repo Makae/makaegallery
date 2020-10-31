@@ -13,7 +13,7 @@ class Security
     public function __construct(ISessionProvider $sessionProvider, ?DateInterval $validityInterval=null)
     {
         $this->sessionProvider = $sessionProvider;
-        $this->validityInterval = is_null($validityInterval) ? new \DateInterval($validityInterval) : $validityInterval;
+        $this->validityInterval = is_null($validityInterval) ? new \DateInterval("PT5M") : $validityInterval;
     }
 
     public function createNonceToken(string $key): string

@@ -14,6 +14,7 @@ if (DOING_AJAX) {
 
 $gallery_data = array();
 $repository = $App->getGalleryRepository();
+$security = $App->getSecurity();
 foreach ($repository->getGalleries() as $gallery) {
     $images = Utils::mapImagesToArray($gallery->getImages(true, false));
     $gallery_data[] = array(
@@ -42,7 +43,7 @@ foreach ($repository->getGalleries() as $gallery) {
                     <input type="file" multiple="multiple"
                            class="pull-left"
                            accept="<?= implode(" ", $repository->getAllowedImageTypes()) ?>"/>
-                    <button  data-gallery-id="<?= $gallery['name'] ?>" data-token="<?= $ajax->getNonceToken($gallery['name']) ?>" type="button"
+                    <button  data-gallery-id="<?= $gallery['name'] ?>" data-token="<?= $security->createNonceToken($gallery['name']) ?>" type="button"
                              class="gallery-upload-button clear-gallery-button btn btn-primary pull-left">Upload Image</button>
                 </form>
             </div>

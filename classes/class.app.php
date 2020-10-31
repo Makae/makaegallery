@@ -13,11 +13,6 @@ class App
     private Authentication $auth;
     private Security $security;
 
-    public function getSecurity(): Security
-    {
-        return $this->security;
-    }
-
     public function __construct(
         ISessionProvider $sessionProvider,
         Security $security,
@@ -34,6 +29,11 @@ class App
         $this->partsLoader = $partsLoader;
 
         $this->sessionProvider->start();
+    }
+
+    public function getSecurity(): Security
+    {
+        return $this->security;
     }
 
     public function processRequest($requestURI, $getParams)
@@ -63,7 +63,7 @@ class App
         return $this->galleryRepository;
     }
 
-    public function getAjax() : AjaxRequestHandler
+    public function getAjax(): AjaxRequestHandler
     {
         return $this->ajax;
     }
@@ -73,13 +73,4 @@ class App
         return $this->auth;
     }
 
-    /**
-     * @param Security $security
-     * @return App
-     */
-    public function setSecurity(Security $security): App
-    {
-        $this->security = $security;
-        return $this;
-    }
 }
