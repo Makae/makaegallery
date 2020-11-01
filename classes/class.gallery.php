@@ -15,7 +15,7 @@ class Gallery
     private string $refText;
     private int $order;
     private int $level;
-    private ?array $imageList = null;
+    private ?array $images = null;
 
     public function __construct(string $folder,
                                 ?string $title,
@@ -55,11 +55,6 @@ class Gallery
         return ($a->getIdentifier() < $b->getIdentifier()) ? -1 : 1;
     }
 
-    public function getFolder(): string
-    {
-        return $this->folder;
-    }
-
     public function getCover()
     {
         return $this->cover;
@@ -90,6 +85,87 @@ class Gallery
         return $this->level;
     }
 
+    public function addImageByName($fileName): ?Image
+    {
+        return $this->addImageAtPath($this->getFolder() . DIRECTORY_SEPARATOR . $fileName);
+    }
+
+    private function addImageAtPath($path): ?Image
+    {
+        $this->getImages();
+        $this->removeImage($this->getImageIdentifier($path));
+        $images = $this->appendImages($this->images, [$path]);
+        if (count($images) === 0) {
+            return null;
+        }
+        return $images[0];
+    }
+
+    public function removeImage(string $imageId)
+    {
+        if(is_null($this->images)) return;
+
+        for ($idx = 0; $idx < count($this->images); $idx++) {
+            if ($this->images[$idx]->getIdentifier() === $imageId) {
+                unset($this->images[$idx]);
+                return;
+            }
+        }
+    }
+
+    private function getImageIdentifier(string $path)
+    {
+        return $this->getIdentifier() . '|' . basename($path);
+    }
+
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    private function appendImages(array &$images, array $paths): array
+    {
+        $newImages = [];
+        foreach ($paths as $path) {
+            $image = $this->appendImageFromPath($images, $path);
+            if (!is_null($image)) {
+                $newImages[] = $image;
+            }
+        }
+        usort($images, [$this, 'sort']);
+        return $newImages;
+    }
+
+    private function appendImageFromPath(array &$images, $path): ?Image
+    {
+        $image = $this->loadImageFromPath($path);
+        if (is_null($image)) {
+            return null;
+        }
+        $images[] = $image;
+        return $image;
+    }
+
+    private function loadImageFromPath($path)
+    {
+        if (!preg_match('/^.*\.(jpg|jpeg|bmp|png)$/i', $path)) {
+            return null;
+        }
+
+        $path = str_replace('\/', DIRECTORY_SEPARATOR, $path);
+        return new Image(
+            $this->getImageIdentifier($path),
+            $path,
+            null
+        );
+
+    }
+
+    public function getFolder(): string
+    {
+        return $this->folder;
+    }
+
     public function getImage($imageid)
     {
         $list = $this->getImages();
@@ -103,11 +179,11 @@ class Gallery
 
     public function getImages($reload = false)
     {
-        if (!$reload && $this->imageList !== null) {
-            return $this->imageList;
+        if (!$reload && $this->images !== null) {
+            return $this->images;
         }
-        $this->imageList = $this->loadImagesFromDirectory($this->folder);
-        return $this->imageList;
+        $this->images = $this->loadImagesFromDirectory($this->folder);
+        return $this->images;
     }
 
     private function loadImagesFromDirectory($path)
@@ -123,46 +199,9 @@ class Gallery
             }
         }
 
-        $imageList = [];
-        $this->addImages($paths, $imageList);
-        return $imageList;
-    }
-
-    private function addImages(array $paths, array &$images)
-    {
-        foreach ($paths as $path) {
-            $image = $this->loadImageFromPath($path);
-            if ($image === null) {
-                continue;
-            }
-            $images[] = $image;
-        }
-        usort($images, [$this, 'sort']);
-    }
-
-    private function loadImageFromPath($path)
-    {
-        if (!preg_match('/^.*\.(jpg|jpeg|bmp|png)$/i', $path)) {
-            return null;
-        }
-
-        $path = str_replace('\/', DIRECTORY_SEPARATOR, $path);
-        return new Image(
-            $this->getIdentifier() . '|' . basename($path),
-            $path,
-            null
-        );
-
-    }
-
-    public function getIdentifier()
-    {
-        return $this->identifier;
-    }
-
-    private function addImage($path)
-    {
-        $this->addImages([$path], $this->imageList);
+        $images = [];
+        $this->appendImages($images, $paths);
+        return $images;
     }
 
 }

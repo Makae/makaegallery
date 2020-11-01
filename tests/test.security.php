@@ -33,5 +33,4 @@ class SecurityTest extends TestCase
 
         $this->assertFalse($security->validateNonceToken($token));
     }
-
 }

@@ -71,10 +71,50 @@ class GalleryRepository
         return $map;
     }
 
+    public function addUploadedFiles(string $galleryId, array $files)
+    {
+        $result = [];
+        foreach ($files as $file) {
+            $result[] = $this->addUploadedFile($galleryId, $file);
+        }
+        return $result;
+    }
+
+    private function addUploadedFile(string $galleryId, $file)
+    {
+        if ($file['error'] !== 0) {
+            return ['name' => $file['name'], 'success' => false, 'msg' => 'upload_error'];
+        }
+
+        $gallery = $this->getGallery($galleryId);
+        if (!$gallery) {
+            return ['name' => $file['name'], 'success' => false, 'msg' => 'invalid_galleryid'];
+        }
+
+        if (!Utils::moveUploadedFile($file, $gallery->getFolder())) {
+            return ['name' => $file['name'], 'success' => false, 'msg' => 'upload_error'];
+        }
+
+        $image = $gallery->addImageByName($file['name']);
+        if(is_null($image)) {
+            return ['name' => $file['name'], 'success' => false, 'msg' => 'gallery_adding_error'];
+        }
+        return ['name' => $file['name'], 'success' => true];
+    }
+
+    public function getGallery($gallery_id): ?PublicGallery
+    {
+        foreach ($this->getGalleries() as $gallery) {
+            if ($gallery->getIdentifier() == $gallery_id)
+                return $gallery;
+        }
+        return null;
+    }
+
     private function prepareImage($image, $process, $meta)
     {
         if ($process) {
-            $image = $this->processImage($image);
+            $image = $this->processImageById($image);
         }
 
         if ($meta) {
@@ -83,7 +123,7 @@ class GalleryRepository
         return $image;
     }
 
-    public function processImage($imgId)
+    public function processImageById($imgId)
     {
         $gallery = $this->getGalleryByImageId($imgId);
         return $gallery->processImageById($imgId);
@@ -94,15 +134,6 @@ class GalleryRepository
         $galleryId = explode('|', $imgId)[0];
         return $this->getGallery($galleryId);
 
-    }
-
-    public function getGallery($gallery_id): ?PublicGallery
-    {
-        foreach ($this->getGalleries() as $gallery) {
-            if ($gallery->getIdentifier() == $gallery_id)
-                return $gallery;
-        }
-        return null;
     }
 
     public function addImageMeta($image)

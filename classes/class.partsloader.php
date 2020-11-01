@@ -27,9 +27,7 @@ class PartsLoader
         $view_output = ob_get_clean();
         if (!$this->ajax->isAjaxRequest())
             include_once($this->partsDir . DIRECTORY_SEPARATOR . 'header.php');
-
         echo $view_output;
-
         if (!$this->ajax->isAjaxRequest())
             include_once($this->partsDir . DIRECTORY_SEPARATOR . 'footer.php');
     }

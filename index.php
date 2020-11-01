@@ -1,5 +1,4 @@
 <?php
-
 use ch\makae\makaegallery\AjaxRequestHandler;
 use ch\makae\makaegallery\App;
 use ch\makae\makaegallery\Authentication;
@@ -32,7 +31,7 @@ $makaeGallery = new GalleryRepository(
     $galleryLoader,
     $galleryConverter
 );
-$ajax = new AjaxRequestHandler($makaeGallery, $sessionProvider, DOING_AJAX);
+$ajax = new AjaxRequestHandler($makaeGallery, DOING_AJAX);
 $App = new App(
     $sessionProvider,
     new Security($sessionProvider),

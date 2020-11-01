@@ -37,7 +37,7 @@ var admin = {
             e.preventDefault();
             self.service.request({
                 url: window.location.pathname,
-                method: 'POST',
+                method: 'GET',
                 data: {ajax: true, action: 'clear_minified'},
                 success: function (request) {
                     $('.processing-progress li.done').removeClass('done');
@@ -48,13 +48,28 @@ var admin = {
             });
         });
 
-        $(".gallery-upload-button").on('click', function (e) {
+        $(".upload-image-button").on('click', function (e) {
             e.preventDefault();
-            const token = $(".gallery-upload-button").data("token");
+
+            const fileInput = $(this).closest("form").find("input[type='file']")[0];
+            if(fileInput.files.length === 0) {
+                return;
+            }
+            const nonceToken = $(this).data("nonce");
+            const galleryid = $(this).data('gallery-id');
+
             self.service.request({
                 url: window.location.pathname,
                 method: 'POST',
-                data: {ajax: true, nonce: token, action: 'upload', images: images},
+                query: {
+                    ajax: 1,
+                    nonce: nonceToken,
+                    action: 'upload_images',
+                    galleryid: galleryid
+                },
+                data: {
+                    images: fileInput.files
+                },
                 success: function (request) {
                     $('.processing-progress li.done').removeClass('done');
                 },
@@ -71,7 +86,7 @@ var admin = {
             var _this = this;
             self.service.request({
                 url: window.location.pathname,
-                method: 'POST',
+                method: 'GET',
                 data: {ajax: true, action: 'clear_minified', galleryid: galleryid},
                 success: function (request) {
                     $(_this).closest('.gallery-wrapper').find('li.done').removeClass('done');
@@ -97,7 +112,7 @@ var admin = {
         var self = this;
         self.service.request({
             url: window.location.pathname,
-            method: 'POST',
+            method: 'GET',
             data: {imageid: imgid, ajax: true, action: 'minify_image'},
             success: function (request) {
                 success(request);

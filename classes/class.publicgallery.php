@@ -27,6 +27,10 @@ class PublicGallery
         $this->cache = new Cache($this->gallery->getFolder() . DIRECTORY_SEPARATOR . PublicGallery::CACHE_KEY);
     }
 
+    public function getFolder() {
+        return $this->gallery->getFolder();
+    }
+
     public function getCover()
     {
         return $this->gallery->getCover();
@@ -123,7 +127,7 @@ class PublicGallery
         return $this->gallery->getFolder() . DIRECTORY_SEPARATOR . 'resized';
     }
 
-    public function processImageById($imageId)
+    public function processImageById($imageId): Image
     {
         $image = $this->convertImage($this->getImage($imageId, true, false));
 
@@ -147,6 +151,14 @@ class PublicGallery
         $image->setThumbnailUrl($this->getURLFromPath($thumbnailResult->getConversionPath()));
 
         return $image;
+    }
+
+    public function addImageByName($fileName): Image
+    {
+        $image = $this->gallery->addImageByName($fileName);
+
+        return $this->processImageById($image->getIdentifier());
+
     }
 
 

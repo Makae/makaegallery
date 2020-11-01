@@ -43,8 +43,8 @@ foreach ($repository->getGalleries() as $gallery) {
                     <input type="file" multiple="multiple"
                            class="pull-left"
                            accept="<?= implode(" ", $repository->getAllowedImageTypes()) ?>"/>
-                    <button  data-gallery-id="<?= $gallery['name'] ?>" data-token="<?= $security->createNonceToken($gallery['name']) ?>" type="button"
-                             class="gallery-upload-button clear-gallery-button btn btn-primary pull-left">Upload Image</button>
+                    <button  data-gallery-id="<?= $gallery['name'] ?>" data-nonce="<?= $security->createNonceToken($gallery['name']) ?>" type="button"
+                             class="gallery-button upload-image-button btn btn-primary pull-left">Upload Image</button>
                 </form>
             </div>
             <ul class="processing-progress" data-gallery="<?= $gallery['name'] ?>">

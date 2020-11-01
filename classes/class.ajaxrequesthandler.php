@@ -4,13 +4,13 @@ namespace ch\makae\makaegallery;
 
 class AjaxRequestHandler
 {
-    private $makaeGallery;
-    private $active;
+    private GalleryRepository $galleryRepository;
+    private bool $active;
 
-    public function __construct(GalleryRepository $makaeGallery, $active = false)
+    public function __construct(GalleryRepository $galleryRepository, $active = false)
     {
         $this->active = $active;
-        $this->makaeGallery = $makaeGallery;
+        $this->galleryRepository = $galleryRepository;
     }
 
     public function isAjaxRequest()
@@ -23,10 +23,24 @@ class AjaxRequestHandler
         call_user_func_array(array($this, 'admin_action_' . $_REQUEST['action']), $_REQUEST);
     }
 
+    public function admin_action_upload_images($params) {
+        $galleryId = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
+        $files = Utils::getUploadedFiles("images");
+
+        $result = $this->galleryRepository->addUploadedFiles($galleryId, $files);
+        echo json_encode(array(
+            'status' => 'success',
+            'msg' => 'Added Images to ' . $galleryId,
+            'galleryid' => $galleryId,
+            'result' => $result
+        ));
+        exit();
+    }
+
     public function admin_action_clear_minified($params)
     {
         $gallery = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
-        $this->makaeGallery->clearProcessedImages($gallery);
+        $this->galleryRepository->clearProcessedImages($gallery);
         echo json_encode(array(
             'status' => 'success',
             'msg' => 'Gallery ' . $gallery . ' cleared',
@@ -38,7 +52,7 @@ class AjaxRequestHandler
     public function admin_action_update_image_list($params)
     {
         $gallery = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
-        $diff = $this->makaeGallery->updateImageList($gallery);
+        $diff = $this->galleryRepository->updateImageList($gallery);
         echo json_encode(array(
             'status' => 'success',
             'msg' => 'Gallery ' . $gallery . ' updated',
@@ -52,7 +66,7 @@ class AjaxRequestHandler
     {
         $imgid = urldecode($_REQUEST['imageid']);
 
-        $image = $this->makaeGallery->processImage($imgid);
+        $image = $this->galleryRepository->processImageById($imgid);
 
         header('Content-Type: text/json');
         if (is_null($image)) {

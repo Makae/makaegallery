@@ -7,6 +7,7 @@ use DateTime;
 
 class Security
 {
+    private const SALT = "aü0-thaü3gnyv(6e°46?";
     private \DateInterval $validityInterval;
     private ISessionProvider $sessionProvider;
 
@@ -19,13 +20,15 @@ class Security
     public function createNonceToken(string $key): string
     {
         $validUntil = $this->now()->add($this->validityInterval);
-        $token = new NonceToken(md5($key . $validUntil->getTimestamp()), $validUntil);
+        $token = new NonceToken($this->generateTokenId($key), $validUntil);
         $this->sessionProvider->set(
             'nonce-' . $token->getId(),
             $token
         );
         return $token->getId();
     }
+
+
 
     private function now(): DateTime
     {
@@ -49,6 +52,11 @@ class Security
     private function clearToken(string $identifier): void
     {
         $this->sessionProvider->remove($identifier);
+    }
+
+    private function generateTokenId(string $key)
+    {
+        return md5($key . self::SALT);
     }
 
 
