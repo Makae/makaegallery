@@ -82,12 +82,16 @@ class PublicGallery
             $images = $this->convertImages($images);
         }
         if($doCache) {
-            $data = $this->cache->get();
-            $data['images'] = $images;
-            $data['processed'] = array_map(fn(Image $image) => $image->getIdentifier(), $images);
-            $this->cache->set($data);
+            $this->setCache($images);
         }
         return $images;
+    }
+
+    private function setCache(array $images) {
+        $data = $this->cache->get();
+        $data['images'] = $images;
+        $data['processed'] = array_map(fn(Image $image) => $image->getIdentifier(), $images);
+        $this->cache->set($data);
     }
 
     private function convertImages($imageList)
@@ -135,6 +139,7 @@ class PublicGallery
         $pIdx = array_search($image->getIdentifier(), $data['processed']);
         $pIdx = $pIdx === false ? 0 : 1;
         $data['processed'][$pIdx] = $image->getIdentifier();
+        $this->cache->set($data);
 
         return $image;
     }
@@ -156,9 +161,8 @@ class PublicGallery
     public function addImageByName($fileName): Image
     {
         $image = $this->gallery->addImageByName($fileName);
-
-        return $this->processImageById($image->getIdentifier());
-
+        $image = $this->processImageById($image->getIdentifier());
+        return $image;
     }
 
 

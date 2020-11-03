@@ -99,17 +99,21 @@ Request.prototype._state_change = function (e) {
             event: e,
             data: this.xmlhttp.responseText
         };
-        if (this.xmlhttp.status === 400) {
-            this.result.status = Request.prototype.STATUS.ERROR;
-            this.error(this, e);
-        } else if (this.xmlhttp.status === 200) {
+
+        if (this.isSuccess()) {
             this.result.status = Request.prototype.STATUS.SUCCESS
             this.success(this, e);
         } else {
+            this.result.status = Request.prototype.STATUS.ERROR;
             this.error(this, e);
         }
     }
 };
+
+Request.prototype.isSuccess = function () {
+    const diff = this.xmlhttp.status - 200;
+    return 0 <= diff && diff <= 99;
+}
 
 function Service(max_procesing) {
     this.max_processing = 5;

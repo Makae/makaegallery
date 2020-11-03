@@ -73,9 +73,11 @@ class GalleryRepository
 
     public function addUploadedFiles(string $galleryId, array $files)
     {
-        $result = [];
+        $result = ['images' => [], 'success' => true];
         foreach ($files as $file) {
-            $result[] = $this->addUploadedFile($galleryId, $file);
+            $imageResult = $this->addUploadedFile($galleryId, $file);
+            $result['images'][] = $imageResult;
+            $result['success'] = $result['success'] && $imageResult['success'];
         }
         return $result;
     }
@@ -96,7 +98,7 @@ class GalleryRepository
         }
 
         $image = $gallery->addImageByName($file['name']);
-        if(is_null($image)) {
+        if (is_null($image)) {
             return ['name' => $file['name'], 'success' => false, 'msg' => 'gallery_adding_error'];
         }
         return ['name' => $file['name'], 'success' => true];

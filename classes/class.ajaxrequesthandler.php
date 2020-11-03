@@ -23,16 +23,20 @@ class AjaxRequestHandler
         call_user_func_array(array($this, 'admin_action_' . $_REQUEST['action']), $_REQUEST);
     }
 
-    public function admin_action_upload_images($params) {
+    public function admin_action_upload_images($params)
+    {
         $galleryId = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
         $files = Utils::getUploadedFiles("images");
-
         $result = $this->galleryRepository->addUploadedFiles($galleryId, $files);
+        if ($result['success']) {
+            http_response_code(200);
+        } else {
+            http_response_code(500);
+        }
         echo json_encode(array(
-            'status' => 'success',
             'msg' => 'Added Images to ' . $galleryId,
             'galleryid' => $galleryId,
-            'result' => $result
+            'result' => $result['images']
         ));
         exit();
     }

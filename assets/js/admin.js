@@ -52,7 +52,8 @@ var admin = {
             e.preventDefault();
 
             const fileInput = $(this).closest("form").find("input[type='file']")[0];
-            if(fileInput.files.length === 0) {
+            const $errorContainer = $(fileInput).closest(".upload-wrapper").find(".error-wrapper");
+            if (fileInput.files.length === 0) {
                 return;
             }
             const nonceToken = $(this).data("nonce");
@@ -71,10 +72,23 @@ var admin = {
                     images: fileInput.files
                 },
                 success: function (request) {
-                    $('.processing-progress li.done').removeClass('done');
-                },
-                error: function () {
+                    $errorContainer.empty();
+                    $errorContainer.removeClass("visible");
 
+                },
+                error: function (request) {
+                    var data = JSON.parse(request.result.data);
+                    $errorContainer.empty();
+                    var errors = "";
+                    for(var key in data.result) {
+                        if(!data.result.hasOwnProperty(key) || data.result[key]['success']) {
+                            continue;
+                        }
+                        let image = data.result[key];
+                        errors += '<p class="error">The image `<strong>' + image.name + '</strong>` could not be uploaded.<br/>ERROR: <em>`' + image.msg + '`</em></p>'
+                    }
+                    $errorContainer.html(errors)
+                    $errorContainer.addClass("visible");
                 }
             });
         });

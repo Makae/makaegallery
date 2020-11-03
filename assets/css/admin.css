@@ -2,3 +2,30 @@
     padding-top: 24px;
     padding-bottom: 24px;
 }
+
+input[type="file"] {
+    padding-top: 7px;
+}
+
+.error-wrapper {
+    display: none;
+    float: none;
+    clear: both;
+
+    margin: 24px 0;
+    padding: 18px 12px;
+    max-width: 480px;
+    color: #FAFAFA;
+    background-color: #d9534f;
+}
+
+.error-wrapper.visible {
+    display: block
+}
+
+
+.error-wrapper p {
+    margin: 8px;
+    padding: 0 0 0 1.5em;
+    text-indent: -1.5em;
+}
