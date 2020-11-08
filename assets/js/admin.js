@@ -80,11 +80,11 @@ var admin = {
                     var data = JSON.parse(request.result.data);
                     $errorContainer.empty();
                     var errors = "";
-                    for(var key in data.result) {
-                        if(!data.result.hasOwnProperty(key) || data.result[key]['success']) {
+                    for (var key in data.result.results) {
+                        if (!data.result.hasOwnProperty(key) || data.result[key]['success']) {
                             continue;
                         }
-                        let image = data.result[key];
+                        let image = data.result.results[key];
                         errors += '<p class="error">The image `<strong>' + image.name + '</strong>` could not be uploaded.<br/>ERROR: <em>`' + image.msg + '`</em></p>'
                     }
                     $errorContainer.html(errors)

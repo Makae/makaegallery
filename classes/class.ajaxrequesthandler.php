@@ -6,11 +6,15 @@ class AjaxRequestHandler
 {
     private GalleryRepository $galleryRepository;
     private bool $active;
+    private UploadHandler $uploadHandler;
+    private Security $security;
 
-    public function __construct(GalleryRepository $galleryRepository, $active = false)
+    public function __construct(GalleryRepository $galleryRepository, Security $security, UploadHandler $uploadHandler, $active = false)
     {
-        $this->active = $active;
         $this->galleryRepository = $galleryRepository;
+        $this->security = $security;
+        $this->uploadHandler = $uploadHandler;
+        $this->active = $active;
     }
 
     public function isAjaxRequest()
@@ -26,9 +30,19 @@ class AjaxRequestHandler
     public function admin_action_upload_images($params)
     {
         $galleryId = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
-        $files = Utils::getUploadedFiles("images");
-        $result = $this->galleryRepository->addUploadedFiles($galleryId, $files);
-        if ($result['success']) {
+        $nonceToken = $_REQUEST['nonce'];
+       /* if (!$this->security->validateNonceToken($nonceToken)) {
+            http_response_code(401);
+            echo "Nonce token is invalid!";
+            exit;
+        }*/
+
+        $result = $this->uploadHandler->addUploadedImages(
+            $galleryId,
+            $this->uploadHandler->getUploadedFiles($_FILES["images"])
+        );
+        die(json_encode($result));
+        if ($result->isSuccess()) {
             http_response_code(200);
         } else {
             http_response_code(500);
@@ -36,7 +50,7 @@ class AjaxRequestHandler
         echo json_encode(array(
             'msg' => 'Added Images to ' . $galleryId,
             'galleryid' => $galleryId,
-            'result' => $result['images']
+            'result' => $result
         ));
         exit();
     }

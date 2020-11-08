@@ -1,21 +1,39 @@
 <?php
 
-function load_test_dependencies($base_dir="") {
+class DependencyLoader
+{
+    public function loadDependencies($baseDir)
+    {
+        $this->loadMultipleDependencies([
+            $baseDir . "classes/**trait.*.php",
+            $baseDir . "interfaces/interface.*.php",
+            $baseDir . "classes/class.*.php",
+            $baseDir . "classes/**/class.*.php"
+        ]);
+    }
+
+    private function loadMultipleDependencies(array $array)
+    {
+        foreach ($array as $pattern) {
+            foreach (glob($pattern) as $filename) {
+                require $filename;
+            }
+        }
+    }
+}
+
+function load_test_dependencies($baseDir = "")
+{
     include_once('config-test.php');
 
-    foreach (glob($base_dir . "tests/classes/class.*.php") as $filename)
-        require $filename;
-
-    load_dependencies($base_dir);
+    $dependencyLoader = new DependencyLoader();
+    $dependencyLoader->loadDependencies($baseDir);
+    $dependencyLoader->loadDependencies($baseDir . "tests");
 }
-function load_dependencies($base_dir="")
+
+function load_dependencies($baseDir = "")
 {
-    foreach (glob($base_dir . "classes/trait.*.php") as $filename)
-        require $filename;
-
-    foreach (glob($base_dir . "interfaces/interface.*.php") as $filename)
-        require $filename;
-
-    foreach (glob($base_dir . "classes/class.*.php") as $filename)
-        require $filename;
+    $dependencyLoader = new DependencyLoader();
+    $dependencyLoader->loadDependencies($baseDir);
 }
+

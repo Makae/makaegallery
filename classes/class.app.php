@@ -53,12 +53,12 @@ class App
         $this->partsLoader->load($view, $requestURI);
     }
 
-    public function getSessionProvider()
+    public function getSessionProvider(): ISessionProvider
     {
         return $this->sessionProvider;
     }
 
-    public function getGalleryRepository()
+    public function getGalleryRepository(): GalleryRepository
     {
         return $this->galleryRepository;
     }
@@ -68,7 +68,7 @@ class App
         return $this->ajax;
     }
 
-    public function getAuth()
+    public function getAuth(): Authentication
     {
         return $this->auth;
     }

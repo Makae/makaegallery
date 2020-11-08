@@ -23,7 +23,8 @@ abstract class Utils
         ];
     }
 
-    public static function arraySearch(array $array, callable $comparitor) {
+    public static function arraySearch(array $array, callable $comparitor)
+    {
         return array_filter(
             $array,
             function ($element) use ($comparitor) {
@@ -125,28 +126,6 @@ abstract class Utils
             return substr($url, 0, -1);
         }
         return $url;
-    }
-
-    public static function getUploadedFiles(string $key) : array
-    {
-        global $_FILES;
-        $fileData = is_array($_FILES[$key]) ? $_FILES[$key] : [$_FILES[$key]];
-        $files = [];
-        for ($idx = 0; $idx < count($fileData['tmp_name']); $idx++) {
-            $files[] = [
-                'name' => $fileData['name'][$idx],
-                'tmp_path' => $fileData['tmp_name'][$idx],
-                'size' => $fileData['size'][$idx],
-                'error' => $fileData['error'][$idx]
-             ];
-        }
-
-        return $files;
-    }
-
-    public static function moveUploadedFile($file, string $targetFolder)
-    {
-        return move_uploaded_file($file['tmp_path'], $targetFolder . DIRECTORY_SEPARATOR . basename($file['name']));
     }
 
 }

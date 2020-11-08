@@ -11,7 +11,7 @@ class Security
     private \DateInterval $validityInterval;
     private ISessionProvider $sessionProvider;
 
-    public function __construct(ISessionProvider $sessionProvider, ?DateInterval $validityInterval=null)
+    public function __construct(ISessionProvider $sessionProvider, ?DateInterval $validityInterval = null)
     {
         $this->sessionProvider = $sessionProvider;
         $this->validityInterval = is_null($validityInterval) ? new \DateInterval("PT5M") : $validityInterval;
@@ -29,10 +29,14 @@ class Security
     }
 
 
-
     private function now(): DateTime
     {
         return new DateTime();
+    }
+
+    private function generateTokenId(string $key)
+    {
+        return md5($key . self::SALT);
     }
 
     public function validateNonceToken(string $identifier): bool
@@ -51,12 +55,7 @@ class Security
 
     private function clearToken(string $identifier): void
     {
-        $this->sessionProvider->remove($identifier);
-    }
-
-    private function generateTokenId(string $key)
-    {
-        return md5($key . self::SALT);
+        $this->sessionProvider->remove('nonce-' . $identifier);
     }
 
 

@@ -126,11 +126,6 @@ class PublicGallery
         $this->cache->clear();
     }
 
-    public function getResizeFolder()
-    {
-        return $this->gallery->getFolder() . DIRECTORY_SEPARATOR . 'resized';
-    }
-
     public function processImageById($imageId): Image
     {
         $image = $this->convertImage($this->getImage($imageId, true, false));
