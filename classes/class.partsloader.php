@@ -25,17 +25,19 @@ class PartsLoader
         }
 
         $view_output = ob_get_clean();
-        if (!$this->ajax->isAjaxRequest())
+        if (!$this->ajax->isAjaxRequest()) {
             include_once($this->partsDir . DIRECTORY_SEPARATOR . 'header.php');
+        }
         echo $view_output;
-        if (!$this->ajax->isAjaxRequest())
+        if (!$this->ajax->isAjaxRequest()) {
             include_once($this->partsDir . DIRECTORY_SEPARATOR . 'footer.php');
+        }
     }
 
     public function pathFromURI($requestURI)
     {
         $subDir = $this->subRoot === '' ? '' : $this->subRoot . '\/';
-        $regex = '/(https?:)?\/\/?' . $subDir .'([^\?]+)+\?.*/';
+        $regex = '/(https?:)?\/\/?' . $subDir . '([^\?]+)+\?.*/';
         return preg_replace($regex, '$2', $requestURI);
     }
 
