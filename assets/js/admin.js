@@ -73,39 +73,15 @@ var admin = {
                     images: fileInput.files
                 },
                 success: function (request) {
-                    $(fileInput).val("");
-
                     const data = JSON.parse(request.result.data);
-                    self.clearContainers($uploadWrapper);
-                    let list = [];
+                    self.updateContainers($uploadWrapper, data.result.results);
 
-                    for (const key in data.result.results) {
-                        if (!data.result.results.hasOwnProperty(key) || !data.result.results[key]['success']) {
-                            continue;
-                        }
-                        let image = data.result.results[key];
-                        list.push('`<strong>' + image.name + '</strong>` has been uploaded');
-
-                    }
-
-                    self.setNotifications($uploadWrapper, list);
+                    $(fileInput).val("");
 
                 },
                 error: function (request) {
                     const data = JSON.parse(request.result.data);
-                    self.clearContainers($(fileInput));
-                    let list = [];
-
-                    for (const key in data.result.results) {
-                        if (!data.result.results.hasOwnProperty(key) || data.result.results[key]['success']) {
-                            continue;
-                        }
-                        let image = data.result.results[key];
-                        list.push('The image `<strong>' + image.name + '</strong>` could not be uploaded.<br/>ERROR: <em>`' + image.msg + '`</em>');
-
-                    }
-
-                    self.setErrors($uploadWrapper, list);
+                    self.updateContainers($uploadWrapper, data.result.results);
                 }
             });
         });
@@ -139,42 +115,68 @@ var admin = {
         });
     },
 
-    setErrors: function ($context, list) {
-        let html = '';
-        for(let key in list) {
-            if(!list.hasOwnProperty(key)) {
+    updateContainers: function ($context, results) {
+        this.clearContainers($context);
+
+        const successMessages = [];
+        const errorMessages = [];
+
+        for (const key in results) {
+            if (!results.hasOwnProperty(key)) {
                 continue;
             }
-            html += '<p class="error">' + list[key] + '</p>';
-        }
-        const $errorContainer = $context.find(".message-wrapper.error");
-        $errorContainer.append($(html));
-        $errorContainer.addClass("visible");
+            let image = results[key];
 
+            if (results[key]['success']) {
+                successMessages.push('<strong>' + image.name + '</strong> has been uploaded');
+            } else {
+                errorMessages.push('The image <strong>' + image.name + '</strong> could not be uploaded.<br/>ERROR: <em>`' + image.msg + '`</em>');
+            }
+        }
+
+        this.setErrors($context, errorMessages);
+        this.setNotifications($context, successMessages);
     },
 
-    setNotifications: function ($context, list) {
-        let html = '';
-        for(let key in list) {
-            if(!list.hasOwnProperty(key)) {
+    setMessages: function ($container, clazz, messages) {
+        if(messages.length === 0) {
+            return;
+        }
+        let html = '<span class="close-button">X</span>';
+        for (let key in messages) {
+            if (!messages.hasOwnProperty(key)) {
                 continue;
             }
-            html += '<p class="notification">' + list[key] + '</p>';
+            html += '<p class="' + clazz + '">' + messages[key] + '</p>';
         }
-        const $errorContainer = $context.find(".message-wrapper.notification");
-        $errorContainer.append($(html));
-        $errorContainer.addClass("visible");
+        const $html = $(html);
 
+        var self = this;
+        $($html.get(0)).on('click', () => {
+            self.clearContainer($container.parent(), clazz);
+        })
+        $container.append($html);
+        $container.addClass("visible");
+    },
+
+    setErrors: function ($context, messages) {
+        this.setMessages($context.find(".message-wrapper.error"), "error", messages);
+    },
+
+    setNotifications: function ($context, messages) {
+        this.setMessages($context.find(".message-wrapper.notification"), "notification", messages)
     },
 
     clearContainers: function ($context) {
-        const $errorContainer = $context.find(".message-wrapper.error");
-        const $notificationContainer = $context.find(".message-wrapper.notification");
+        this.clearContainer($context, "error");
+        this.clearContainer($context, "notification");
+    },
 
-        $errorContainer.empty();
-        $errorContainer.removeClass("visible");
-        $notificationContainer.empty();
-        $notificationContainer.removeClass("visible");
+    clearContainer: function ($context, clazz) {
+        const $container = $context.find(".message-wrapper." + clazz);
+
+        $container.empty();
+        $container.removeClass("visible");
     },
 
     minifyImg: function (imgid, success, error) {
