@@ -30,18 +30,17 @@ class AjaxRequestHandler
     public function admin_action_upload_images($params)
     {
         $galleryId = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
-        $nonceToken = $_REQUEST['nonce'];
-       /* if (!$this->security->validateNonceToken($nonceToken)) {
-            http_response_code(401);
-            echo "Nonce token is invalid!";
-            exit;
-        }*/
+        $nonceToken = isset($_REQUEST['nonce']) ? $_REQUEST['nonce'] : null;
+        /* if (!$this->security->validateNonceToken($nonceToken)) {
+             http_response_code(401);
+             echo "Nonce token is invalid!";
+             exit;
+         }*/
 
         $result = $this->uploadHandler->addUploadedImages(
             $galleryId,
             $this->uploadHandler->getUploadedFiles($_FILES["images"])
         );
-        die(json_encode($result));
         if ($result->isSuccess()) {
             http_response_code(200);
         } else {

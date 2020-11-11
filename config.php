@@ -1,9 +1,8 @@
 <?php
-// FIND SERVER ROOT PATH EXTENSION
-
 use ch\makae\makaegallery\Authentication;
 use ch\makae\makaegallery\ImageConverter;
 
+// FIND SERVER ROOT PATH EXTENSION
 $root = str_replace("\\", "/", $_SERVER['DOCUMENT_ROOT']);
 $dir = str_replace("\\", "/", dirname($_SERVER['SCRIPT_NAME']));
 $dir = $dir == '/' ? '' : $dir;
