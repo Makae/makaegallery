@@ -37,9 +37,10 @@ class AjaxRequestHandler
              exit;
          }*/
 
+        $files = $this->uploadHandler->getUploadedFiles($_FILES["images"]);
         $result = $this->uploadHandler->addUploadedImages(
             $galleryId,
-            $this->uploadHandler->getUploadedFiles($_FILES["images"])
+            $files
         );
         if ($result->isSuccess()) {
             http_response_code(200);

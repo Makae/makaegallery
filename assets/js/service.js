@@ -190,5 +190,4 @@ Service.prototype.trash = function (request) {
             return;
         }
     }
-    ;
 };

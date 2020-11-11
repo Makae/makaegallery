@@ -47,7 +47,9 @@ foreach ($repository->getGalleries() as $gallery) {
                             data-nonce="<?= $security->createNonceToken($gallery['name']) ?>" type="button"
                             class="gallery-button upload-image-button btn btn-primary pull-left">Upload Images
                     </button>
-                    <div class="error-wrapper">
+                    <div class="message-wrapper error">
+                    </div>
+                    <div class="message-wrapper notification">
                     </div>
                 </form>
             </div>

@@ -52,12 +52,13 @@ var admin = {
             e.preventDefault();
 
             const fileInput = $(this).closest("form").find("input[type='file']")[0];
-            const $errorContainer = $(fileInput).closest(".upload-wrapper").find(".error-wrapper");
+            const $uploadWrapper = $(fileInput).closest(".upload-wrapper");
+
             if (fileInput.files.length === 0) {
                 return;
             }
             const nonceToken = $(this).data("nonce");
-            const galleryid = $(this).data('gallery-id');
+            const galleryId = $(this).data('gallery-id');
 
             self.service.request({
                 url: window.location.pathname,
@@ -66,29 +67,45 @@ var admin = {
                     ajax: 1,
                     nonce: nonceToken,
                     action: 'upload_images',
-                    galleryid: galleryid
+                    galleryid: galleryId
                 },
                 data: {
                     images: fileInput.files
                 },
                 success: function (request) {
-                    $errorContainer.empty();
-                    $errorContainer.removeClass("visible");
+                    $(fileInput).val("");
 
-                },
-                error: function (request) {
-                    var data = JSON.parse(request.result.data);
-                    $errorContainer.empty();
-                    var errors = "";
-                    for (var key in data.result.results) {
-                        if (!data.result.hasOwnProperty(key) || data.result[key]['success']) {
+                    const data = JSON.parse(request.result.data);
+                    self.clearContainers($uploadWrapper);
+                    let list = [];
+
+                    for (const key in data.result.results) {
+                        if (!data.result.results.hasOwnProperty(key) || !data.result.results[key]['success']) {
                             continue;
                         }
                         let image = data.result.results[key];
-                        errors += '<p class="error">The image `<strong>' + image.name + '</strong>` could not be uploaded.<br/>ERROR: <em>`' + image.msg + '`</em></p>'
+                        list.push('`<strong>' + image.name + '</strong>` has been uploaded');
+
                     }
-                    $errorContainer.html(errors)
-                    $errorContainer.addClass("visible");
+
+                    self.setNotifications($uploadWrapper, list);
+
+                },
+                error: function (request) {
+                    const data = JSON.parse(request.result.data);
+                    self.clearContainers($(fileInput));
+                    let list = [];
+
+                    for (const key in data.result.results) {
+                        if (!data.result.results.hasOwnProperty(key) || data.result.results[key]['success']) {
+                            continue;
+                        }
+                        let image = data.result.results[key];
+                        list.push('The image `<strong>' + image.name + '</strong>` could not be uploaded.<br/>ERROR: <em>`' + image.msg + '`</em>');
+
+                    }
+
+                    self.setErrors($uploadWrapper, list);
                 }
             });
         });
@@ -120,6 +137,44 @@ var admin = {
                 $this.closest('li').removeClass("start").addClass("done");
             });
         });
+    },
+
+    setErrors: function ($context, list) {
+        let html = '';
+        for(let key in list) {
+            if(!list.hasOwnProperty(key)) {
+                continue;
+            }
+            html += '<p class="error">' + list[key] + '</p>';
+        }
+        const $errorContainer = $context.find(".message-wrapper.error");
+        $errorContainer.append($(html));
+        $errorContainer.addClass("visible");
+
+    },
+
+    setNotifications: function ($context, list) {
+        let html = '';
+        for(let key in list) {
+            if(!list.hasOwnProperty(key)) {
+                continue;
+            }
+            html += '<p class="notification">' + list[key] + '</p>';
+        }
+        const $errorContainer = $context.find(".message-wrapper.notification");
+        $errorContainer.append($(html));
+        $errorContainer.addClass("visible");
+
+    },
+
+    clearContainers: function ($context) {
+        const $errorContainer = $context.find(".message-wrapper.error");
+        const $notificationContainer = $context.find(".message-wrapper.notification");
+
+        $errorContainer.empty();
+        $errorContainer.removeClass("visible");
+        $notificationContainer.empty();
+        $notificationContainer.removeClass("visible");
     },
 
     minifyImg: function (imgid, success, error) {
