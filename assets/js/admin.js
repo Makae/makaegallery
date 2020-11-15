@@ -7,7 +7,7 @@ var admin = {
     },
 
     bind: function () {
-        var self = this;
+        let self = this;
 
         $("#minify-button").on('click', function (e) {
             e.preventDefault();

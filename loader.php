@@ -5,31 +5,27 @@ class DependencyLoader
     public function loadDependencies($baseDir)
     {
         $this->loadMultipleDependencies([
-            $baseDir . "classes/**trait.*.php",
-            $baseDir . "interfaces/interface.*.php",
-            $baseDir . "classes/class.*.php",
-            $baseDir . "classes/**/class.*.php"
+            $baseDir . "**trait.*.php",
+            $baseDir . "interface.*.php",
+            $baseDir . "**/interface.*.php",
+            $baseDir . "class.*.php",
+            $baseDir . "**/class.*.php"
         ]);
     }
 
-    private function loadMultipleDependencies(array $array)
+    public function loadMultipleDependencies(array $array)
     {
         foreach ($array as $pattern) {
             foreach (glob($pattern) as $filename) {
+                if(is_dir($filename)) {
+                    continue;
+                }
                 require $filename;
             }
         }
     }
 }
 
-function load_test_dependencies($baseDir = "")
-{
-    include_once('config-test.php');
-
-    $dependencyLoader = new DependencyLoader();
-    $dependencyLoader->loadDependencies($baseDir);
-    $dependencyLoader->loadDependencies($baseDir . "tests");
-}
 
 function load_dependencies($baseDir = "")
 {

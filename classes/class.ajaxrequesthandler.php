@@ -67,19 +67,6 @@ class AjaxRequestHandler
         exit();
     }
 
-    public function admin_action_update_image_list($params)
-    {
-        $gallery = isset($_REQUEST['galleryid']) ? $_REQUEST['galleryid'] : null;
-        $diff = $this->galleryRepository->updateImageList($gallery);
-        echo json_encode(array(
-            'status' => 'success',
-            'msg' => 'Gallery ' . $gallery . ' updated',
-            'galleryid' => $gallery,
-            'diff' => $diff
-        ));
-        exit();
-    }
-
     public function admin_action_minify_image($params)
     {
         $imgid = urldecode($_REQUEST['imageid']);
