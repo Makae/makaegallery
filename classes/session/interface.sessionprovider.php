@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ch\makae\makaegallery;
+namespace ch\makae\makaegallery\session;
 
 
 interface ISessionProvider

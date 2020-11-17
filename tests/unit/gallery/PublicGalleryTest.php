@@ -1,7 +1,4 @@
 <?php
-require_once('../loader.php');
-
-load_test_dependencies('../');
 
 use ch\makae\makaegallery\tests\GalleryHelper;
 use ch\makae\makaegallery\Utils;
@@ -9,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class PublicGalleryTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown(): void
     {
         Utils::rmdir(GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'converted');
         Utils::rmfile(GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'gallery.cache');

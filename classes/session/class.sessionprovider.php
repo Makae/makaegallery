@@ -1,6 +1,6 @@
 <?php
 
-namespace ch\makae\makaegallery;
+namespace ch\makae\makaegallery\session;
 
 class SessionProvider implements ISessionProvider
 {

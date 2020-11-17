@@ -1,7 +1,4 @@
 <?php
-require_once('../loader.php');
-
-load_test_dependencies('../');
 
 use ch\makae\makaegallery\ConversionConfig;
 use ch\makae\makaegallery\ImageConverter;
@@ -11,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 class ImageConverterTest extends TestCase
 {
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         GalleryHelper::cleanUp();
     }
@@ -19,14 +16,14 @@ class ImageConverterTest extends TestCase
     public function test_convertTo_withValidConfig_works()
     {
         $galleryConverter = GalleryHelper::getStandardConverter();
-        $resultResized = $galleryConverter->convertTo("resized", GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'first.jpg');
+        $resultResized = $galleryConverter->convertTo("thumbnail", GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'first.jpg');
         $this->assertEquals($resultResized->getWidth(), 800);
-        $this->assertTrue(file_exists(GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'resized-first-800-1200-80.jpg'));
+        $this->assertTrue(file_exists(GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'converted' . DIRECTORY_SEPARATOR . 'resized-first-800-1200-80.jpg'));
 
-        $resultOptimized = $galleryConverter->convertTo("quality", GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'first.jpg');
+        $resultOptimized = $galleryConverter->convertTo("optimized", GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'first.jpg');
         $this->assertEquals($resultOptimized->getWidth(), 1080);
         $this->assertEquals($resultOptimized->getHeight(), 1620);
-        $this->assertTrue(file_exists(GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'resized-first-1080-1620-75.jpg'));
+        $this->assertTrue(file_exists(GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'converted' . DIRECTORY_SEPARATOR . 'resized-first-1080-1620-75.jpg'));
     }
 
     public function test_convertTo_withSpecialTargetpath_works()
@@ -48,7 +45,7 @@ class ImageConverterTest extends TestCase
         );
         $resultResized = $galleryConverter->convertTo("resized", GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'first.jpg');
         $this->assertEquals($resultResized->getWidth(), 800);
-        $this->assertTrue(file_exists(GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'resized-first-800-1200-80.jpg'));
+        $this->assertTrue(file_exists(GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'converted' . DIRECTORY_SEPARATOR . 'resized-first-800-1200-80.jpg'));
 
         $resultOptimized = $galleryConverter->convertTo("quality", GalleryHelper::TEST_GALLERY_FOLDER . DIRECTORY_SEPARATOR . 'first.jpg');
         $this->assertEquals($resultOptimized->getWidth(), 1080);

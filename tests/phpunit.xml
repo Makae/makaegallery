@@ -1,7 +1,16 @@
 <phpunit bootstrap="test-loader.php">
     <testsuites>
+        <testsuite name="gallery">
+            <directory suffix="Test.php">unit/gallery</directory>
+        </testsuite>
+        <testsuite name="security">
+            <directory suffix="Test.php">unit/security</directory>
+        </testsuite>
         <testsuite name="rest">
-            <directory suffix="Test.php">tests/unit/rest</directory>
+            <directory suffix="Test.php">unit/rest</directory>
+        </testsuite>
+        <testsuite name="general">
+            <directory suffix="Test.php">unit</directory>
         </testsuite>
     </testsuites>
 </phpunit>

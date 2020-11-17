@@ -1,7 +1,4 @@
 <?php
-require_once('../loader.php');
-
-load_test_dependencies('../');
 
 use ch\makae\makaegallery\tests\GalleryHelper;
 use PHPUnit\Framework\TestCase;

@@ -1,6 +1,8 @@
 <?php
 
-namespace ch\makae\makaegallery;
+namespace ch\makae\makaegallery\tests;
+
+use ch\makae\makaegallery\session\ISessionProvider;
 
 class SessionProviderMock implements ISessionProvider
 {

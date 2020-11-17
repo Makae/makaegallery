@@ -2,6 +2,8 @@
 
 namespace ch\makae\makaegallery;
 
+use ch\makae\makaegallery\session\ISessionProvider;
+
 class Authentication
 {
     const USER_LEVEL_ADMIN = 0;

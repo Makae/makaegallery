@@ -2,6 +2,7 @@
 
 namespace ch\makae\makaegallery;
 
+use ch\makae\makaegallery\session\ISessionProvider;
 use DateInterval;
 use DateTime;
 

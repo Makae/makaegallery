@@ -1,11 +1,7 @@
 <?php
-require_once('../loader.php');
-
-load_dependencies('../');
-require_once('mocks/mock.sessionprovider.php');
 
 use ch\makae\makaegallery\Authentication;
-use ch\makae\makaegallery\SessionProviderMock;
+use ch\makae\makaegallery\tests\SessionProviderMock;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationTest extends TestCase

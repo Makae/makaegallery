@@ -14,7 +14,7 @@ use ch\makae\makaegallery\SessionProvider;
 use ch\makae\makaegallery\UploadHandler;
 
 require_once('./loader.php');
-load_dependencies('classes/');
+load_dependencies(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR);
 require_once('./config.php');
 
 global $App;
