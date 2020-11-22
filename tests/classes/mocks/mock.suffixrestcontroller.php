@@ -2,13 +2,22 @@
 
 namespace ch\makae\makaegallery\tests;
 
-use ch\makae\makaegallery\rest\IRestController;
+use ch\makae\makaegallery\rest\RestController;
 
-class SuffixRestController implements IRestController
+class SuffixRestController extends RestController
 {
+
+    private string $suffix;
+
+    public function __construct(string $suffix, string $routePattern = "/")
+    {
+        parent::__construct($routePattern);
+        $this->suffix = $suffix;
+
+    }
 
     public function handle(string $path)
     {
-        return $path . "-suffix";
+        return $path . $this->suffix;
     }
 }
