@@ -2,6 +2,7 @@
 
 namespace ch\makae\makaegallery\tests;
 
+use ch\makae\makaegallery\rest\HttpResponse;
 use ch\makae\makaegallery\rest\RestController;
 
 class SuffixRestController extends RestController
@@ -16,8 +17,8 @@ class SuffixRestController extends RestController
 
     }
 
-    public function handle(string $path)
+    public function handle(string $path, array $header, array $body): HttpResponse
     {
-        return $path . $this->suffix;
+        return new HttpResponse($path . $this->suffix);
     }
 }

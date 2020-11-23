@@ -2,6 +2,10 @@
 
 namespace ch\makae\makaegallery;
 
+use ch\makae\makaegallery\rest\ControllerDefinitionException;
+use ch\makae\makaegallery\rest\RestApi;
+use ch\makae\makaegallery\session\ISessionProvider;
+
 class App
 {
     const DEFAULT_VIEW = 'list';
@@ -18,14 +22,14 @@ class App
         Security $security,
         Authentication $authentication,
         GalleryRepository $galleryRepository,
-        AjaxRequestHandler $ajax,
+        RestApi $restApi,
         PartsLoader $partsLoader)
     {
         $this->security = $security;
         $this->sessionProvider = $sessionProvider;
         $this->galleryRepository = $galleryRepository;
         $this->auth = $authentication;
-        $this->ajax = $ajax;
+        $this->restApi = $restApi;
         $this->partsLoader = $partsLoader;
 
         $this->sessionProvider->start();
@@ -36,8 +40,18 @@ class App
         return $this->security;
     }
 
-    public function processRequest($requestURI, $getParams)
+    public function processRequest($requestURI, $header, $body)
     {
+        try {
+            $response = $this->restApi->handleRequest($requestURI, $header, $body);
+            if ($response !== null) {
+                http_response_code($response->getStatus());
+                echo $response->getBody();
+                exit;
+            }
+        } catch(ControllerDefinitionException $e) {
+        }
+
         if (isset($getParams['logout'])) {
             $this->auth->logout();
         }

@@ -128,4 +128,18 @@ abstract class Utils
         return $url;
     }
 
+    public static function getAllHeaders()
+    {
+        foreach ($_SERVER as $K => $V) {
+            $a = explode('_', $K);
+            if (array_shift($a) == 'HTTP') {
+                array_walk($a, function (&$v) {
+                    $v = ucfirst(strtolower($v));
+                });
+                $retval[join('-', $a)] = $V;
+            }
+        }
+        return $retval;
+    }
+
 }

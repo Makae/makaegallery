@@ -10,13 +10,18 @@ abstract class RestController implements IRestController
         $this->route = new Route($routePattern);
     }
 
-    public function handle(string $path)
+    public function handle(string $path, array $header, array $body): HttpResponse
     {
-        return $path;
+        return new HttpResponse($path);
     }
 
     public function matchesPath(string $path)
     {
         return $this->route->matches($path);
+    }
+
+    protected function getRequestData(string $path, array $header, array $body): RequestData
+    {
+        return new RequestData($this->route->getParameters($path), $header, $body);
     }
 }

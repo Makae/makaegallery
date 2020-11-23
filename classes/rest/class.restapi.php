@@ -6,13 +6,13 @@ class RestApi
 {
     private array $controllers = [];
 
-    public function handleRequest(string $path)
+    public function handleRequest(string $path, array $header, array $body): HttpResponse
     {
         $controller = $this->getMatchingController($path);
         if (is_null($controller)) {
             throw new ControllerDefinitionException("Can not find suitable Controller");
         }
-        return $controller->handle($path);
+        return $controller->handle($path, $header, $body);
     }
 
     private function getMatchingController(string $path): ?IRestController

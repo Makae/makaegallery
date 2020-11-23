@@ -2,7 +2,6 @@
 
 use ch\makae\makaegallery\rest\ControllerDefinitionException;
 use ch\makae\makaegallery\rest\RestApi;
-use ch\makae\makaegallery\rest\RestController;
 use ch\makae\makaegallery\tests\SuffixRestController;
 use PHPUnit\Framework\TestCase;
 
@@ -19,33 +18,33 @@ class RestApiTest extends TestCase
         $restApi = new RestApi();
 
         $this->expectException(ControllerDefinitionException::class);
-        $restApi->handleRequest('/');
+        $restApi->handleRequest('/', [], []);
     }
 
     public function test_addController_works()
     {
         $restApi = new RestApi();
         $restApi->addController(new SuffixRestController('', '/'));
-        $result = $restApi->handleRequest('/');
-        $this->assertEquals("/", $result);
+        $result = $restApi->handleRequest('/', [], []);
+        $this->assertEquals("/", $result->getBody());
     }
 
     public function test_handlingDifferentRequests_works()
     {
         $restApi = new RestApi();
         $restApi->addController(new SuffixRestController('', '/'));
-        $resultAlpha = $restApi->handleRequest('/alpha');
-        $resultBeta = $restApi->handleRequest('/beta');
-        $this->assertEquals('/alpha', $resultAlpha);
-        $this->assertEquals('/beta', $resultBeta);
+        $resultAlpha = $restApi->handleRequest('/alpha', [], []);
+        $resultBeta = $restApi->handleRequest('/beta', [], []);
+        $this->assertEquals('/alpha', $resultAlpha->getBody());
+        $this->assertEquals('/beta', $resultBeta->getBody());
     }
 
     public function test_handlingRequestsDifferently_works()
     {
         $restApi = new RestApi();
-        $restApi->addController(new SuffixRestController("-suffix" ,"/"));
-        $resultAlpha = $restApi->handleRequest('/alpha');
-        $this->assertEquals('/alpha-suffix', $resultAlpha);
+        $restApi->addController(new SuffixRestController("-suffix", "/"));
+        $resultAlpha = $restApi->handleRequest('/alpha', [], []);
+        $this->assertEquals('/alpha-suffix', $resultAlpha->getBody());
     }
 
     public function test_handlingRequestsByDifferentController_works()
@@ -53,8 +52,8 @@ class RestApiTest extends TestCase
         $restApi = new RestApi();
         $restApi->addController(new SuffixRestController("-suffix", '/first'));
         $restApi->addController(new SuffixRestController("-other-suffix", '/second'));
-        $this->assertEquals('/first-suffix', $restApi->handleRequest('/first'));
-        $this->assertEquals('/second-other-suffix', $restApi->handleRequest('/second'));
+        $this->assertEquals('/first-suffix', $restApi->handleRequest('/first', [], [])->getBody());
+        $this->assertEquals('/second-other-suffix', $restApi->handleRequest('/second', [], [])->getBody());
     }
 
 }
