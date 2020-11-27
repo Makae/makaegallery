@@ -8,17 +8,18 @@ class RestApi
 
     public function handleRequest(string $path, array $header, array $body): HttpResponse
     {
-        $controller = $this->getMatchingController($path);
+        $method = isset($header['REQUEST_METHOD']) ? $header['REQUEST_METHOD'] : "GET";
+        $controller = $this->getMatchingController($path, $method);
         if (is_null($controller)) {
             throw new ControllerDefinitionException("Can not find suitable Controller");
         }
         return $controller->handle($path, $header, $body);
     }
 
-    private function getMatchingController(string $path): ?IRestController
+    private function getMatchingController(string $path, string $method="GET"): ?IRestController
     {
         foreach ($this->controllers as $controller) {
-            if ($controller->matchesPath($path)) {
+            if ($controller->matchesPath($path, $method)) {
                 return $controller;
             }
         }

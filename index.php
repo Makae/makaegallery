@@ -14,7 +14,7 @@ use ch\makae\makaegallery\Security;
 use ch\makae\makaegallery\session\SessionProvider;
 use ch\makae\makaegallery\UploadHandler;
 use ch\makae\makaegallery\Utils;
-use ch\makae\makaegallery\web\GalleryController;
+use ch\makae\makaegallery\web\GalleryRestController;
 
 require_once('./loader.php');
 load_dependencies(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR);
@@ -45,7 +45,7 @@ $ajax = new AjaxRequestHandler(
 );
 
 $restApi = new RestApi();
-$restApi->addController(new GalleryController());
+$restApi->addController(new GalleryRestController());
 
 $App = new App(
     $sessionProvider,

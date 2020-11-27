@@ -3,21 +3,24 @@
 
 namespace ch\makae\makaegallery\web;
 
-use ch\makae\makaegallery\rest\HttpResponse;
-use ch\makae\makaegallery\rest\RestController;
+use ch\makae\makaegallery\rest\MultiRestController;
+use ch\makae\makaegallery\rest\RequestData;
+use ch\makae\makaegallery\rest\Route;
+use ch\makae\makaegallery\rest\RouteDeclarations;
 
-class GalleryController extends RestController
+class GalleryRestController extends MultiRestController
 {
 
     public function __construct()
     {
-        parent::__construct('/api/gallery/{gallery_id}');
+        parent::__construct(new RouteDeclarations([
+                [new Route('/api/gallery/{gallery_id}'), [$this, 'getGalleryEndpoint']],
+        ]));
     }
 
-    public function handle(string $path, array $header, array $body): HttpResponse
-    {
-        $requestData = $this->getRequestData($path, $header, $body);
-        return new HttpResponse(json_encode($requestData->getParameters()));
+    public function getGalleryEndpoint(RequestData $requestData) {
+
     }
+
 
 }

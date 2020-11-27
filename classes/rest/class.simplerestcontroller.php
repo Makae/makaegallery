@@ -2,7 +2,7 @@
 
 namespace ch\makae\makaegallery\rest;
 
-abstract class RestController implements IRestController
+abstract class SimpleRestController implements IRestController
 {
     private Route $route;
 
@@ -10,12 +10,12 @@ abstract class RestController implements IRestController
         $this->route = new Route($routePattern);
     }
 
-    public function handle(string $path, array $header, array $body): HttpResponse
+    public function handle(string $method, string $path, array $header, array $body): HttpResponse
     {
         return new HttpResponse($path);
     }
 
-    public function matchesPath(string $path)
+    public function matchesPath(string $path, string $method="GET")
     {
         return $this->route->matches($path);
     }

@@ -4,10 +4,12 @@ namespace ch\makae\makaegallery\rest;
 
 class Route
 {
+    private string $method;
     private ?array $route;
 
-    public function __construct(string $routePattern)
+    public function __construct(string $routePattern, string $method = "GET")
     {
+        $this->method = $method;
         if (!preg_match('/^(\/|(\/({[^{}]+}|[^}\/{]+))+)$/', $routePattern)) {
             throw new InvalidRouteException("The route pattern " . $routePattern . " is invalid");
         }
@@ -36,8 +38,11 @@ class Route
         ];
     }
 
-    public function matches(string $path): bool
+    public function matches(string $path, string $method = "GET"): bool
     {
+        if ($this->method !== $method) {
+            return false;
+        }
         if (!preg_match($this->route['pattern'], $path)) {
             return false;
         }
@@ -53,6 +58,11 @@ class Route
         }
 
         return $mapping;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
     }
 }
 
