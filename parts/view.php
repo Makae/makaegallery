@@ -8,7 +8,7 @@ if (!defined('DOC_ROOT'))
 
 global $App;
 
-$components = Utils::getUriComponents();
+$components = Utils::getUriComponents(Utils::getRequestUri());
 $gallery_id = $components[1];
 $gallery = $App->getGalleryRepository()->getGallery($gallery_id);
 $images = Utils::mapImagesToArray($gallery->getImages());

@@ -42,8 +42,9 @@ class App
 
     public function processRequest($requestURI, $header, $body)
     {
+        $uri = Utils::getRequestUri($requestURI);
         try {
-            $response = $this->restApi->handleRequest($requestURI, $header, $body);
+            $response = $this->restApi->handleRequest('/' . $uri, $header, $body);
             if ($response !== null) {
                 http_response_code($response->getStatus());
                 echo $response->getBody();
@@ -56,7 +57,7 @@ class App
             $this->auth->logout();
         }
 
-        $route = Utils::getUriComponents();
+        $route = Utils::getUriComponents($uri);
         $route[0] = isset($route[0]) ? $route[0] : self::DEFAULT_VIEW;
         $view = $route[0];
         $path = join('/', $route);

@@ -12,3 +12,4 @@ composer.phar
 
 galleries/*
 config-env.php
+/tests/galleries/testgallery/converted/

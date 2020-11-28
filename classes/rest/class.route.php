@@ -10,16 +10,19 @@ class Route
     public function __construct(string $routePattern, string $method = "GET")
     {
         $this->method = $method;
-        if (!preg_match('/^(\/|(\/({[^{}]+}|[^}\/{]+))+)$/', $routePattern)) {
+        if (!preg_match('/^(\/|(\/({[^{}]+}|[^}\/{]+))+)\/?$/', $routePattern)) {
             throw new InvalidRouteException("The route pattern " . $routePattern . " is invalid");
         }
 
         $this->route = $this->getRoute($routePattern);
     }
 
-    private function getRoute(string $route): array
+    private function getRoute(string $routePath): array
     {
-        $parts = explode('/', $route);
+        if (substr($routePath, -1) === '/') {
+            $routePath = substr($routePath, 0, -1);
+        }
+        $parts = explode('/', $routePath);
         $mapping = [];
         foreach ($parts as $key => $value) {
             if (strpos($value, '{') === false) {
@@ -29,9 +32,12 @@ class Route
             $mapping[$name] = $key;
         }
 
-        // /locations/{id} -> /locations/[a-zA-Z0-9-_]
-        $pattern = preg_replace('/{[^{}]+}/', '[a-zA-Z0-9-_]+', $route);
+        // /locations/{id} -> /locations/[a-zA-Z0-9-_]\/?
+
+        $pattern = preg_replace('/{[^{}]+}/', '[a-zA-Z0-9-_]+', $routePath);
         $pattern = str_replace('/', '\/', $pattern);
+        $pattern .= '\/?';
+
         return [
             'mapping' => $mapping,
             'pattern' => '/' . $pattern . '/'

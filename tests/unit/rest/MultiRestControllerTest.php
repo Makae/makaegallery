@@ -18,12 +18,12 @@ class MultiRestControllerMock extends MultiRestController {
 
     public function getResourceEndpoint(RequestData $requestData): HttpResponse {
         $this->getResourceEndpointParams = $requestData;
-        return new HttpResponse("get ok", 200);
+        return new HttpResponse("get ok", HttpResponse::STATUS_OK);
     }
 
     public function postResourceEndpoint(RequestData $requestData): HttpResponse {
         $this->postResourceEndpointParams = $requestData;
-        return new HttpResponse("post ok", 201);
+        return new HttpResponse("post ok", HttpResponse::STATUS_CREATED);
     }
 
 }
@@ -31,7 +31,7 @@ class MultiRestControllerMock extends MultiRestController {
 
 class MultiRestControllerTest extends TestCase
 {
-    public function test_emptyRoute_returns404()
+    public function test_emptyRoute_returns400()
     {
         $multiRestController = new MultiRestControllerMock();
 
@@ -39,7 +39,7 @@ class MultiRestControllerTest extends TestCase
 
         $this->assertNull($multiRestController->getResourceEndpointParams);
         $this->assertNull($multiRestController->postResourceEndpointParams);
-        $this->assertEquals(400, $response->getStatus());
+        $this->assertEquals(HttpResponse::STATUS_BAD_REQUEST, $response->getStatus());
         $this->assertEquals("Invalid route", $response->getBody());
     }
 

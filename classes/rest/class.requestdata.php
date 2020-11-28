@@ -26,8 +26,16 @@ class RequestData
         return $this->body;
     }
 
+    public function getMethod(): string {
+        return isset($header['REQUEST_METHOD']) ? $header['REQUEST_METHOD'] : "GET";
+    }
+
     public function getParameters(): array
     {
         return $this->parameters;
+    }
+
+    public function getParameter(string $name) {
+        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
     }
 }

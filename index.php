@@ -45,7 +45,7 @@ $ajax = new AjaxRequestHandler(
 );
 
 $restApi = new RestApi();
-$restApi->addController(new GalleryRestController());
+$restApi->addController(new GalleryRestController($galleryRepository));
 
 $App = new App(
     $sessionProvider,
@@ -57,4 +57,3 @@ $App = new App(
 );
 
 $App->processRequest($_SERVER['REQUEST_URI'], Utils::getAllHeaders(), $_REQUEST);
-

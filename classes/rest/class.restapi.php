@@ -13,7 +13,7 @@ class RestApi
         if (is_null($controller)) {
             throw new ControllerDefinitionException("Can not find suitable Controller");
         }
-        return $controller->handle($path, $header, $body);
+        return $controller->handle($method, $path, $header, $body);
     }
 
     private function getMatchingController(string $path, string $method="GET"): ?IRestController

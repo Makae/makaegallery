@@ -72,7 +72,19 @@ abstract class Utils
         return unlink($file);
     }
 
-    public static function getUriComponents($url = null)
+    public static function getUriComponents($uri = null)
+    {
+        $uri = explode("/", $uri);
+        foreach ($uri as $k => $v) {
+            if ($v == '') {
+                unset($uri[$k]);
+            }
+        }
+
+        return array_values($uri);
+    }
+
+    public static function getRequestUri($url = null): string
     {
         $url = is_null($url) ? $_SERVER["REQUEST_URI"] : $url;
         $url = str_replace('/' . WWW_SUB_ROOT . '/', '', $url);
@@ -85,16 +97,7 @@ abstract class Utils
         } else {
             $uri = $_SERVER['REQUEST_URI'];
         }
-
-
-        $uri = explode("/", $uri);
-        foreach ($uri as $k => $v) {
-            if ($v == '') {
-                unset($uri[$k]);
-            }
-        }
-
-        return array_values($uri);
+        return $uri;
     }
 
     public static function getHomeUrl()
