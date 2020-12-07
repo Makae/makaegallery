@@ -5,7 +5,7 @@ var gallery = {
             '<img src="%imgsrc%" data-modalimage="%modalimage%" data-bigimage="%bigimage%" alt="%alttext%"  />' +
         '</div>',
 
-  gallery : null,
+  gallery_id : null,
   modal : null,
   modal_image: null,
   modal_caption: null,
@@ -30,12 +30,36 @@ var gallery = {
   page_iamges_loaded: 0,
 
   init : function() {
-    this.bind();
-    this.loadHash();
+    var self = this;
+    this.service = new Service(-1);
 
-    this.total_pages = Math.ceil(this.images.length / this.num_per_page);
+    $('<div class="modal"></div>').appendTo('body');
+    this.container = $('.gallery');
+    this.modal = $('.modal');
+    this.backend_api_url = this.container.data('apiurl');
+    this.gallery_id = this.container.data('galleryid');
+    this.perload = this.container.data('perload');
+    this.columns = this.container.data('columns');
+    this.images = JSON.parse(decodeURIComponent(this.container.data('images')));
 
-    this.setCurrentPage(this.hash.page);
+    this.service.request({
+      url: self.backend_api_url + '/gallery/' + this.gallery_id ,
+      method: 'GET',
+      success: function (request) {
+        const data = JSON.parse(request.result.data);
+        self.images = data.images;
+
+        self.bind();
+        self.loadHash();
+
+        self.total_pages = Math.ceil(self.images.length / self.num_per_page);
+
+        self.setCurrentPage(self.hash.page);
+      },
+      error: function () {
+
+      }
+    });
 
   },
 
@@ -55,12 +79,6 @@ var gallery = {
 
   bind : function() {
     var self = this;
-    $('<div class="modal"></div>').appendTo('body');
-    this.container = $('.gallery');
-    this.modal = $('.modal');
-    this.perload = this.container.data('perload');
-    this.columns = this.container.data('columns');
-    this.images = JSON.parse(decodeURIComponent(this.container.data('images')));
     
     this.prepareModal();
     this.bindImages();

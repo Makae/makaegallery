@@ -84,7 +84,7 @@ Request.prototype.execute = function () {
     }
 
     this.xmlhttp.onreadystatechange = function (e) {
-        self._state_change(e);
+        self._stateChange(e);
     };
 
     this.xmlhttp.open(this.method, this.getRequestUrl(), this.async);
@@ -92,7 +92,7 @@ Request.prototype.execute = function () {
 };
 
 
-Request.prototype._state_change = function (e) {
+Request.prototype._stateChange = function (e) {
     if (this.xmlhttp.readyState === XMLHttpRequest.DONE) {
         this.result = {
             status: Request.prototype.STATUS.UNKNOWN,
@@ -133,10 +133,14 @@ Service.prototype.enqueue = function (request) {
     this._next_request();
 };
 
+Service.prototype._canProcessNewRequest = function () {
+    return this.max_processing === -1 || this.processing.length >= this.max_processing
+};
+
 Service.prototype._next_request = function () {
     if (!this.queue.length) {
         return;
-    } else if (this.processing.length >= this.max_processing) {
+    } else if (this._canProcessNewRequest()) {
         //console.warn("Too many open requests. Queue-Length:" + this.queue.length);
         return;
     }

@@ -1,6 +1,6 @@
 var admin = {
     service: null,
-
+    backend_api_url: null,
     init: function () {
         this.service = new Service(3);
         this.bind();
@@ -8,6 +8,7 @@ var admin = {
 
     bind: function () {
         let self = this;
+        this.backend_api_url = this.container.data('apiurl');
 
         $("#minify-button").on('click', function (e) {
             e.preventDefault();
@@ -35,17 +36,7 @@ var admin = {
 
         $("#clear-button").on('click', function (e) {
             e.preventDefault();
-            self.service.request({
-                url: window.location.pathname,
-                method: 'GET',
-                data: {ajax: true, action: 'clear_minified'},
-                success: function (request) {
-                    $('.processing-progress li.done').removeClass('done');
-                },
-                error: function () {
-
-                }
-            });
+            admin.clearAllGalleries();
         });
 
         $(".upload-image-button").on('click', function (e) {
@@ -59,31 +50,7 @@ var admin = {
             }
             const nonceToken = $(this).data("nonce");
             const galleryId = $(this).data('gallery-id');
-
-            self.service.request({
-                url: window.location.pathname,
-                method: 'POST',
-                query: {
-                    ajax: 1,
-                    nonce: nonceToken,
-                    action: 'upload_images',
-                    galleryid: galleryId
-                },
-                data: {
-                    images: fileInput.files
-                },
-                success: function (request) {
-                    const data = JSON.parse(request.result.data);
-                    self.updateContainers($uploadWrapper, data.result.results);
-
-                    $(fileInput).val("");
-
-                },
-                error: function (request) {
-                    const data = JSON.parse(request.result.data);
-                    self.updateContainers($uploadWrapper, data.result.results);
-                }
-            });
+            self.uploadImage(galleryId, fileInput, nonceToken);
         });
 
 
@@ -139,7 +106,7 @@ var admin = {
     },
 
     setMessages: function ($container, clazz, messages) {
-        if(messages.length === 0) {
+        if (messages.length === 0) {
             return;
         }
         let html = '<span class="close-button">X</span>';
@@ -182,8 +149,8 @@ var admin = {
     minifyImg: function (imgid, success, error) {
         var self = this;
         self.service.request({
-            url: window.location.pathname,
-            method: 'GET',
+            url: this.backend_api_url + '/images/' + imgid + '/minify',
+            method: 'POST',
             data: {imageid: imgid, ajax: true, action: 'minify_image'},
             success: function (request) {
                 success(request);
@@ -194,6 +161,49 @@ var admin = {
         });
     },
 
+    clearAllGalleries: function () {
+        var self = this;
+
+        self.service.request({
+            url: window.location.pathname,
+            method: 'GET',
+            data: {ajax: true, action: 'clear_minified'},
+            success: function (request) {
+                $('.processing-progress li.done').removeClass('done');
+            },
+            error: function () {
+
+            }
+        });
+    },
+
+    uploadImage: function (galleryId, fileInput, nonceToken) {
+        var self = this;
+        self.service.request({
+            url: window.location.pathname,
+            method: 'POST',
+            query: {
+                ajax: 1,
+                nonce: nonceToken,
+                action: 'upload_images',
+                galleryid: galleryId
+            },
+            data: {
+                images: fileInput.files
+            },
+            success: function (request) {
+                const data = JSON.parse(request.result.data);
+                self.updateContainers($uploadWrapper, data.result.results);
+
+                $(fileInput).val("");
+
+            },
+            error: function (request) {
+                const data = JSON.parse(request.result.data);
+                self.updateContainers($uploadWrapper, data.result.results);
+            }
+        });
+    }
 };
 
 $(document).ready(function () {

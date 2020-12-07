@@ -4,13 +4,7 @@ use ch\makae\makaegallery\Utils;
 
 if (!defined('DOC_ROOT'))
     die();
-
 global $App;
-$ajax = $App->getAjax();
-if (DOING_AJAX) {
-    $ajax->admin();
-    return;
-}
 
 $gallery_data = array();
 $repository = $App->getGalleryRepository();
@@ -23,20 +17,20 @@ foreach ($repository->getGalleries() as $gallery) {
     );
 }
 ?>
-<div class="admin">
-    <a id="minify-button" href="<?= WWW_BASE . "/admin?minify_galleries=1" ?>" class="btn btn-default">Minify
-        Galleries</a>
-    <a id="clear-button" href="<?= WWW_BASE . "/admin?clear_minified=1" ?>" class="btn btn-danger">Clear Minified
-        Images</a>
+<div class="admin" data-apiurl="<?= $App->getRestApi()->getUrl() ?>">
+    <button id="minify-button" href="#" class="btn btn-default">Minify
+        Galleries</button>
+    <button id="clear-button" href="#" class="btn btn-danger">Clear Minified
+        Images</button>
 
     <?php foreach ($gallery_data as $gallery): ?>
         <div class="gallery-wrapper">
             <h3><?= $gallery['name'] ?></h3>
             <div class="control-wrapper clearfix">
-                <a data-gallery-id="<?= $gallery['name'] ?>" href="<?= WWW_BASE . "/admin?minify_galleries=1" ?>"
-                   class="gallery-button minify-gallery-button btn btn-default pull-left">Minify this gallery</a>
-                <a data-gallery-id="<?= $gallery['name'] ?>" href="<?= WWW_BASE . "/admin?clear_minified=1" ?>"
-                   class="gallery-button clear-gallery-button btn btn-danger pull-left">Clear this gallery</a>
+                <button data-gallery-id="<?= $gallery['name'] ?>" href="#"
+                   class="gallery-button minify-gallery-button btn btn-default pull-left">Minify this gallery</button>
+                <button data-gallery-id="<?= $gallery['name'] ?>" href="#"
+                   class="gallery-button clear-gallery-button btn btn-danger pull-left">Clear this gallery</button>
             </div>
             <div class="upload-wrapper clearfix">
                 <form>

@@ -44,7 +44,7 @@ $ajax = new AjaxRequestHandler(
     DOING_AJAX
 );
 
-$restApi = new RestApi();
+$restApi = new RestApi(WWW_BASE . '/api');
 $restApi->addController(new GalleryRestController($galleryRepository));
 
 $App = new App(

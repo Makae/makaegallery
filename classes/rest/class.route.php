@@ -33,7 +33,6 @@ class Route
         }
 
         // /locations/{id} -> /locations/[a-zA-Z0-9-_]\/?
-
         $pattern = preg_replace('/{[^{}]+}/', '[a-zA-Z0-9-_]+', $routePath);
         $pattern = str_replace('/', '\/', $pattern);
         $pattern .= '\/?';

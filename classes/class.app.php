@@ -13,9 +13,9 @@ class App
     private ISessionProvider $sessionProvider;
     private GalleryRepository $galleryRepository;
     private PartsLoader $partsLoader;
-    private AjaxRequestHandler $ajax;
     private Authentication $auth;
     private Security $security;
+    private RestApi $restApi;
 
     public function __construct(
         ISessionProvider $sessionProvider,
@@ -78,14 +78,19 @@ class App
         return $this->galleryRepository;
     }
 
-    public function getAjax(): AjaxRequestHandler
-    {
-        return $this->ajax;
-    }
-
     public function getAuth(): Authentication
     {
         return $this->auth;
+    }
+
+    public function getRestApi(): RestApi
+    {
+        return $this->restApi;
+    }
+
+    public function setRestApi(RestApi $restApi): void
+    {
+        $this->restApi = $restApi;
     }
 
 }

@@ -27,7 +27,10 @@ for ($idx = 0; $idx < count($images); $idx++) {
 <script src="<?= WWW_ASSETS ?>/js/event_buffer.js"></script>
 <script src="<?= WWW_ASSETS ?>/js/gallery.js"></script>
 
-<div class="row gallery" data-title="<?= $gallery->getTitle() ?>" data-imgidx="<?= $imgidx ?>"
+<div class="row gallery"
+     data-apiurl="<?= $App->getRestApi()->getUrl() ?>"
+     data-galleryid="<?= $gallery->getIdentifier() ?>"
+     data-title="<?= $gallery->getTitle() ?>" data-imgidx="<?= $imgidx ?>"
      data-columns="<?= GALLERY_COLUMNS ?>" data-images="<?= urlencode(json_encode($images)); ?>"
      data-perload="<?= GALLERY_IMAGES_PER_LOAD ?>">
     <?php foreach ($columns as $idx => $col): ?>

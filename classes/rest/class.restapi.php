@@ -5,6 +5,16 @@ namespace ch\makae\makaegallery\rest;
 class RestApi
 {
     private array $controllers = [];
+    private string $apiUrl;
+
+    public function __construct(string $apiUrl)
+    {
+        $this->apiUrl = $apiUrl;
+    }
+
+    public function getUrl(): string {
+        return $this->apiUrl;
+    }
 
     public function handleRequest(string $path, array $header, array $body): HttpResponse
     {
