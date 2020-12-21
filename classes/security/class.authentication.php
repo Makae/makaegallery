@@ -6,10 +6,10 @@ use ch\makae\makaegallery\session\ISessionProvider;
 
 class Authentication
 {
-    const USER_LEVEL_ADMIN = 0;
-    const USER_LEVEL_USER = 1;
-    const USER_LEVEL_GUEST = 2;
-    const USER_LEVEL_PUBLIC = 100;
+    const ACCESS_LEVEL_ADMIN = 0;
+    const ACCESS_LEVEL_USER = 1;
+    const ACCESS_LEVEL_GUEST = 2;
+    const ACCESS_LEVEL_PUBLIC = 100;
 
     private $salt;
     private $users;
@@ -28,13 +28,13 @@ class Authentication
         $state = false;
         foreach ($this->restrictions as $r_path => $level) {
             if (strpos($path, $r_path) === 0) {
-                $state = $this->canAccess($level);
+                $state = $this->hasAccessForLevel($level);
             }
         }
         return $state;
     }
 
-    public function canAccess($level)
+    public function hasAccessForLevel($level)
     {
         if ($this->getUserLevel() <= $level) {
             return true;
@@ -49,13 +49,13 @@ class Authentication
 
     public function isAdmin()
     {
-        return $this->isLoggedIn() && $this->sessionProvider->get('user')['level'] === Authentication::USER_LEVEL_ADMIN;
+        return $this->isLoggedIn() && $this->sessionProvider->get('user')['level'] === Authentication::ACCESS_LEVEL_ADMIN;
     }
 
     public function getUserLevel()
     {
         if (!$this->isLoggedIn())
-            return Authentication::USER_LEVEL_PUBLIC;
+            return Authentication::ACCESS_LEVEL_PUBLIC;
 
         return $this->sessionProvider->get('user')['level'];
     }

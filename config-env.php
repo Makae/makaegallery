@@ -20,21 +20,21 @@ use ch\makae\makaegallery\Authentication;
     array(
         'name' => 'radmin',
         'password' => '1f5153edc921f1eee2e7916fdf98f0c6',
-        'level' => Authentication::USER_LEVEL_ADMIN,
+        'level' => Authentication::ACCESS_LEVEL_ADMIN,
     ),
     array(
         'name' => 'jum_admin',
         'password' => '23b43d87f5dac4cad8b2252ab8f77d82',
-        'level' => Authentication::USER_LEVEL_ADMIN,
+        'level' => Authentication::ACCESS_LEVEL_ADMIN,
     ),
     array(
         'name' => 'photobox',
         'password' => '4041ed306863ddde6c9ebf2c2676edb7',
-        'level' => Authentication::USER_LEVEL_USER,
+        'level' => Authentication::ACCESS_LEVEL_USER,
     ),
     array(
         'name' => 'besucher',
         'password' => '35b91af1d068598b2269aaf6cb56bfee',
-        'level' => Authentication::USER_LEVEL_GUEST,
+        'level' => Authentication::ACCESS_LEVEL_GUEST,
     )
 )));

@@ -2,13 +2,17 @@
 
 namespace ch\makae\makaegallery\rest;
 
+use ch\makae\makaegallery\Authentication;
+
 class Route
 {
     private string $method;
     private ?array $route;
+    private int $accessLevel;
 
-    public function __construct(string $routePattern, string $method = "GET")
+    public function __construct(string $method, string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
     {
+        $this->accessLevel = $accessLevel;
         $this->method = $method;
         if (!preg_match('/^(\/|(\/({[^{}]+}|[^}\/{]+))+)\/?$/', $routePattern)) {
             throw new InvalidRouteException("The route pattern " . $routePattern . " is invalid");
@@ -43,7 +47,7 @@ class Route
         ];
     }
 
-    public function matches(string $path, string $method = "GET"): bool
+    public function matches(string $method, string $path): bool
     {
         if ($this->method !== $method) {
             return false;
@@ -68,6 +72,43 @@ class Route
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+    public function getAccessLevel(): int
+    {
+        return $this->accessLevel;
+    }
+}
+
+class GETRoute extends Route
+{
+    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    {
+        parent::__construct('GET', $routePattern, $accessLevel);
+    }
+}
+
+class POSTRoute extends Route
+{
+    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    {
+        parent::__construct('POST', $routePattern, $accessLevel);
+    }
+}
+
+class PATCHRoute extends Route
+{
+    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    {
+        parent::__construct('PATCH', $routePattern, $accessLevel);
+    }
+}
+
+class PUTRoute extends Route
+{
+    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    {
+        parent::__construct('PUT', $routePattern, $accessLevel);
     }
 }
 

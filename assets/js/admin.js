@@ -1,4 +1,5 @@
 var admin = {
+    container: null,
     service: null,
     backend_api_url: null,
     init: function () {
@@ -8,6 +9,7 @@ var admin = {
 
     bind: function () {
         let self = this;
+        this.container = $('.admin');
         this.backend_api_url = this.container.data('apiurl');
 
         $("#minify-button").on('click', function (e) {

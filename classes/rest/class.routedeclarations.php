@@ -17,9 +17,9 @@ class RouteDeclarations
         $this->declarations[] =  [$route, $handler];
     }
 
-    public function getMatchingRouteDeclaration(string $path, string $method="GET"): ?array {
+    public function getMatchingRouteDeclaration(string $method, string $path): ?array {
         foreach ($this->declarations as $declaration) {
-            if($declaration[0]->matches($path, $method)) {
+            if($declaration[0]->matches($method, $path)) {
                 return $declaration;
             }
         }

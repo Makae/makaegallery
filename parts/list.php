@@ -8,7 +8,7 @@ $galleries = $App->getGalleryRepository()->getGalleries();
 ?>
 <div class="row">
     <?php foreach ($galleries as $gallery):
-        if (!$App->getAuth()->canAccess($gallery->getLevel()))
+        if (!$App->getAuth()->hasAccessForLevel($gallery->getLevel()))
             continue;
         $has_gallery_output = true;
     ?>

@@ -50,27 +50,27 @@ define('DOING_AJAX', isset($_REQUEST['ajax']));
     array(
         'name' => 'radmin',
         'password' => '1f5153edc921f1eee2e7916fdf98f0c6',
-        'level' => Authentication::USER_LEVEL_ADMIN,
+        'level' => Authentication::ACCESS_LEVEL_ADMIN,
     ),
     array(
         'name' => 'photobox',
         'password' => '4041ed306863ddde6c9ebf2c2676edb7',
-        'level' => Authentication::USER_LEVEL_USER,
+        'level' => Authentication::ACCESS_LEVEL_USER,
     ),
     array(
         'name' => 'besucher',
         'password' => '35b91af1d068598b2269aaf6cb56bfee',
-        'level' => Authentication::USER_LEVEL_GUEST,
+        'level' => Authentication::ACCESS_LEVEL_GUEST,
     )
 )));
 
 @define('AUTH_RESTRICTIONS', serialize(array(
-    'admin' => Authentication::USER_LEVEL_ADMIN,
-    'view/photobox' => Authentication::USER_LEVEL_USER,
-    'galleries/photobox' => Authentication::USER_LEVEL_USER,
-    'view' => Authentication::USER_LEVEL_GUEST,
-    'login' => Authentication::USER_LEVEL_PUBLIC,
-    'list' => Authentication::USER_LEVEL_PUBLIC
+    'admin' => Authentication::ACCESS_LEVEL_ADMIN,
+    'view/photobox' => Authentication::ACCESS_LEVEL_USER,
+    'galleries/photobox' => Authentication::ACCESS_LEVEL_USER,
+    'view' => Authentication::ACCESS_LEVEL_GUEST,
+    'login' => Authentication::ACCESS_LEVEL_PUBLIC,
+    'list' => Authentication::ACCESS_LEVEL_PUBLIC
 )));
 
 @define('PROCESS_CONFIG_THUMB', serialize([

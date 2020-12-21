@@ -23,7 +23,7 @@ class Gallery
                                 string $description = '',
                                 string $refText = '',
                                 int $order = 10,
-                                int $level = Authentication::USER_LEVEL_ADMIN)
+                                int $level = Authentication::ACCESS_LEVEL_ADMIN)
     {
         $this->folder = $folder;
         $this->identifier = basename($folder);
@@ -44,7 +44,7 @@ class Gallery
             isset($meta['description']) ? $meta['description'] : null,
             isset($meta['refText']) ? $meta['refText'] : '',
             isset($meta['order']) ? $meta['order'] : 10,
-            isset($meta['level']) ? $meta['level'] : Authentication::USER_LEVEL_ADMIN);
+            isset($meta['level']) ? $meta['level'] : Authentication::ACCESS_LEVEL_ADMIN);
     }
 
     private static function sort($a, $b)

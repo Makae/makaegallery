@@ -2,6 +2,7 @@
 
 namespace ch\makae\makaegallery\tests;
 
+use ch\makae\makaegallery\Authentication;
 use ch\makae\makaegallery\rest\HttpResponse;
 use ch\makae\makaegallery\rest\SimpleRestController;
 
@@ -10,9 +11,9 @@ class SuffixSimpleRestController extends SimpleRestController
 
     private string $suffix;
 
-    public function __construct(string $suffix, string $routePattern = "/")
+    public function __construct(string $suffix, string $method = "GET", string $routePattern = "/", int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
     {
-        parent::__construct($routePattern);
+        parent::__construct($method, $routePattern, $accessLevel);
         $this->suffix = $suffix;
 
     }
@@ -21,4 +22,5 @@ class SuffixSimpleRestController extends SimpleRestController
     {
         return new HttpResponse($path . $this->suffix);
     }
+
 }
