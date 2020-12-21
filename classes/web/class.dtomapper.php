@@ -32,7 +32,7 @@ abstract class DtoMapper
         return $images;
     }
 
-    private static function mapImageToDto(Image $image): array
+    public static function mapImageToDto(Image $image): array
     {
         return [
             'id' => $image->getIdentifier(),

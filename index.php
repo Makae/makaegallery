@@ -24,6 +24,7 @@ require_once('./config.php');
 global $App;
 $sessionProvider = new SessionProvider();
 $security = new Security($sessionProvider);
+$authentication = new Authentication($sessionProvider, SALT, unserialize(AUTH_USERS), unserialize(AUTH_RESTRICTIONS));
 $galleryLoader = new GalleryLoader(GALLERY_ROOT,
     unserialize(GALLERY_CONFIGURATION),
     GALLERY_DEFAULT_COVER
@@ -45,14 +46,14 @@ $ajax = new AjaxRequestHandler(
     DOING_AJAX
 );
 
-$restApi = new RestApi(WWW_BASE . '/api');
+$restApi = new RestApi(WWW_BASE . '/api', $authentication);
 $restApi->addController(new GalleryRestController($galleryRepository));
 $restApi->addController(new ImageRestController($galleryRepository));
 
 $App = new App(
     $sessionProvider,
     $security,
-    new Authentication($sessionProvider, SALT, unserialize(AUTH_USERS), unserialize(AUTH_RESTRICTIONS)),
+    $authentication,
     $galleryRepository,
     $restApi,
     new PartsLoader(PARTS_DIR, SUB_ROOT, $ajax)

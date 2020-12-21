@@ -36,27 +36,35 @@ class GalleryRepository
         return $this->galleries;
     }
 
-    public function getGallery($gallery_id): ?PublicGallery
-    {
-        foreach ($this->getGalleries() as $gallery) {
-            if ($gallery->getIdentifier() == $gallery_id) {
-                return $gallery;
-            }
-        }
-        return null;
-    }
-
     public function processImageById($imgId)
     {
         $gallery = $this->getGalleryByImageId($imgId);
         return $gallery->processImageById($imgId);
     }
 
-    private function getGalleryByImageId(string $imgId): PublicGallery
+    public function getGalleryByImageId(string $imgId): PublicGallery
     {
         $galleryId = explode('|', $imgId)[0];
         return $this->getGallery($galleryId);
+    }
 
+    public function getGallery($gallery_id, $ignoreCache = false, $process = true): ?PublicGallery
+    {
+        foreach ($this->getGalleries() as $gallery) {
+            if ($gallery->getIdentifier() == $gallery_id) {
+                $gallery->getImages($ignoreCache, $process);
+                return $gallery;
+            }
+        }
+        return null;
+    }
+
+    public function getImageById($imgId)
+    {
+        list($galleryId, $imageId) = explode('|', $imgId);
+        $gallery = $this->getGallery($galleryId);
+        var_dump($gallery->getImage($imageId));
+        return $this->getGallery($galleryId)->getImage($imageId);
     }
 
 

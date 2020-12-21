@@ -151,7 +151,7 @@ var admin = {
     minifyImg: function (imgid, success, error) {
         var self = this;
         self.service.request({
-            url: this.backend_api_url + '/images/' + imgid + '/minify',
+            url: this.backend_api_url + '/image/' + imgid + '/minify',
             method: 'POST',
             data: {imageid: imgid, ajax: true, action: 'minify_image'},
             success: function (request) {

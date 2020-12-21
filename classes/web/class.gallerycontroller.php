@@ -3,11 +3,12 @@
 
 namespace ch\makae\makaegallery\web;
 
+use ch\makae\makaegallery\Authentication;
 use ch\makae\makaegallery\GalleryRepository;
+use ch\makae\makaegallery\rest\GETRoute;
 use ch\makae\makaegallery\rest\HttpResponse;
 use ch\makae\makaegallery\rest\MultiRestController;
 use ch\makae\makaegallery\rest\RequestData;
-use ch\makae\makaegallery\rest\Route;
 use ch\makae\makaegallery\rest\RouteDeclarations;
 
 class GalleryRestController extends MultiRestController
@@ -17,7 +18,7 @@ class GalleryRestController extends MultiRestController
     public function __construct(GalleryRepository $galleryRepository)
     {
         parent::__construct(new RouteDeclarations([
-            [new Route('/api/gallery/{gallery_id}'), [$this, 'getGallery']],
+            [new GETRoute('/api/gallery/{gallery_id}', Authentication::ACCESS_LEVEL_USER), [$this, 'getGallery']],
         ]));
 
         $this->galleryRepository = $galleryRepository;
@@ -27,7 +28,7 @@ class GalleryRestController extends MultiRestController
     {
         $gallery_id = $requestData->getParameter('gallery_id');
         $gallery = $this->galleryRepository->getGallery($gallery_id);
-        if(is_null($gallery)) {
+        if (is_null($gallery)) {
             return HttpResponse::responseNotFound("Gallery with id `$gallery_id` can't be found");
         }
         return new HttpResponse(
