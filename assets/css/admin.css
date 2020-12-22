@@ -1,0 +1,52 @@
+.upload-wrapper {
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+input[type="file"] {
+    padding-top: 7px;
+}
+
+.message-wrapper {
+    display: none;
+    position: relative;
+    float: none;
+    clear: both;
+
+    margin: 24px 0;
+    padding: 18px 12px;
+    max-width: 480px;
+}
+.message-wrapper.visible + .message-wrapper.visible {
+    margin-top: -24px;
+}
+
+.message-wrapper.visible {
+    display: block
+}
+
+.message-wrapper .close-button {
+    cursor: pointer;
+    position: absolute;
+    right: 18px;
+    top: 12px;
+}
+
+.message-wrapper p {
+    margin: 8px;
+}
+
+.message-wrapper.notification {
+    color: #FAFAFA;
+    background-color: #1ca307;
+}
+
+.message-wrapper.error {
+    color: #FAFAFA;
+    background-color: #d9534f;
+}
+
+.message-wrapper.error p {
+    padding: 0 0 0 1.5em;
+    text-indent: -1.5em;
+}

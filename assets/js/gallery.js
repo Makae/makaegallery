@@ -5,7 +5,7 @@ var gallery = {
             '<img src="%imgsrc%" data-modalimage="%modalimage%" data-bigimage="%bigimage%" alt="%alttext%"  />' +
         '</div>',
 
-  gallery : null,
+  gallery_id : null,
   modal : null,
   modal_image: null,
   modal_caption: null,
@@ -30,12 +30,38 @@ var gallery = {
   page_iamges_loaded: 0,
 
   init : function() {
-    this.bind();
-    this.loadHash();
+    var self = this;
+    this.service = new Service(-1);
 
-    this.total_pages = Math.ceil(this.images.length / this.num_per_page);
+    $('<div class="modal"></div>').appendTo('body');
+    this.container = $('.gallery');
+    this.modal = $('.modal');
+    this.backend_api_url = this.container.data('apiurl');
+    this.gallery_id = this.container.data('galleryid');
+    this.perload = this.container.data('perload');
+    this.columns = this.container.data('columns');
+    this.images = JSON.parse(decodeURIComponent(this.container.data('images')));
 
-    this.setCurrentPage(this.hash.page);
+    this.service.request({
+      url: self.backend_api_url + '/gallery/' + this.gallery_id ,
+      method: 'GET',
+      success: function (request) {
+        const data = JSON.parse(request.result.data);
+        self.images = data.images;
+        for(var i = 0; i < self.images.length; i++) {
+          self.images[i].idx = i;
+        }
+        self.bind();
+        self.loadHash();
+
+        self.total_pages = Math.ceil(self.images.length / self.num_per_page);
+
+        self.setCurrentPage(self.hash.page);
+      },
+      error: function () {
+
+      }
+    });
 
   },
 
@@ -55,12 +81,6 @@ var gallery = {
 
   bind : function() {
     var self = this;
-    $('<div class="modal"></div>').appendTo('body');
-    this.container = $('.gallery');
-    this.modal = $('.modal');
-    this.perload = this.container.data('perload');
-    this.columns = this.container.data('columns');
-    this.images = JSON.parse(decodeURIComponent(this.container.data('images')));
     
     this.prepareModal();
     this.bindImages();
@@ -254,7 +274,7 @@ var gallery = {
     for(var ptr = 0; ptr < this.num_load_more; ptr++) {
       this.pointer =  pointer_start + ptr;
 
-      if(this.pointer >= this.max_pointer) {
+      if(this.pointer > this.max_pointer) {
         this.allPageLoaded();
         break;
       }
@@ -310,7 +330,7 @@ var gallery = {
     html = this.item_template.replace('%imgsrc%', imgsrc);
     html = html.replace('%bigimage%', bigsrc);
     html = html.replace('%modalimage%', modalsrc);
-    html = html.replace('%imgidx%', img.imgidx);
+    html = html.replace('%imgidx%', img.idx);
     html = html.replace('%alttext%', caption);
     html = html.replace('%padding%', padding);
     
@@ -402,11 +422,12 @@ var gallery = {
 
   setCurrentPage : function(page) {
     this.current_page = page;
-    this.pointer =  (this.current_page - 1 ) * this.num_per_page;
-    this.max_pointer = Math.min(this.images.length - 1, (this.current_page) * this.num_per_page);
+    this.pointer =  (this.current_page - 1) * this.num_per_page;
+    this.max_pointer = Math.min(this.images.length - 1, this.current_page * this.num_per_page - 1);
     // console.log(this.max_pointer - this.pointer);
     this.page_images_loaded = 0;
     this.currently_loading = 0;
+
     this.clearImages();
     this.loadMore();
     
@@ -431,7 +452,7 @@ var gallery = {
     if($('.alloaded').length)
       return;
 
-    $("<div class='alloaded alert alert-success'>Keine weitern Bilder</div>").appendTo('body');
+    $("<div class='alloaded alert alert-success'>Keine weiteren Bilder</div>").appendTo('body');
     $('.loadmore,.load-next-page').css('display', 'none');
   },
 

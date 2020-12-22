@@ -1,75 +1,55 @@
 <?php
+
+use ch\makae\makaegallery\App;
+use ch\makae\makaegallery\security\Authentication;
+use ch\makae\makaegallery\ConversionConfig;
+use ch\makae\makaegallery\GalleryLoader;
+use ch\makae\makaegallery\GalleryRepository;
+use ch\makae\makaegallery\ImageConverter;
+use ch\makae\makaegallery\PartsLoader;
+use ch\makae\makaegallery\PublicGallery;
+use ch\makae\makaegallery\rest\RestApi;
+use ch\makae\makaegallery\security\Security;
+use ch\makae\makaegallery\session\SessionProvider;
+use ch\makae\makaegallery\UploadHandler;
+use ch\makae\makaegallery\Utils;
+use ch\makae\makaegallery\web\GalleryRestController;
+use ch\makae\makaegallery\web\ImageRestController;
+
+require_once('./loader.php');
+load_dependencies(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR);
 require_once('./config.php');
 
-session_start();
+global $App;
+$sessionProvider = new SessionProvider();
+$security = new Security($sessionProvider);
+$authentication = new Authentication($sessionProvider, SALT, unserialize(AUTH_USERS), unserialize(AUTH_RESTRICTIONS));
+$galleryLoader = new GalleryLoader(GALLERY_ROOT,
+    unserialize(GALLERY_CONFIGURATION),
+    GALLERY_DEFAULT_COVER
+);
+$galleryConverter = new ImageConverter(
+    [
+        PublicGallery::PROCESSOR_OPTIMIZED_KEY => ConversionConfig::fromArray(unserialize(PROCESS_CONFIG_NORMAL)),
+        PublicGallery::PROCESSOR_THUMBNAIL_KEY => ConversionConfig::fromArray(unserialize(PROCESS_CONFIG_THUMB))
+    ]
+);
+$galleryRepository = new GalleryRepository(
+    $galleryLoader,
+    $galleryConverter
+);
 
-foreach (glob("classes/trait.*.php") as $filename)
-    require $filename;
+$restApi = new RestApi(WWW_BASE . '/api', $authentication);
+$restApi->addController(new GalleryRestController($galleryRepository, $security, new UploadHandler($galleryRepository)));
+$restApi->addController(new ImageRestController($galleryRepository));
 
-foreach (glob("classes/class.*.php") as $filename)
-    require $filename;
+$App = new App(
+    $sessionProvider,
+    $security,
+    $authentication,
+    $galleryRepository,
+    $restApi,
+    new PartsLoader(PARTS_DIR, SUB_ROOT)
+);
 
-/*include_once('./tests/tests.php');*/
-
-global $galleries;
-
-$galleries = [];
-$g_metas = unserialize(GALLERY_CONFIGURATION);
-foreach (glob(GALLERY_ROOT . "/*") as $dirname) {
-    if(!is_dir($dirname)) {
-        continue;
-    }
-
-    if(strpos($dirname, '.') === 0) {
-        continue;
-    }
-
-    $folder = basename($dirname);
-    if(isset($g_metas[$folder])) {
-        $meta = $g_metas[$folder];
-    } else {
-        $meta = array(
-            'title' => $folder,
-            'description' => $folder,
-            'level' => 0
-        );
-    }
-    $galleries[] = new Gallery($dirname, $meta);
-    usort($galleries, function($a, $b) {
-        if($a->getOrder() == $b->getOrder()) {
-            return 0;
-        }
-
-        return $a->getOrder() < $b->getOrder() ? -1 : 1;
-    });
-}
-
-$auth = Authentication::instance();
-$auth->setUsers(unserialize(AUTH_USERS));
-$auth->setRestrictions(unserialize(AUTH_RESTRICTIONS));
-
-
-if(isset($_GET['logout']))   {
-    $auth->logout();
-}
-
-$route = Utils::getUriComponents();
-$view = isset($route[0]) ? $route[0] : 'list';
-
-if(!Authentication::instance()->urlAllowed($_SERVER['REQUEST_URI'])) {
-    $redirect = $_SERVER['REQUEST_URI'];
-    $view = 'login';
-}
-
-ob_start();
-if(!file_exists(PARTS . $view .'.php')) {
-    include_once(PARTS .'404.php');
-} else {
-    include_once(PARTS . $view .'.php');
-}
-$view_output = ob_get_clean();
-if(!DOING_AJAX)
-    include_once(PARTS . 'header.php');
-echo $view_output;
-if(!DOING_AJAX)
-    include_once(PARTS . 'footer.php');
+$App->processRequest($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], Utils::getAllHeaders(), $_REQUEST);

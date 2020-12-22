@@ -1,5 +1,3 @@
-galleries/*
-config-env.php
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/.gitignore
 /.idea/google-java-format.xml
@@ -7,3 +5,11 @@ config-env.php
 /.idea/misc.xml
 /.idea/modules.xml
 /.idea/vcs.xml
+/.idea/
+
+/vendor
+composer.phar
+
+galleries/*
+config-env.php
+/tests/galleries/testgallery/converted/
