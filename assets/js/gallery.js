@@ -48,7 +48,9 @@ var gallery = {
       success: function (request) {
         const data = JSON.parse(request.result.data);
         self.images = data.images;
-
+        for(var i = 0; i < self.images.length; i++) {
+          self.images[i].idx = i;
+        }
         self.bind();
         self.loadHash();
 
@@ -328,7 +330,7 @@ var gallery = {
     html = this.item_template.replace('%imgsrc%', imgsrc);
     html = html.replace('%bigimage%', bigsrc);
     html = html.replace('%modalimage%', modalsrc);
-    html = html.replace('%imgidx%', img.imgidx);
+    html = html.replace('%imgidx%', img.idx);
     html = html.replace('%alttext%', caption);
     html = html.replace('%padding%', padding);
     
