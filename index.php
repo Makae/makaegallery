@@ -1,8 +1,7 @@
 <?php
 
-use ch\makae\makaegallery\AjaxRequestHandler;
 use ch\makae\makaegallery\App;
-use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\security\Authentication;
 use ch\makae\makaegallery\ConversionConfig;
 use ch\makae\makaegallery\GalleryLoader;
 use ch\makae\makaegallery\GalleryRepository;
@@ -10,7 +9,7 @@ use ch\makae\makaegallery\ImageConverter;
 use ch\makae\makaegallery\PartsLoader;
 use ch\makae\makaegallery\PublicGallery;
 use ch\makae\makaegallery\rest\RestApi;
-use ch\makae\makaegallery\Security;
+use ch\makae\makaegallery\security\Security;
 use ch\makae\makaegallery\session\SessionProvider;
 use ch\makae\makaegallery\UploadHandler;
 use ch\makae\makaegallery\Utils;
@@ -39,15 +38,9 @@ $galleryRepository = new GalleryRepository(
     $galleryLoader,
     $galleryConverter
 );
-$ajax = new AjaxRequestHandler(
-    $galleryRepository,
-    $security,
-    new UploadHandler($galleryRepository),
-    DOING_AJAX
-);
 
 $restApi = new RestApi(WWW_BASE . '/api', $authentication);
-$restApi->addController(new GalleryRestController($galleryRepository));
+$restApi->addController(new GalleryRestController($galleryRepository, $security, new UploadHandler($galleryRepository)));
 $restApi->addController(new ImageRestController($galleryRepository));
 
 $App = new App(
@@ -56,7 +49,7 @@ $App = new App(
     $authentication,
     $galleryRepository,
     $restApi,
-    new PartsLoader(PARTS_DIR, SUB_ROOT, $ajax)
+    new PartsLoader(PARTS_DIR, SUB_ROOT)
 );
 
-$App->processRequest($_SERVER['REQUEST_URI'], Utils::getAllHeaders(), $_REQUEST);
+$App->processRequest($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], Utils::getAllHeaders(), $_REQUEST);

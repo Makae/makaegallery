@@ -2,7 +2,7 @@
 
 namespace ch\makae\makaegallery\rest;
 
-use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\security\Authentication;
 
 class RestApi
 {
@@ -20,9 +20,8 @@ class RestApi
         return $this->apiUrl;
     }
 
-    public function handleRequest(string $path, array $header=[], array $body=[]): HttpResponse
+    public function handleRequest(string $method, string $path, array $header=[], array $body=[]): HttpResponse
     {
-        $method = isset($header['REQUEST_METHOD']) ? $header['REQUEST_METHOD'] : "GET";
         try {
             $controller = $this->getMatchingController($method, $path);
         } catch(RestAccessLevelException $exception) {

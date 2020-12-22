@@ -13,13 +13,15 @@ class RouteDeclarations
         $this->declarations = $declarations;
     }
 
-    public function addMapping(Route $route, callable $handler) {
-        $this->declarations[] =  [$route, $handler];
+    public function addMapping(Route $route, callable $handler)
+    {
+        $this->declarations[] = [$route, $handler];
     }
 
-    public function getMatchingRouteDeclaration(string $method, string $path): ?array {
+    public function getMatchingRouteDeclaration(string $method, string $path): ?array
+    {
         foreach ($this->declarations as $declaration) {
-            if($declaration[0]->matches($method, $path)) {
+            if ($declaration[0]->matches($method, $path)) {
                 return $declaration;
             }
         }

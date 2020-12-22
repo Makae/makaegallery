@@ -1,6 +1,6 @@
 <?php
 
-use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\security\Authentication;
 use ch\makae\makaegallery\tests\AuthenticationHelper;
 use PHPUnit\Framework\TestCase;
 

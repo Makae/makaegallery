@@ -1,6 +1,6 @@
 <?php
 
-use ch\makae\makaegallery\NonceToken;
+use ch\makae\makaegallery\security\NonceToken;
 use PHPUnit\Framework\TestCase;
 
 class NonceTokenTest extends TestCase

@@ -38,14 +38,14 @@ class GalleryRepository
 
     public function processImageById($imgId)
     {
-        $gallery = $this->getGalleryByImageId($imgId);
+        $gallery = $this->getGalleryByImageId($imgId, true, false);
         return $gallery->processImageById($imgId);
     }
 
-    public function getGalleryByImageId(string $imgId): PublicGallery
+    public function getGalleryByImageId(string $imgId, $ignoreCache = false, $process = true): PublicGallery
     {
         $galleryId = explode('|', $imgId)[0];
-        return $this->getGallery($galleryId);
+        return $this->getGallery($galleryId, $ignoreCache, $process);
     }
 
     public function getGallery($gallery_id, $ignoreCache = false, $process = true): ?PublicGallery
@@ -62,10 +62,6 @@ class GalleryRepository
     public function getImageById($imgId)
     {
         list($galleryId, $imageId) = explode('|', $imgId);
-        $gallery = $this->getGallery($galleryId);
-        var_dump($gallery->getImage($imageId));
         return $this->getGallery($galleryId)->getImage($imageId);
     }
-
-
 }

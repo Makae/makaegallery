@@ -1,5 +1,5 @@
 <?php
-use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\security\Authentication;
 use ch\makae\makaegallery\ImageConverter;
 
 // FIND SERVER ROOT PATH EXTENSION

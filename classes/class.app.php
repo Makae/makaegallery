@@ -4,6 +4,8 @@ namespace ch\makae\makaegallery;
 
 use ch\makae\makaegallery\rest\ControllerDefinitionException;
 use ch\makae\makaegallery\rest\RestApi;
+use ch\makae\makaegallery\security\Authentication;
+use ch\makae\makaegallery\security\Security;
 use ch\makae\makaegallery\session\ISessionProvider;
 
 class App
@@ -40,17 +42,17 @@ class App
         return $this->security;
     }
 
-    public function processRequest($requestURI, $header, $body)
+    public function processRequest($requestMethod, $requestURI, $header, $body)
     {
         $uri = Utils::getRequestUri($requestURI);
         try {
-            $response = $this->restApi->handleRequest('/' . $uri, $header, $body);
+            $response = $this->restApi->handleRequest($requestMethod, '/' . $uri, $header, $body);
             if ($response !== null) {
                 http_response_code($response->getStatus());
                 echo $response->getBody();
                 exit;
             }
-        } catch(ControllerDefinitionException $e) {
+        } catch (ControllerDefinitionException $e) {
         }
 
         if (isset($getParams['logout'])) {

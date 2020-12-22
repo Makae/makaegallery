@@ -1,6 +1,6 @@
 <?php
 
-use ch\makae\makaegallery\Security;
+use ch\makae\makaegallery\security\Security;
 use ch\makae\makaegallery\tests\SessionProviderMock;
 use PHPUnit\Framework\TestCase;
 

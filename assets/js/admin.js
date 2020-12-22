@@ -18,6 +18,7 @@ var admin = {
                 var imgid = $(this).data('minify-img');
                 var $this = $(this);
                 $this.addClass("start");
+
                 admin.minifyImg(imgid, function () {
                     $this.removeClass("start").addClass("done");
                 });
@@ -30,6 +31,7 @@ var admin = {
                 var imgid = $(this).data('minify-img');
                 var $this = $(this);
                 $this.addClass("start");
+
                 admin.minifyImg(imgid, function () {
                     $this.removeClass("start").addClass("done");
                 });
@@ -52,7 +54,14 @@ var admin = {
             }
             const nonceToken = $(this).data("nonce");
             const galleryId = $(this).data('gallery-id');
-            self.uploadImage(galleryId, fileInput, nonceToken);
+            self.uploadImage(galleryId, fileInput, nonceToken, (request) => {
+                const data = JSON.parse(request.result.data);
+                self.updateContainers($uploadWrapper, data.result.results);
+                $(fileInput).val("");
+            }, (request) => {
+                const data = JSON.parse(request.result.data);
+                self.updateContainers($uploadWrapper, data.result.results);
+            });
         });
 
 
@@ -60,16 +69,9 @@ var admin = {
             e.preventDefault();
             var galleryid = $(this).data('gallery-id');
             var _this = this;
-            self.service.request({
-                url: window.location.pathname,
-                method: 'GET',
-                data: {ajax: true, action: 'clear_minified', galleryid: galleryid},
-                success: function (request) {
-                    $(_this).closest('.gallery-wrapper').find('li.done').removeClass('done');
-                },
-                error: function () {
 
-                }
+            self.clearGallery(galleryid, (request) => {
+                $(_this).closest('.gallery-wrapper').find('li.done').removeClass('done');
             });
         });
 
@@ -78,9 +80,22 @@ var admin = {
             var imgid = $(this).data('minify-img');
             var $this = $(this);
             $this.closest('li').addClass("start");
+
             admin.minifyImg(imgid, function () {
                 $this.closest('li').removeClass("start").addClass("done");
             });
+        });
+    },
+
+    clearGallery: function (galleryId, successCbk) {
+        var self = this;
+        self.service.request({
+            url: this.backend_api_url + '/gallery/' + galleryId + '/clear',
+            method: 'GET',
+            success: successCbk,
+            error: function () {
+                error(request);
+            }
         });
     },
 
@@ -152,8 +167,7 @@ var admin = {
         var self = this;
         self.service.request({
             url: this.backend_api_url + '/image/' + imgid + '/minify',
-            method: 'POST',
-            data: {imageid: imgid, ajax: true, action: 'minify_image'},
+            method: 'GET',
             success: function (request) {
                 success(request);
             },
@@ -165,45 +179,31 @@ var admin = {
 
     clearAllGalleries: function () {
         var self = this;
-
         self.service.request({
-            url: window.location.pathname,
+            url: this.backend_api_url + '/gallery/clear-all',
             method: 'GET',
-            data: {ajax: true, action: 'clear_minified'},
             success: function (request) {
-                $('.processing-progress li.done').removeClass('done');
+                success(request);
             },
             error: function () {
-
+                error(request);
             }
         });
     },
 
-    uploadImage: function (galleryId, fileInput, nonceToken) {
+    uploadImage: function (galleryId, fileInput, nonceToken, successCbk, errorCbk) {
         var self = this;
         self.service.request({
-            url: window.location.pathname,
+            url: this.backend_api_url + '/gallery/' + galleryId + '/image/',
             method: 'POST',
             query: {
-                ajax: 1,
                 nonce: nonceToken,
-                action: 'upload_images',
-                galleryid: galleryId
             },
             data: {
                 images: fileInput.files
             },
-            success: function (request) {
-                const data = JSON.parse(request.result.data);
-                self.updateContainers($uploadWrapper, data.result.results);
-
-                $(fileInput).val("");
-
-            },
-            error: function (request) {
-                const data = JSON.parse(request.result.data);
-                self.updateContainers($uploadWrapper, data.result.results);
-            }
+            success: successCbk,
+            error: errorCbk
         });
     }
 };

@@ -3,7 +3,7 @@
 
 namespace ch\makae\makaegallery\web;
 
-use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\security\Authentication;
 use ch\makae\makaegallery\GalleryRepository;
 use ch\makae\makaegallery\rest\GETRoute;
 use ch\makae\makaegallery\rest\HttpResponse;

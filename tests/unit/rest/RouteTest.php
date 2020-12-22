@@ -2,6 +2,7 @@
 
 namespace ch\makae\makaegallery\rest;
 
+use ch\makae\makaegallery\security\Authentication;
 use PHPUnit\Framework\TestCase;
 
 class RouteTest extends TestCase
@@ -34,6 +35,32 @@ class RouteTest extends TestCase
     {
         $route = new GETRoute("/locations/{uuid}/");
         $this->assertTrue($route->matches('GET', "/locations/foo_bar/"));
+    }
+
+    public function test_matches_withQuery_works() {
+        $route = new GETRoute("/locations/{uuid}/");
+        $this->assertTrue($route->matches('GET', "/locations/foo_bar/?query=value"));
+    }
+
+    public function test_matches_withDetailedQuery_works()
+    {
+        $route = new POSTRoute('/api/gallery/{gallery_id}/image');
+        $this->assertTrue(
+            $route->matches(
+                'POST',
+                '/api/gallery/__my_gallery/image/?ajax=1&nonce=05b7dfa6ec47d3f6899ef1028b60127f&action=upload_images&galleryid=__my_gallery'
+            )
+        );
+    }
+
+    public function test_matches_withTrailingQuestionMark_works() {
+        $route = new GETRoute("/locations/{uuid}/");
+        $this->assertTrue($route->matches('GET', "/locations/foo_bar/?"));
+    }
+
+    public function test_matches_withSubPath_doesNotWork() {
+        $route = new GETRoute("/locations/{uuid}/");
+        $this->assertFalse($route->matches('GET', "/locations/foo_bar/subpath"));
     }
 
     public function test_gallery_route()

@@ -2,7 +2,7 @@
 
 namespace ch\makae\makaegallery\rest;
 
-use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\security\Authentication;
 
 class Route
 {
@@ -39,7 +39,7 @@ class Route
         // /locations/{id} -> /locations/[a-zA-Z0-9-_]\/?
         $pattern = preg_replace('/{[^{}]+}/', '[a-zA-Z0-9-_\.%~]+', $routePath);
         $pattern = str_replace('/', '\/', $pattern);
-        $pattern .= '\/?';
+        $pattern .= '\/?(\?.*)?$';
 
         return [
             'mapping' => $mapping,
@@ -52,6 +52,8 @@ class Route
         if ($this->method !== $method) {
             return false;
         }
+        $debug = $this->method === 'POST';
+
         if (!preg_match($this->route['pattern'], $path)) {
             return false;
         }

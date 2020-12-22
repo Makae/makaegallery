@@ -4,14 +4,12 @@ namespace ch\makae\makaegallery;
 
 class PartsLoader
 {
-    private $ajax;
     private $partsDir;
 
-    public function __construct($partsDirectory, $subRoot, AjaxRequestHandler $ajax)
+    public function __construct($partsDirectory, $subRoot)
     {
         $this->partsDir = $partsDirectory;
         $this->subRoot = $subRoot;
-        $this->ajax = $ajax;
     }
 
     public function load($view, $requestURI)
@@ -25,13 +23,9 @@ class PartsLoader
         }
 
         $view_output = ob_get_clean();
-        if (!$this->ajax->isAjaxRequest()) {
-            include_once($this->partsDir . DIRECTORY_SEPARATOR . 'header.php');
-        }
+        include_once($this->partsDir . DIRECTORY_SEPARATOR . 'header.php');
         echo $view_output;
-        if (!$this->ajax->isAjaxRequest()) {
-            include_once($this->partsDir . DIRECTORY_SEPARATOR . 'footer.php');
-        }
+        include_once($this->partsDir . DIRECTORY_SEPARATOR . 'footer.php');
     }
 
     public function pathFromURI($requestURI)

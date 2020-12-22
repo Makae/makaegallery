@@ -2,7 +2,7 @@
 
 namespace ch\makae\makaegallery\rest;
 
-use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\security\Authentication;
 
 abstract class SimpleRestController implements IRestController
 {

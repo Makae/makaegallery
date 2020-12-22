@@ -1,6 +1,6 @@
 <?php
 
-namespace ch\makae\makaegallery;
+namespace ch\makae\makaegallery\security;
 
 use ch\makae\makaegallery\session\ISessionProvider;
 use DateInterval;

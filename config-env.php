@@ -1,6 +1,6 @@
 <?php
 
-use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\security\Authentication;
 
 @define('GALLERY_CONFIGURATION', serialize(array(
     'photobox' => array(

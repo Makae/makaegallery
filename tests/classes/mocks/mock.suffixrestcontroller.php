@@ -2,7 +2,7 @@
 
 namespace ch\makae\makaegallery\tests;
 
-use ch\makae\makaegallery\Authentication;
+use ch\makae\makaegallery\security\Authentication;
 use ch\makae\makaegallery\rest\HttpResponse;
 use ch\makae\makaegallery\rest\SimpleRestController;
 
