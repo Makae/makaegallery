@@ -69,6 +69,7 @@ define('DOING_AJAX', isset($_REQUEST['ajax']));
     'view/photobox' => Authentication::ACCESS_LEVEL_USER,
     'galleries/photobox' => Authentication::ACCESS_LEVEL_USER,
     'view' => Authentication::ACCESS_LEVEL_GUEST,
+    'masonry' => Authentication::ACCESS_LEVEL_GUEST,
     'login' => Authentication::ACCESS_LEVEL_PUBLIC,
     'list' => Authentication::ACCESS_LEVEL_PUBLIC
 )));

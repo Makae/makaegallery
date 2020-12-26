@@ -10,7 +10,7 @@ global $App;
         <link rel="stylesheet" href="//yandex.st/bootstrap/3.1.1/css/bootstrap.min.css">
         <!-- CUSTOM STYLES -->
         <link rel="stylesheet" href="<?= WWW_ASSETS ?>/css/styles.css">
-        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="<?= WWW_ASSETS ?>/js/libs/jquery.2.1.3.min.js"></script>
         <script>
         $(document).on("mobileinit", function(){
             $.mobile.autoInitializePage=false;
