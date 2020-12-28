@@ -1,6 +1,37 @@
 :root {
-    --grid-height: 240px;
+    --main-color: #fcbc38;
+    --accent-color: #ffffff;
+    --grid-columns: 1;
+    --grid-height: 480px;
 }
+
+/* Wide smartphone */
+@media (min-aspect-ratio: 11/16) {
+    :root {
+        --grid-columns: 2;
+        --grid-height: 240px;
+    }
+}
+
+@media (min-aspect-ratio: 21/20) {
+    :root {
+        --grid-columns: 3;
+    }
+}
+
+@media (min-aspect-ratio: 16/12) {
+    :root {
+        --grid-columns: 4;
+    }
+}
+
+@media (min-aspect-ratio: 16/8) {
+    :root {
+        --grid-columns: 5;
+    }
+}
+
+
 * {
     box-sizing: border-box;
 }
@@ -57,8 +88,7 @@ body > .container {
 
 .grid-sizer,
 .grid-item {
-    /*width: 33.333%;*/
-    width: 25%;
+    width: calc(100% / var(--grid-columns));
 }
 
 
@@ -76,6 +106,10 @@ body > .container {
 
 .grid-area-1to3 {
     height: calc(var(--grid-height) * 3);
+}
+
+.grid-item {
+    border: 1px solid var(--accent-color);
 }
 
 .image-holder {

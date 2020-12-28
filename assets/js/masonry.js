@@ -19,6 +19,12 @@ let masonry = {
         this.backend_api_url = this.$container.data('apiurl');
         this.gallery_id = this.$container.data('galleryid');
 
+
+        $(window).on('resize', () => {
+            let aspectRatio = (window.screen.width / window.screen.height);
+            console.log("screenAspect: " + aspectRatio + "px");
+        });
+
         this.$grid = $('.grid');
         this.$grid.masonry({
             itemSelector: '.grid-item',
