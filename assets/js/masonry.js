@@ -1,6 +1,7 @@
 let masonry = {
     $container: null,
     $grid: null,
+    $masonry: null,
     service: null,
     backend_api_url: null,
 
@@ -19,14 +20,8 @@ let masonry = {
         this.backend_api_url = this.$container.data('apiurl');
         this.gallery_id = this.$container.data('galleryid');
 
-
-        $(window).on('resize', () => {
-            let aspectRatio = (window.screen.width / window.screen.height);
-            console.log("screenAspect: " + aspectRatio + "px");
-        });
-
         this.$grid = $('.grid');
-        this.$grid.masonry({
+        this.$masonry = this.$grid.masonry({
             itemSelector: '.grid-item',
             columnWidth: '.grid-sizer',
             rowHeight: '.grid-sizer'
@@ -49,6 +44,12 @@ let masonry = {
         });
 
 
+    },
+
+    setGridOptions: function(columns, columnHeight) {
+        document.documentElement.style.setProperty('--grid-columns', columns);
+        document.documentElement.style.setProperty('--grid-column-height', columnHeight + "px");
+        this.$grid.masonry();
     },
 
     bind: function () {

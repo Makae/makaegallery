@@ -2,14 +2,14 @@
     --main-color: #fcbc38;
     --accent-color: #ffffff;
     --grid-columns: 1;
-    --grid-height: 480px;
+    --grid-column-height: 480px;
 }
 
 /* Wide smartphone */
 @media (min-aspect-ratio: 11/16) {
     :root {
         --grid-columns: 2;
-        --grid-height: 240px;
+        --grid-column-height: 240px;
     }
 }
 
@@ -83,7 +83,7 @@ body > .container {
 /* ---- .grid-item ---- */
 
 .grid-sizer {
-    height: var(--grid-height);
+    height: var(--grid-column-height);
 }
 
 .grid-sizer,
@@ -97,15 +97,15 @@ body > .container {
 }
 
 .grid-area-1to1 {
-    height: calc(var(--grid-height));
+    height: calc(var(--grid-column-height));
 }
 
 .grid-area-1to2 {
-    height: calc(var(--grid-height) * 2);
+    height: calc(var(--grid-column-height) * 2);
 }
 
 .grid-area-1to3 {
-    height: calc(var(--grid-height) * 3);
+    height: calc(var(--grid-column-height) * 3);
 }
 
 .grid-item {
