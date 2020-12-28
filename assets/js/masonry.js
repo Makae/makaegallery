@@ -26,10 +26,6 @@ let masonry = {
             rowHeight: '.grid-sizer'
         });
 
-        $(document).on('click', () => {
-            console.log("asdf");
-            self.bind();
-        });
         this.service.request({
             url: self.backend_api_url + '/gallery/' + this.gallery_id,
             method: 'GET',
@@ -39,6 +35,7 @@ let masonry = {
                 for (var i = 0; i < self.images.length; i++) {
                     self.images[i].idx = i;
                 }
+                self.bind();
             },
             error: function () {
 
@@ -74,7 +71,6 @@ let masonry = {
         html = html.replace('%image_idx%', image.idx);
 
         let gridArea = '';
-        console.log(image['dimensions']);
         console.log(aspectRatio);
         if(aspectRatio <= 0.6) {
             gridArea = 'grid-area-1to3'
