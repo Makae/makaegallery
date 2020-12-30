@@ -1,16 +1,14 @@
-body {
-    padding: 84px 24px;
-}
-
-
 label {
     min-width: 85px;
 }
 
-nav .btn {
-    margin-top: 8px;
+nav li {
     margin-left: 4px;
     margin-right: 4px;
+}
+
+.navbar-light .navbar-nav .nav-link.btn {
+    color: white;
 }
 
 nav .btn:first-child {

@@ -18,7 +18,7 @@ foreach ($repository->getGalleries() as $gallery) {
 }
 ?>
 <div class="admin" data-apiurl="<?= $App->getRestApi()->getUrl() ?>">
-    <button id="minify-button" href="#" class="btn btn-default">Minify
+    <button id="minify-button" href="#" class="btn btn-light">Minify
         Galleries</button>
     <button id="clear-button" href="#" class="btn btn-danger">Clear Minified
         Images</button>
@@ -28,7 +28,7 @@ foreach ($repository->getGalleries() as $gallery) {
             <h3><?= $gallery['name'] ?></h3>
             <div class="control-wrapper clearfix">
                 <button data-gallery-id="<?= $gallery['name'] ?>" href="#"
-                   class="gallery-button minify-gallery-button btn btn-default pull-left">Minify this gallery</button>
+                   class="gallery-button minify-gallery-button btn btn-light pull-left">Minify this gallery</button>
                 <button data-gallery-id="<?= $gallery['name'] ?>" href="#"
                    class="gallery-button clear-gallery-button btn btn-danger pull-left">Clear this gallery</button>
             </div>
@@ -51,7 +51,7 @@ foreach ($repository->getGalleries() as $gallery) {
                 <?php foreach ($gallery['images'] as $img): ?>
                     <li data-minify-img="<?= urlencode($img['id']) ?>"><?= explode('|', basename($img['id']))[1] ?><a
                                 href="#"
-                                class="manual-trigger btn btn-default"
+                                class="manual-trigger btn btn-light"
                                 data-minify-img="<?= urlencode($img['id']) ?>">Execute
                             now</a>
                     </li>

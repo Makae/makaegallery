@@ -55,7 +55,9 @@ let masonry = {
     bind: function () {
         let $images = $(this.renderImages(this.images));
         this.$grid.append($images)
-            .masonry('appended', $images)
+            .masonry('appended', $images);
+
+        $('#uploadPhotoModal').modal('show');
     },
 
     renderImages: function (images) {
@@ -78,7 +80,6 @@ let masonry = {
         html = html.replace('%image_idx%', image.idx);
 
         let gridArea = '';
-        console.log(aspectRatio);
         if(aspectRatio <= 0.6) {
             gridArea = 'grid-area-1to3'
         } else if(aspectRatio <= 0.8) {

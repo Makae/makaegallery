@@ -3,6 +3,11 @@
     padding-bottom: 24px;
 }
 
+li[data-minify-img] {
+    min-height: 52px;
+    line-height: 52px;
+}
+
 input[type="file"] {
     padding-top: 7px;
 }

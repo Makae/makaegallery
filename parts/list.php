@@ -11,17 +11,16 @@ $galleries = $App->getGalleryRepository()->getGalleries();
         if (!$App->getAuth()->hasAccessForLevel($gallery->getLevel()))
             continue;
         $has_gallery_output = true;
-    ?>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <img src="<?= $gallery->getCover(); ?>" alt="<?= $gallery->getTitle(); ?>"/>
-                <div class="caption">
-                    <h3><?= $gallery->getTitle(); ?></h3>
-                    <p><?= $gallery->getDescription(); ?></p>
-                    <p><?= $gallery->getRefText(); ?></p>
-                    <p><a href="<?= $gallery->getLink(); ?>" class="btn btn-primary" role="button">Jetzt anschauen</a>
-                    </p>
-                </div>
+        ?>
+        <div class="card col-sm-6 col-md-4"" style="width: 18rem;">
+            <img src="<?= $gallery->getCover(); ?>" class="card-img-top" alt="<?= $gallery->getTitle(); ?>">
+            <div class="card-body">
+                <h5 class="card-title"><?= $gallery->getTitle(); ?></h5>
+                <p class="card-text">
+                    <span><?= $gallery->getDescription(); ?></span>
+                    <span><?= $gallery->getRefText(); ?></span>
+                </p>
+                <a href="<?= $gallery->getLink(); ?>" class="btn btn-primary">Jetzt anschauen</a>
             </div>
         </div>
     <?php endforeach; ?>
