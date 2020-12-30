@@ -84,4 +84,9 @@ class Authentication
         $this->sessionProvider->remove('user');
     }
 
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
 }

@@ -2,6 +2,8 @@
 
 namespace ch\makae\makaegallery;
 
+use ch\makae\makaegallery\security\Authentication;
+
 abstract class Utils
 {
 
@@ -143,6 +145,21 @@ abstract class Utils
             }
         }
         return $retval;
+    }
+
+    public static function getAccessLevelName(int $level): string
+    {
+        switch ($level) {
+            case Authentication::ACCESS_LEVEL_ADMIN:
+                return "ADMIN";
+            case Authentication::ACCESS_LEVEL_USER:
+                return "USER";
+            case Authentication::ACCESS_LEVEL_GUEST:
+                return "GUEST";
+            case Authentication::ACCESS_LEVEL_PUBLIC:
+            default:
+                return "PUBLIC";
+        }
     }
 
 }

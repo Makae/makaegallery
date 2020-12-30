@@ -66,6 +66,7 @@ define('DOING_AJAX', isset($_REQUEST['ajax']));
 
 @define('AUTH_RESTRICTIONS', serialize(array(
     'admin' => Authentication::ACCESS_LEVEL_ADMIN,
+    'users' => Authentication::ACCESS_LEVEL_ADMIN,
     'view/photobox' => Authentication::ACCESS_LEVEL_USER,
     'galleries/photobox' => Authentication::ACCESS_LEVEL_USER,
     'view' => Authentication::ACCESS_LEVEL_GUEST,
