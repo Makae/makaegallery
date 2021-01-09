@@ -31,7 +31,7 @@ global $App;
     <script src="<?= WWW_ASSETS ?>/js/libs/tilt.jquery.min.js"></script>
     <script src="<?= WWW_ASSETS ?>/js/service.js"></script>
 </head>
-<body>
+<body class="view-<?php echo $App->getCurrentView() ?>">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Makae Gallery</a>
@@ -39,9 +39,8 @@ global $App;
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
-
-            <ul class="navbar-nav">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <?php if ($App->getAuth()->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN)): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= WWW_BASE . '/users' ?>">Benutzer</a>
@@ -51,11 +50,11 @@ global $App;
                     </li>
                 <?php endif; ?>
             </ul>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav d-flex justify-content-end">
                 <?php if ($App->getAuth()->isLoggedIn()): ?>
-                    <li class="nav-item">
+                    <li class="nav-item nav-item-logout">
                         <a class="nav-link btn btn-primary" aria-current="page"
-                           href="<?= WWW_BASE . '/list?logout=true' ?>">Abmelden</a>
+                           href="<?= WWW_BASE . '/login?logout=true' ?>">Abmelden</a>
                     </li>
                 <?php else: ?>
                     <li class="nav-item">

@@ -39,11 +39,11 @@ for ($idx = 0; $idx < count($images); $idx++) {
     <?php endforeach; ?>
 </div>
 <div class="loadmore btn btn-primary">Mehr anzeigen</div>
-<nav class="navbar navbar-default navbar-fixed-bottom">
-    <div class="container clearfix">
+<nav class="navbar navbar-bottom fixed-bottom navbar-light bg-light">
+    <div class="container d-flex justify-content-between">
         <div class="progressbar"></div>
-        <div class="btn btn-primary load-prev-page pull-left">Vorherige Seite</div>
+        <div class="btn btn-primary load-prev-page float-start">Vorherige Seite</div>
         <span class="pagexofy"><span class="pagex">X</span> von <span class="ofy">X</span></span>
-        <div class="btn btn-primary load-next-page pull-right">Nächste Seite</div>
+        <div class="btn btn-primary load-next-page float-end">Nächste Seite</div>
     </div>
 </nav>

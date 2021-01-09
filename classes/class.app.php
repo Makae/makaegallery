@@ -18,6 +18,7 @@ class App
     private Authentication $auth;
     private Security $security;
     private RestApi $restApi;
+    private $currentView;
 
     public function __construct(
         ISessionProvider $sessionProvider,
@@ -55,9 +56,10 @@ class App
         } catch (ControllerDefinitionException $e) {
         }
 
-        if (isset($getParams['logout'])) {
+        if (isset($body['logout'])) {
             $this->auth->logout();
         }
+
 
         $route = Utils::getUriComponents($uri);
         $route[0] = isset($route[0]) ? $route[0] : self::DEFAULT_VIEW;
@@ -66,7 +68,7 @@ class App
         if (!$this->auth->routeAllowed($path)) {
             $view = 'login';
         }
-
+        $this->currentView = $view;
         $this->partsLoader->load($view, $requestURI);
     }
 
@@ -93,6 +95,11 @@ class App
     public function setRestApi(RestApi $restApi): void
     {
         $this->restApi = $restApi;
+    }
+
+    public function getCurrentView()
+    {
+        return $this->currentView;
     }
 
 }

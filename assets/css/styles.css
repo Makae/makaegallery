@@ -1,5 +1,13 @@
+body.view-view {
+    padding-bottom: 70px;
+}
+
 label {
     min-width: 85px;
+}
+
+.nav-item-logout {
+    max-width: 240px;
 }
 
 nav li {
@@ -299,8 +307,9 @@ body .image-holder.loaded img {
 .progressbar {
     position: absolute;
     left: 0;
-    width: 0%;
-    height: 3px;
+    bottom: 0;
+    width: 0;
+    height: 4px;
     background-color: #357ebd;
     transition: width 0.5s ease;
 }

@@ -26,6 +26,7 @@ class PartsLoader
         include_once($this->partsDir . DIRECTORY_SEPARATOR . 'header.php');
         echo $view_output;
         include_once($this->partsDir . DIRECTORY_SEPARATOR . 'footer.php');
+
     }
 
     public function pathFromURI($requestURI)
