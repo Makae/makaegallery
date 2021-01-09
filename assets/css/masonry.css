@@ -158,7 +158,8 @@ body > .container {
         transform: scale(1.2);
     }
 }
-
+/*
+Very bad performance!
 @keyframes heartbeat2 {
     0% {
         box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.8);
@@ -167,20 +168,20 @@ body > .container {
     100% {
         box-shadow: 0 0 200px 9px rgba(0, 0, 0, 0.7);
     }
-}
+}*/
 
 @keyframes heartbeat1 {
     0% {
         transform: scale(1.25);
     }
     25% {
-        transform: scale(1.225);
+        transform: scale(1.245);
     }
     50% {
         transform: scale(1.25);
     }
     75% {
-        transform: scale(1.275);
+        transform: scale(1.255);
     }
     100% {
         transform: scale(1.25);
