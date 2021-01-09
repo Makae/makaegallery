@@ -8,26 +8,29 @@
 /* Wide smartphone */
 @media (min-aspect-ratio: 11/16) {
     :root {
-        --grid-columns: 2;
+        --grid-columns: 4;
         --grid-column-height: 240px;
     }
 }
 
 @media (min-aspect-ratio: 21/20) {
     :root {
-        --grid-columns: 3;
+        --grid-columns: 5;
+        --grid-column-height: 230px;
     }
 }
 
 @media (min-aspect-ratio: 16/12) {
     :root {
-        --grid-columns: 4;
+        --grid-columns: 6;
+        --grid-column-height: 220px;
     }
 }
 
 @media (min-aspect-ratio: 16/8) {
     :root {
-        --grid-columns: 5;
+        --grid-columns: 7;
+        --grid-column-height: 200px;
     }
 }
 
