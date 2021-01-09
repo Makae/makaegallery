@@ -126,13 +126,13 @@ var gallery = {
       maxTilt:        40,
       perspective:    1200,   // Transform perspective, the lower the more extreme the tilt gets.
       
-      scale:          1.02,      // 2 = 200%, 1.5 = 150%, etc..
-      speed:          800,    // Speed of the enter/exit transition.
+      scale:          1.05,      // 2 = 200%, 1.5 = 150%, etc..
+      speed:          1000,    // Speed of the enter/exit transition.
       transition:     true,   // Set a transition on enter/exit.
       axis:           null,   // What axis should be disabled. Can be X or Y.
       reset:          true,   // If the tilt effect has to be reset on exit.
       glare:          true,  // Enables glare effect
-      maxGlare:       0.5       // From 0 - 1.    
+      maxGlare:       0.8       // From 0 - 1.
     });
 
   },
