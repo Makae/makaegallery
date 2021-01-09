@@ -142,7 +142,7 @@ var gallery = {
     var html =
     '<div id="the-modal" class="modal">' +
       '<div class="loader"> </div>' +
-      '<span class="close">&times;</span>' +
+      '<span class="btn-close-image">&times;</span>' +
       '<div class="modal-infos"><span class="modal-x">x</span> von <span class="modal-y">y</span></div>' +
       '<img class="modal-content" id="modal_image">' +
       '<div class="modal-caption"></div>' +
@@ -155,7 +155,7 @@ var gallery = {
     this.modal = $('#the-modal');
     this.modal_image = $('#the-modal img');
     this.modal_caption = $('#the-modal caption');
-    this.modal_close = $('#the-modal .close');
+    this.modal_close = $('#the-modal .btn-close-image');
 
     this.modal_close.on('click', function() {
       self.modal.hide();

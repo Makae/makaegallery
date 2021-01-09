@@ -19,20 +19,20 @@ $repository = $App->getGalleryRepository()
 <script src="<?= WWW_ASSETS ?>/js/masonry.js"></script>
 <link rel="stylesheet" href="<?= WWW_ASSETS ?>/css/masonry.css">
 
-<div class="modal fade" id="uploadPhotoModal" tabindex="-1" role="dialog" aria-labelledby="uploadPhotoModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<!-- Modal -->
+<div class="modal fade" id="uploadPhotoModal" tabindex="-1" aria-labelledby="uploadPhotoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="uploadPhotoModalLabel">Foto hochladen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form class="photo-upload">
+            <form class="photo-upload">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="user">Name</label>
-                        <input type="text" disabled="disabled" class="form-control" id="user" placeholder="Enter email" value="<?= $user['name'] ?>">
+                        <input type="text" disabled="disabled" class="form-control" id="user" placeholder="Enter email"
+                               value="<?= $user['name'] ?>">
                     </div>
                     <div class="form-group">
                         <label for="title">Titel</label>
@@ -43,15 +43,18 @@ $repository = $App->getGalleryRepository()
                         <input type="file" multiple="multiple"
                                class="form-control"
                                accept="<?= implode(" ", $repository->getAllowedImageTypes()) ?>"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo">Foto-Titel</label>
                         <input type="text" class="form-control" id="photo" placeholder="Fototitel angeben" value="">
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Hochladen</button>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>

@@ -26,6 +26,7 @@ for ($idx = 0; $idx < count($images); $idx++) {
 ?>
 <script src="<?= WWW_ASSETS ?>/js/event_buffer.js"></script>
 <script src="<?= WWW_ASSETS ?>/js/gallery.js"></script>
+<link rel="stylesheet" href="<?= WWW_ASSETS ?>/css/gallery.css">
 
 <div class="row gallery"
      data-apiurl="<?= $App->getRestApi()->getUrl() ?>"

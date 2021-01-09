@@ -53,11 +53,17 @@ let masonry = {
     },
 
     bind: function () {
+        let self = this;
         let $images = $(this.renderImages(this.images));
         this.$grid.append($images)
             .masonry('appended', $images);
-
-        $('#uploadPhotoModal').modal('show');
+        $(document).on('keyup', (event) => {
+            // 191 == "§" on Swiss German keyboard (left of digit 1)
+            if(event.keyCode !== 191) {
+                return;
+            }
+            self.uploader.showUploadModal();
+        })
     },
 
     renderImages: function (images) {
@@ -91,6 +97,12 @@ let masonry = {
 
         return $(html)[0];
     },
+
+    uploader: {
+        showUploadModal: () => {
+            $('#uploadPhotoModal').modal('show');
+        }
+    }
 
 };
 
