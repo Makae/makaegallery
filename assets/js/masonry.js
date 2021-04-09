@@ -46,7 +46,7 @@ let masonry = {
 
     },
 
-    setGridOptions: function(columns, columnHeight) {
+    setGridOptions: function (columns, columnHeight) {
         document.documentElement.style.setProperty('--grid-columns', columns);
         document.documentElement.style.setProperty('--grid-column-height', columnHeight + "px");
         this.$grid.masonry();
@@ -59,7 +59,7 @@ let masonry = {
             .masonry('appended', $images);
         $(document).on('keyup', (event) => {
             // 191 == "§" on Swiss German keyboard (left of digit 1)
-            if(event.keyCode !== 191) {
+            if (event.keyCode !== 191) {
                 return;
             }
             self.uploader.showUploadModal();
@@ -86,9 +86,9 @@ let masonry = {
         html = html.replace('%image_idx%', image.idx);
 
         let gridArea = '';
-        if(aspectRatio <= 0.6) {
+        if (aspectRatio <= 0.6) {
             gridArea = 'grid-area-1to3'
-        } else if(aspectRatio <= 0.8) {
+        } else if (aspectRatio <= 0.8) {
             gridArea = 'grid-area-1to2'
         } else {
             gridArea = 'grid-area-1to1'
@@ -99,8 +99,49 @@ let masonry = {
     },
 
     uploader: {
-        showUploadModal: () => {
-            $('#uploadPhotoModal').modal('show');
+        initialized: false,
+        $uploadModal: null,
+        init: function () {
+            let self = this;
+
+            this.initialized = true;
+            this.$uploadModal = $('#uploadPhotoModal');
+            this.$previewContainer = this.$uploadModal.find('.preview');
+            this.$uploadModal[0].querySelector("input[type='file']").onchange = function (event) {
+                self.clearPreview();
+                if (!this.files || !this.files.length) {
+                    return;
+                }
+                for (let i = 0; i < this.files.length; i++) {
+                    self.loadPreviewImage(this.files[i]);
+                }
+            };
+        },
+
+        showUploadModal: function () {
+            this.init();
+            this.$uploadModal.modal('show');
+
+        },
+
+        clearPreview: function () {
+            this.$previewContainer.empty();
+        },
+
+        addPreviewImage: function (base64Url) {
+            let img = $('<img class="preview-image" alt="preview-image" src="' + base64Url + '" />')
+            this.$previewContainer.append(img);
+        },
+
+        loadPreviewImage: function (image) {
+            let self = this;
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                self.addPreviewImage(e.target.result)
+            }
+
+            reader.readAsDataURL(image);
         }
     }
 

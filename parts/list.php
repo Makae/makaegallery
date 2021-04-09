@@ -12,7 +12,7 @@ $galleries = $App->getGalleryRepository()->getGalleries();
             continue;
         $has_gallery_output = true;
         ?>
-        <div class="card col-sm-6 col-md-4"" style="width: 18rem;">
+        <div class="card col-sm-6 col-md-4" style="width: 18rem;">
             <img src="<?= $gallery->getCover(); ?>" class="card-img-top" alt="<?= $gallery->getTitle(); ?>">
             <div class="card-body">
                 <h5 class="card-title"><?= $gallery->getTitle(); ?></h5>

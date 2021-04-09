@@ -30,23 +30,20 @@ $repository = $App->getGalleryRepository()
             <form class="photo-upload">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="user">Name</label>
-                        <input type="text" disabled="disabled" class="form-control" id="user" placeholder="Enter email"
-                               value="<?= $user['name'] ?>">
+                        <label for="photo">Foto</label>
+                        <input type="file" multiple="multiple"
+                               class="form-control"
+                               accept="<?= implode(" ", $repository->getAllowedImageTypes()) ?>"/>
+                        <div class="preview"></div>
                     </div>
                     <div class="form-group">
                         <label for="title">Titel</label>
                         <input type="text" class="form-control" id="title" placeholder="Fototitel angeben" value="">
                     </div>
                     <div class="form-group">
-                        <label for="photo">Foto</label>
-                        <input type="file" multiple="multiple"
-                               class="form-control"
-                               accept="<?= implode(" ", $repository->getAllowedImageTypes()) ?>"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="photo">Foto-Titel</label>
-                        <input type="text" class="form-control" id="photo" placeholder="Fototitel angeben" value="">
+                        <label for="user">Fotograf</label>
+                        <input type="text" disabled="disabled" class="form-control" id="user" placeholder="Enter email"
+                               value="<?= $user['name'] ?>">
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
