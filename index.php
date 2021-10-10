@@ -19,6 +19,7 @@ use ch\makae\makaegallery\web\ImageRestController;
 require_once('./loader.php');
 load_dependencies(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR);
 require_once('./config.php');
+
 global $App;
 $sessionProvider = new SessionProvider();
 $security = new Security($sessionProvider);

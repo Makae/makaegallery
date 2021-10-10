@@ -9,7 +9,7 @@ class RequestData
     private array $header;
     private array $body;
 
-    public function __construct(array $parameters, array $header, array $body)
+    public function __construct(array $parameters, array $header, $body)
     {
         $this->parameters = $parameters;
         $this->header = $header;

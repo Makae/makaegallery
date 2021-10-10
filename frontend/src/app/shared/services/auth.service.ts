@@ -23,12 +23,13 @@ export class AuthService {
       `auth/login`,
       {name, password}
     ).subscribe({
-      next: () => {
+      complete: () => {
+        debugger;
         this.authStatusSubject.next({loggedIn: true});
       },
       error: (response) => {
         if (response.status === HttpStatusCode.Unauthorized) {
-          this.authStatusSubject.next({loggedIn: true});
+          this.authStatusSubject.next({loggedIn: false});
         }
       }
     });

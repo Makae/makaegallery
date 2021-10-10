@@ -23,7 +23,11 @@
         </form>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button [disabled]="!formGroup.valid" mat-flat-button color="primary" (click)="onSubmit()" i18n>
+        <button mat-flat-button
+                type="submit"
+                color="primary"
+                [disabled]="!formGroup.valid"
+                (click)="onSubmit()" i18n>
             Login
         </button>
     </mat-dialog-actions>

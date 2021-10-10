@@ -24,6 +24,10 @@ class RestApi
   public function handleRequest(string $method, string $path, array $header = [], array $body = []): HttpResponse
   {
     $this->setHeaders();
+    if($header['Content-Type'] === 'application/json') {
+      $body = json_decode(file_get_contents('php://input'), true);
+    }
+
     try {
       $controller = $this->getMatchingController($method, $path);
     } catch (RestAccessLevelException $exception) {
