@@ -1,0 +1,34 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav"
+                 [attr.role]="'dialog'"
+                 [mode]="'over'"
+                 [opened]="false">
+        <mat-toolbar>Menu</mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item href="#">Galleries</a>
+            <a mat-list-item href="#">Admin</a>
+            <a mat-list-item href="#">Users</a>
+            <div class="login-wrapper">
+                <button *ngIf="($loggedIn | async) === false" mat-raised-button color="accent" (click)="onLoginClick()">
+                    Login
+                </button>
+                <button *ngIf="($loggedIn | async) === true" mat-raised-button color="accent" (click)="onLogoutClick()">
+                    Logout
+                </button>
+            </div>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <button
+                    type="button"
+                    aria-label="Toggle sidenav"
+                    mat-icon-button
+                    (click)="drawer.toggle()">
+                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+            </button>
+            <span>Makae Gallery</span>
+        </mat-toolbar>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>
