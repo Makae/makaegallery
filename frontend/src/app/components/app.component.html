@@ -9,25 +9,23 @@
             <a mat-list-item href="#">Admin</a>
             <a mat-list-item href="#">Users</a>
             <div class="login-wrapper">
-                <button *ngIf="($loggedIn | async) === false" mat-raised-button color="accent" (click)="onLoginClick()">
-                    Login
-                </button>
-                <button *ngIf="($loggedIn | async) === true" mat-raised-button color="accent" (click)="onLogoutClick()">
-                    Logout
-                </button>
+                <app-login-button></app-login-button>
             </div>
         </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content class="header">
         <mat-toolbar color="primary">
-            <button
-                    type="button"
-                    aria-label="Toggle sidenav"
-                    mat-icon-button
-                    (click)="drawer.toggle()">
-                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-            </button>
-            <span>Makae Gallery</span>
+            <div class="toolbar-wrapper">
+                <button
+                        type="button"
+                        aria-label="Toggle sidenav"
+                        mat-icon-button
+                        (click)="drawer.toggle()">
+                    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+                </button>
+                <span>Makae Gallery</span>
+            </div>
+            <app-login-button></app-login-button>
         </mat-toolbar>
         <router-outlet></router-outlet>
     </mat-sidenav-content>

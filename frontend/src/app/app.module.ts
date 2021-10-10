@@ -10,21 +10,41 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
+import {HttpClientModule} from '@angular/common/http';
+import {LoginButtonComponent} from './components/login/login-button/login-button.component';
+import {LoginDialogComponent} from './components/login/login-dialog/login-dialog.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+import {MatDialogModule} from '@angular/material/dialog';
+import {InputComponent} from './shared/components/input/input.component';
+import {FormComponent} from './shared/components/form/form.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FormComponent,
+    InputComponent,
+    LoginButtonComponent,
+    LoginDialogComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    MatDialogModule,
     MatToolbarModule,
     MatButtonModule,
+    MatInputModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

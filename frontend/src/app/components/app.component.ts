@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
+import {Component} from '@angular/core';
+import {Observable} from "rxjs";
+import {AuthService, AuthStatus} from '../shared/services/auth.service';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -7,13 +9,16 @@ import {BehaviorSubject, Observable} from "rxjs";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  public $loggedIn = new BehaviorSubject<boolean>(false);
+  public readonly loggedIn: Observable<boolean>;
 
-  public onLoginClick(): void {
-
+  public constructor(
+    public authService: AuthService
+  ) {
+    this.loggedIn = this.authService
+      .authStatusChange()
+      .pipe(
+        map((authStatus) => authStatus.loggedIn)
+      );
   }
 
-  public onLogoutClick(): void {
-
-  }
 }
