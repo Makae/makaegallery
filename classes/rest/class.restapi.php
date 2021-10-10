@@ -61,6 +61,7 @@ class RestApi
 
   private function setHeaders()
   {
+    header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Origin: " .  CORS_ALLOWED_ORIGINS);
     header("Access-Control-Allow-Methods: ". CORS_ALLOWED_METHODS);
     header('Access-Control-Allow-Headers: token, Content-Type');

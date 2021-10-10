@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 import {ConfigService} from './config.service';
 import {Observable} from 'rxjs';
 import {PropertyModel} from '../models/property-model';
@@ -31,6 +31,14 @@ export class HttpClientService {
     return this.httpClient.post<T>(this.basePath + path, body, {
       params: params,
       responseType
+    } as PropertyModel);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public httpPostResponse(path: string, body: any, params?: HttpParams): Observable<Object> {
+    return this.httpClient.post(this.basePath + path, body, {
+      params: params,
+      observe: 'response'
     } as PropertyModel);
   }
 

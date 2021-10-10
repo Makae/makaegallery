@@ -20,6 +20,7 @@ import {InputComponent} from './shared/components/input/input.component';
 import {FormComponent} from './shared/components/form/form.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
+import { GalleryListingComponent } from './components/gallery/gallery-listing/gallery-listing.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { SpinnerComponent } from './shared/components/spinner/spinner.component'
     InputComponent,
     LoginButtonComponent,
     LoginDialogComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    GalleryListingComponent
   ],
   imports: [
     BrowserModule,

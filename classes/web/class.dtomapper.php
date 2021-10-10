@@ -43,4 +43,13 @@ abstract class DtoMapper
         ];
     }
 
+  public static function mapGalleryArrayToDto(array $galleries): array
+  {
+    $array_map = [];
+    foreach ($galleries as $key => $value) {
+      $array_map[$key] = DtoMapper::mapGalleryToDto($galleries[$key]);
+    }
+    return $array_map;
+  }
+
 }

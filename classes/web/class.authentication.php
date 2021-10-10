@@ -20,11 +20,16 @@ class AuthenticationRestController extends MultiRestController
   public function __construct(Security $security, Authentication $authentication)
   {
     parent::__construct(new RouteDeclarations([
+      [new GetRoute('/api/auth/status', Authentication::ACCESS_LEVEL_RESTRICTED), [$this, 'loginStatus']],
       [new POSTRoute('/api/auth/login', Authentication::ACCESS_LEVEL_PUBLIC), [$this, 'loginUser']],
       [new POSTRoute('/api/auth/logout', Authentication::ACCESS_LEVEL_PUBLIC), [$this, 'logoutUser']]
     ]));
     $this->security = $security;
     $this->authentication = $authentication;
+  }
+
+  public function loginStatus(RequestData $requestData): HttpResponse {
+    return HttpResponse::responseOK();
   }
 
   public function loginUser(RequestData $requestData): HttpResponse
