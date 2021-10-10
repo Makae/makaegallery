@@ -15,3 +15,4 @@ config-env.php
 /tests/galleries/testgallery/converted/
 
 /**/node_modules
+/**/**/.phpunit.result.cache
