@@ -180,7 +180,7 @@ var admin = {
     clearAllGalleries: function () {
         var self = this;
         self.service.request({
-            url: this.backend_api_url + '/gallery/clear-all',
+            url: this.backend_api_url + '/gallery/clear',
             method: 'GET',
             success: function (request) {
                 success(request);

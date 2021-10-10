@@ -32,7 +32,7 @@ class HttpResponse
         return new HttpResponse($body, self::STATUS_UNAUTHORIZED);
     }
 
-    public static function responseOK(string $body): HttpResponse
+    public static function responseOK(string $body=''): HttpResponse
     {
         return new HttpResponse($body, self::STATUS_OK);
     }

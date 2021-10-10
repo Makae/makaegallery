@@ -1,6 +1,7 @@
 <?php
 
 use ch\makae\makaegallery\security\Authentication;
+@define('CORS_ALLOWED_ORIGINS', 'http://localhost:4300');
 
 @define('GALLERY_CONFIGURATION', serialize(array(
     'photobox' => array(

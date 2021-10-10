@@ -23,6 +23,7 @@ class GalleryRestController extends MultiRestController
     public function __construct(GalleryRepository $galleryRepository, Security $security, UploadHandler $uploadHandler)
     {
         parent::__construct(new RouteDeclarations([
+            [new GETRoute('/api/gallery/clear', Authentication::ACCESS_LEVEL_USER), [$this, 'clearAllGalleries']],
             [new GETRoute('/api/gallery/{gallery_id}', Authentication::ACCESS_LEVEL_USER), [$this, 'getGallery']],
             [new GETRoute('/api/gallery/{gallery_id}/clear', Authentication::ACCESS_LEVEL_ADMIN), [$this, 'clearGallery']],
             [new POSTRoute('/api/gallery/{gallery_id}/image', Authentication::ACCESS_LEVEL_ADMIN), [$this, 'addImage']]
@@ -61,14 +62,38 @@ class GalleryRestController extends MultiRestController
 
     }
 
+    public function clearAllGalleries(RequestData $requestData): HttpResponse {
+        $galleries = $this->galleryRepository->getGalleries();
+
+        $galleriesWithIssues = [];
+        foreach($galleries as $gallery) {
+            if (!$this->_clearGallery($gallery->getIdentifier())) {
+                array_push($galleriesWithIssues, $gallery->getIdentifier());
+            }
+        }
+        if(count($galleriesWithIssues)) {
+            return HttpResponse::responseNotFound("Galleries with id `$galleriesWithIssues` can't be found");
+        }
+        return new HttpResponse(
+            true,
+            HttpResponse::STATUS_OK);
+    }
+
+    private function _clearGallery(string $galleryId): bool {
+        $gallery = $this->galleryRepository->getGallery($galleryId);
+        if (is_null($gallery)) {
+            return false;
+        }
+        $gallery->clearProcessed();
+        return true;
+    }
+
     public function clearGallery(RequestData $requestData): HttpResponse
     {
         $galleryId = $requestData->getParameter('gallery_id');
-        $gallery = $this->galleryRepository->getGallery($galleryId);
-        if (is_null($gallery)) {
+        if ($this->_clearGallery($galleryId)) {
             return HttpResponse::responseNotFound("Gallery with id `$galleryId` can't be found");
         }
-        $gallery->clearProcessed();
 
         return new HttpResponse(
             true,
@@ -79,6 +104,7 @@ class GalleryRestController extends MultiRestController
     {
         $galleryId = $requestData->getParameter('gallery_id');
         $gallery = $this->galleryRepository->getGallery($galleryId);
+
         if (is_null($gallery)) {
             return HttpResponse::responseNotFound("Gallery with id `$galleryId` can't be found");
         }

@@ -26,23 +26,26 @@ if (file_exists('config-env.php')) {
 }
 
 // GETTING PLACES
-define('SUB_ROOT', str_replace('/', DIRECTORY_SEPARATOR, $subFolder));
-define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . SUB_ROOT);
-define('ROOT', dirname(__FILE__));
-define('GALLERY_FOLDER', 'galleries');
-define('GALLERY_ROOT', ROOT . DIRECTORY_SEPARATOR . GALLERY_FOLDER);
-define('PARTS_DIR', ROOT . DIRECTORY_SEPARATOR . 'parts');
+@define('SUB_ROOT', str_replace('/', DIRECTORY_SEPARATOR, $subFolder));
+@define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . SUB_ROOT);
+@define('ROOT', dirname(__FILE__));
+@define('GALLERY_FOLDER', 'galleries');
+@define('GALLERY_ROOT', ROOT . DIRECTORY_SEPARATOR . GALLERY_FOLDER);
+@define('PARTS_DIR', ROOT . DIRECTORY_SEPARATOR . 'parts');
 
-define('WWW_SUB_ROOT', $subFolder);
-define('WWW_ROOT', $domain);
-define('WWW_BASE', $domain . (WWW_SUB_ROOT === "" ? "" : '/' . WWW_SUB_ROOT));
-define('WWW_ASSETS', WWW_BASE . '/assets');
-define('WWW_GALLERY_ROOT', WWW_SUB_ROOT . '/' . GALLERY_FOLDER);
+@define('WWW_SUB_ROOT', $subFolder);
+@define('WWW_ROOT', $domain);
+@define('WWW_BASE', $domain . (WWW_SUB_ROOT === "" ? "" : '/' . WWW_SUB_ROOT));
+@define('WWW_ASSETS', WWW_BASE . '/assets');
+@define('WWW_GALLERY_ROOT', WWW_SUB_ROOT . '/' . GALLERY_FOLDER);
 
-define('ALLOWED_IMAGE_TYPES', 'png,jpeg,bmp');
+@define('CORS_ALLOWED_ORIGINS', '');
+@define('CORS_ALLOWED_METHODS', 'POST, GET, PUT, DELETE, OPTIONS');
 
-define('TESTDIR', ROOT . 'tests' . DIRECTORY_SEPARATOR);
-define('DOING_AJAX', isset($_REQUEST['ajax']));
+@define('ALLOWED_IMAGE_TYPES', 'png,jpeg,bmp');
+
+@define('TESTDIR', ROOT . 'tests' . DIRECTORY_SEPARATOR);
+@define('DOING_AJAX', isset($_REQUEST['ajax']));
 
 @define('SALT', 'asdöfhöç2b4(&jwbj vyk sprog');
 

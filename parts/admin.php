@@ -18,18 +18,18 @@ foreach ($repository->getGalleries() as $gallery) {
 }
 ?>
 <div class="admin" data-apiurl="<?= $App->getRestApi()->getUrl() ?>">
-    <button id="minify-button" href="#" class="btn btn-light">Minify
+    <button id="minify-button" class="btn btn-light">Minify
         Galleries</button>
-    <button id="clear-button" href="#" class="btn btn-danger">Clear Minified
+    <button id="clear-button" class="btn btn-danger">Clear Minified
         Images</button>
 
     <?php foreach ($gallery_data as $gallery): ?>
         <div class="gallery-wrapper">
             <h3><?= $gallery['name'] ?></h3>
             <div class="control-wrapper clearfix">
-                <button data-gallery-id="<?= $gallery['name'] ?>" href="#"
+                <button data-gallery-id="<?= $gallery['name'] ?>"
                    class="gallery-button minify-gallery-button btn btn-light pull-left">Minify this gallery</button>
-                <button data-gallery-id="<?= $gallery['name'] ?>" href="#"
+                <button data-gallery-id="<?= $gallery['name'] ?>"
                    class="gallery-button clear-gallery-button btn btn-danger pull-left">Clear this gallery</button>
             </div>
             <div class="upload-wrapper clearfix">

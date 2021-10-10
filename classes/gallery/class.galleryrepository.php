@@ -31,6 +31,9 @@ class GalleryRepository
         }
     }
 
+    /**
+     * @return Gallery[] $gallery
+     */
     public function getGalleries(): array
     {
         return $this->galleries;
