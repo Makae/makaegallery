@@ -67,7 +67,7 @@ if (file_exists('config-env.php')) {
     )
 )));
 
-@define('AUTH_RESTRICTIONS', serialize(array(
+@define('ROUTE_RESTRICTIONS', serialize(array(
     'admin' => Authentication::ACCESS_LEVEL_ADMIN,
     'users' => Authentication::ACCESS_LEVEL_ADMIN,
     'view/photobox' => Authentication::ACCESS_LEVEL_USER,

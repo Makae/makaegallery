@@ -51,7 +51,7 @@ global $App;
                 <?php endif; ?>
             </ul>
             <ul class="navbar-nav d-flex justify-content-end">
-                <?php if ($App->getAuth()->isLoggedIn()): ?>
+                <?php if ($App->getAuth()->isAuthenticated()): ?>
                     <li class="nav-item nav-item-logout">
                         <a class="nav-link btn btn-primary" aria-current="page"
                            href="<?= WWW_BASE . '/login?logout=true' ?>">Abmelden</a>

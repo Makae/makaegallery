@@ -11,7 +11,7 @@ class AuthenticationTest extends TestCase
     {
         $auth = AuthenticationHelper::getAuthenticationMock();
         $auth->login("admin", "123456");
-        $this->assertTrue($auth->isLoggedIn());
+        $this->assertTrue($auth->isAuthenticated());
     }
 
 
@@ -19,16 +19,16 @@ class AuthenticationTest extends TestCase
     {
         $auth = AuthenticationHelper::getAuthenticationMock();
         $auth->login("admin", "WRONG");
-        $this->assertFalse($auth->isLoggedIn());
+        $this->assertFalse($auth->isAuthenticated());
     }
 
     public function test_logout_userLogout_loggsUserOut()
     {
         $auth = AuthenticationHelper::getAuthenticationMock();
         $auth->login("admin", "123456");
-        $this->assertTrue($auth->isLoggedIn());
+        $this->assertTrue($auth->isAuthenticated());
         $auth->logout();
-        $this->assertFalse($auth->isLoggedIn());
+        $this->assertFalse($auth->isAuthenticated());
     }
 
     public function test_login_loginTwice_loggedInAsLastUser()

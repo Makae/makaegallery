@@ -14,17 +14,15 @@ use ch\makae\makaegallery\security\Security;
 
 class AuthenticationRestController extends MultiRestController
 {
-  private Security $security;
   private Authentication $authentication;
 
-  public function __construct(Security $security, Authentication $authentication)
+  public function __construct(Authentication $authentication)
   {
     parent::__construct(new RouteDeclarations([
       [new GetRoute('/api/auth/status', Authentication::ACCESS_LEVEL_RESTRICTED), [$this, 'loginStatus']],
       [new POSTRoute('/api/auth/login', Authentication::ACCESS_LEVEL_PUBLIC), [$this, 'loginUser']],
       [new POSTRoute('/api/auth/logout', Authentication::ACCESS_LEVEL_PUBLIC), [$this, 'logoutUser']]
     ]));
-    $this->security = $security;
     $this->authentication = $authentication;
   }
 

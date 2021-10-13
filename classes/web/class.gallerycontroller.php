@@ -11,16 +11,14 @@ use ch\makae\makaegallery\rest\POSTRoute;
 use ch\makae\makaegallery\rest\RequestData;
 use ch\makae\makaegallery\rest\RouteDeclarations;
 use ch\makae\makaegallery\security\Authentication;
-use ch\makae\makaegallery\security\Security;
 use ch\makae\makaegallery\UploadHandler;
 
 class GalleryRestController extends MultiRestController
 {
   private GalleryRepository $galleryRepository;
   private UploadHandler $uploadHandler;
-  private Security $security;
 
-  public function __construct(GalleryRepository $galleryRepository, Security $security, UploadHandler $uploadHandler)
+  public function __construct(GalleryRepository $galleryRepository, UploadHandler $uploadHandler)
   {
     parent::__construct(new RouteDeclarations([
       [new GETRoute('/api/galleries/', Authentication::ACCESS_LEVEL_PUBLIC), [$this, 'getAllGalleries']],
@@ -31,7 +29,6 @@ class GalleryRestController extends MultiRestController
     ]));
 
     $this->galleryRepository = $galleryRepository;
-    $this->security = $security;
     $this->uploadHandler = $uploadHandler;
   }
 
@@ -42,10 +39,6 @@ class GalleryRestController extends MultiRestController
     if (is_null($gallery)) {
       return HttpResponse::responseNotFound("Gallery with id `$galleryId` can't be found");
     }
-    /*$nonceToken = $requestData->getParameter('nonce');
-    if (!$this->security->validateNonceToken($nonceToken)) {
-        return HttpResponse::responseUnauthorized("Nonce token is invalid!");
-    }*/
 
     $files = $this->uploadHandler->getUploadedFiles($_FILES["images"]);
     $result = $this->uploadHandler->addUploadedImages(
