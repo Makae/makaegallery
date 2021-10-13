@@ -1,0 +1,6 @@
+<ul>
+    <li *ngFor="let gallery of galleries">
+        <h3>{{gallery.name}} - {{gallery.id}}</h3>
+        <img [src]="gallery.image" alt="gallery.name" />
+    </li>
+</ul>
