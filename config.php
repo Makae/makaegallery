@@ -53,7 +53,7 @@ if (file_exists('config-env.php')) {
     array(
         'name' => 'radmin',
         'password' => '1f5153edc921f1eee2e7916fdf98f0c6',
-        'level' => Authentication::ACCESS_LEVEL_ADMIN,
+        'level' => Authentication::ACCESS_LEVEL_TENANT_ADMIN,
     ),
     array(
         'name' => 'photobox',

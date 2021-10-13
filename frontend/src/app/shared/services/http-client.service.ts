@@ -41,7 +41,7 @@ export class HttpClientService {
   public httpGet<T>(path: string, params?: HttpParams): Observable<T> {
     return this.httpClient.get<T>(this.basePath + path, {
       params: params,
-      headers: this.addBasicAuthHeader()
+      headers: this.getBasicAuthHeaders()
     });
   }
 
@@ -49,7 +49,7 @@ export class HttpClientService {
   public httpPost<T>(path: string, body: any, params?: HttpParams, responseType?: string): Observable<T> {
     return this.httpClient.post<T>(this.basePath + path, body, {
       params: params,
-      headers: this.addBasicAuthHeader(),
+      headers: this.getBasicAuthHeaders(),
       responseType
     } as PropertyModel);
   }
@@ -58,7 +58,7 @@ export class HttpClientService {
   public httpPostResponse(path: string, body: any, params?: HttpParams): Observable<Object> {
     return this.httpClient.post(this.basePath + path, body, {
       params: params,
-      headers: this.addBasicAuthHeader(),
+      headers: this.getBasicAuthHeaders(),
       observe: 'response'
     } as PropertyModel);
   }
@@ -67,23 +67,28 @@ export class HttpClientService {
   public httpPut<T>(path: string, body: any, params?: HttpParams): Observable<T> {
     return this.httpClient.put<T>(this.basePath + path, body, {
       params: params,
-      headers: this.addBasicAuthHeader()
+      headers: this.getBasicAuthHeaders()
     });
   }
 
   public httpDelete<T>(path: string, params?: HttpParams): Observable<T> {
     return this.httpClient.delete<T>(this.basePath + path, {
       params: params,
-      headers: this.addBasicAuthHeader()
+      headers: this.getBasicAuthHeaders()
     });
   }
 
-  private addBasicAuthHeader(): HttpHeaders {
-    const headers = new HttpHeaders();
+  private getBasicAuthHeaders(): HttpHeaders {
     const token = btoa(`${this.basicAuth?.name}:${this.basicAuth?.password}`);
+    // TODO: THIS IS FUCKED UP
+    const headers = new HttpHeaders();
     if (this.basicAuth) {
-      headers.append('Authorization', `Basic ${token}`);
+      headers.append(
+        'Authorization',
+        `Basic ${token}`
+      );
     }
+    console.log(headers.getAll('Authorization'));
     return headers;
   }
 }

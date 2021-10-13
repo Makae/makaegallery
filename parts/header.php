@@ -41,7 +41,7 @@ global $App;
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <?php if ($App->getAuth()->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN)): ?>
+                <?php if ($App->getAuth()->hasAccessForLevel(Authentication::ACCESS_LEVEL_TENANT_ADMIN)): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= WWW_BASE . '/users' ?>">Benutzer</a>
                     </li>

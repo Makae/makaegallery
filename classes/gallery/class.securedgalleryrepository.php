@@ -34,6 +34,9 @@ class SecuredGalleryRepository implements IGalleryRepository
   private function throwIfNoAccessToGallery($galleryId)
   {
     $galleryAccess = $this->getGalleryAccess($galleryId);
+    if ($this->authentication->isSuperAdmin()) {
+      return;
+    }
     if (!$this->belongsToTenant($galleryAccess['tenantId'])) {
       throw new WrongTenantException('Unauthorized');
     }

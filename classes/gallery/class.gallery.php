@@ -2,6 +2,7 @@
 
 namespace ch\makae\makaegallery;
 
+use ch\makae\makaegallery\security\Authentication;
 use DirectoryIterator;
 
 class Gallery
@@ -35,16 +36,16 @@ class Gallery
         $this->level = $level;
     }
 
-    public static function fromArray($folder, $meta)
+    public static function fromArray($folder, $meta): Gallery
     {
         return new Gallery(
             $folder,
-            isset($meta['title']) ? $meta['title'] : null,
-            isset($meta['cover']) ? $meta['cover'] : null,
-            isset($meta['description']) ? $meta['description'] : null,
-            isset($meta['refText']) ? $meta['refText'] : '',
-            isset($meta['order']) ? $meta['order'] : 10,
-            isset($meta['level']) ? $meta['level'] : Authentication::ACCESS_LEVEL_ADMIN);
+          $meta['title'] ?? null,
+          $meta['cover'] ?? null,
+          $meta['description'] ?? null,
+          $meta['refText'] ?? '',
+          $meta['order'] ?? 10,
+          $meta['level'] ?? Authentication::ACCESS_LEVEL_ADMIN);
     }
 
     private static function sort($a, $b)

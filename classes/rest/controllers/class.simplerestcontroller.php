@@ -11,7 +11,7 @@ abstract class SimpleRestController implements IRestController
 {
   private Route $route;
 
-  public function __construct(string $method, string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+  public function __construct(string $method, string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_TENANT_ADMIN)
   {
     $this->route = new Route($method, $routePattern, $accessLevel);
   }

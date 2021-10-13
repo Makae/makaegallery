@@ -19,7 +19,7 @@ class ImageRestController extends MultiRestController
   public function __construct(IGalleryRepository $galleryRepository)
   {
     parent::__construct(new RouteDeclarations([
-      [new GETRoute('/api/image/{image_id}/minify', Authentication::ACCESS_LEVEL_ADMIN), [$this, 'minifyImage']],
+      [new GETRoute('/api/image/{image_id}/minify', Authentication::ACCESS_LEVEL_TENANT_ADMIN), [$this, 'minifyImage']],
     ]));
 
     $this->galleryRepository = $galleryRepository;

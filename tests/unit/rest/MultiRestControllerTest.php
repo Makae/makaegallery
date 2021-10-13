@@ -85,7 +85,7 @@ class MultiRestControllerTest extends TestCase
         $multiRestController = new MultiRestControllerMock();
 
         $this->assertEquals(Authentication::ACCESS_LEVEL_USER, $multiRestController->getAccessLevel('GET', '/api/resource/1'));
-        $this->assertEquals(Authentication::ACCESS_LEVEL_ADMIN, $multiRestController->getAccessLevel('POST', '/api/resource'));
+        $this->assertEquals(Authentication::ACCESS_LEVEL_TENANT_ADMIN, $multiRestController->getAccessLevel('POST', '/api/resource'));
     }
 
 }

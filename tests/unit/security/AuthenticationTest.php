@@ -53,7 +53,7 @@ class AuthenticationTest extends TestCase
         $this->assertTrue($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_PUBLIC));
         $this->assertTrue($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_GUEST));
         $this->assertTrue($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_USER));
-        $this->assertTrue($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN));
+        $this->assertTrue($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_TENANT_ADMIN));
     }
 
     public function test_canAccess_asGuest_guestOrBelowAccessible()
@@ -63,7 +63,7 @@ class AuthenticationTest extends TestCase
         $this->assertTrue($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_PUBLIC));
         $this->assertTrue($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_GUEST));
         $this->assertFalse($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_USER));
-        $this->assertFalse($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN));
+        $this->assertFalse($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_TENANT_ADMIN));
     }
 
     public function test_canAccess_notLoggedIn_onlyPublicAccessible()
@@ -72,7 +72,7 @@ class AuthenticationTest extends TestCase
         $this->assertTrue($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_PUBLIC));
         $this->assertFalse($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_GUEST));
         $this->assertFalse($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_USER));
-        $this->assertFalse($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN));
+        $this->assertFalse($auth->hasAccessForLevel(Authentication::ACCESS_LEVEL_TENANT_ADMIN));
     }
 
 

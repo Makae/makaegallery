@@ -24,9 +24,9 @@ class GalleryRestController extends MultiRestController
     parent::__construct(new RouteDeclarations([
       [new GETRoute('/api/galleries/', Authentication::ACCESS_LEVEL_PUBLIC), [$this, 'getAllGalleries']],
       [new GETRoute('/api/galleries/{gallery_id}', Authentication::ACCESS_LEVEL_PUBLIC), [$this, 'getGallery']],
-      [new GETRoute('/api/galleries/clear', Authentication::ACCESS_LEVEL_USER), [$this, 'clearAllGalleries']],
-      [new GETRoute('/api/galleries/{gallery_id}/clear', Authentication::ACCESS_LEVEL_ADMIN), [$this, 'clearGallery']],
-      [new POSTRoute('/api/galleries/{gallery_id}/image', Authentication::ACCESS_LEVEL_ADMIN), [$this, 'addImage']]
+      [new GETRoute('/api/galleries/clear', Authentication::ACCESS_LEVEL_TENANT_ADMIN), [$this, 'clearAllGalleries']],
+      [new GETRoute('/api/galleries/{gallery_id}/clear', Authentication::ACCESS_LEVEL_TENANT_ADMIN), [$this, 'clearGallery']],
+      [new POSTRoute('/api/galleries/{gallery_id}/image', Authentication::ACCESS_LEVEL_TENANT_ADMIN), [$this, 'addImage']]
     ]));
 
     $this->galleryRepository = $galleryRepository;

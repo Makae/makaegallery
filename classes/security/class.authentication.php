@@ -4,10 +4,11 @@ namespace ch\makae\makaegallery\security;
 
 class Authentication
 {
-  const ACCESS_LEVEL_ADMIN = 0;
-  const ACCESS_LEVEL_USER = 1;
-  const ACCESS_LEVEL_GUEST = 2;
-  const ACCESS_LEVEL_RESTRICTED = 80;
+  const ACCESS_LEVEL_ADMIN = 5;
+  const ACCESS_LEVEL_TENANT_ADMIN = 10;
+  const ACCESS_LEVEL_USER = 20;
+  const ACCESS_LEVEL_GUEST = 30;
+  const ACCESS_LEVEL_RESTRICTED = 90;
   const ACCESS_LEVEL_PUBLIC = 100;
 
   private IAuthProvider $authProvider;
@@ -28,11 +29,6 @@ class Authentication
   public function isAuthenticated()
   {
     return $this->authProvider->isAuthenticated();
-  }
-
-  public function isAdmin()
-  {
-    return $this->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN);
   }
 
   public function getTenantId(): string {
@@ -56,6 +52,17 @@ class Authentication
   public function getUsers()
   {
     return $this->authProvider->getAllUsers();
+  }
+
+
+  public function isTenantAdmin()
+  {
+    return $this->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN);
+  }
+
+  public function isSuperAdmin()
+  {
+    return $this->hasAccessForLevel(self::ACCESS_LEVEL_TENANT_ADMIN);
   }
 
 }

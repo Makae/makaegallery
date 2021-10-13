@@ -10,7 +10,7 @@ class Route
     private ?array $route;
     private int $accessLevel;
 
-    public function __construct(string $method, string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    public function __construct(string $method, string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_TENANT_ADMIN)
     {
         $this->accessLevel = $accessLevel;
         $this->method = $method;
@@ -83,7 +83,7 @@ class Route
 
 class GETRoute extends Route
 {
-    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_TENANT_ADMIN)
     {
         parent::__construct('GET', $routePattern, $accessLevel);
     }
@@ -91,7 +91,7 @@ class GETRoute extends Route
 
 class POSTRoute extends Route
 {
-    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_TENANT_ADMIN)
     {
         parent::__construct('POST', $routePattern, $accessLevel);
     }
@@ -99,7 +99,7 @@ class POSTRoute extends Route
 
 class PATCHRoute extends Route
 {
-    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_TENANT_ADMIN)
     {
         parent::__construct('PATCH', $routePattern, $accessLevel);
     }
@@ -107,7 +107,7 @@ class PATCHRoute extends Route
 
 class PUTRoute extends Route
 {
-    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    public function __construct(string $routePattern, int $accessLevel = Authentication::ACCESS_LEVEL_TENANT_ADMIN)
     {
         parent::__construct('PUT', $routePattern, $accessLevel);
     }

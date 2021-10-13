@@ -21,21 +21,21 @@ use ch\makae\makaegallery\security\Authentication;
   'other-private-tenant' => array(
     'title' => 'PRIVATE TENANT',
     'description' => 'sooo private',
-    'level' => Authentication::ACCESS_LEVEL_ADMIN,
+    'level' => Authentication::ACCESS_LEVEL_TENANT_ADMIN,
     'tenantId' => 'd9fff352-9c48-42b6-9e65-4e6a555a91d4'
   )
 )));
 
 @define('AUTH_USERS', serialize([
   [
-    'name' => 'radmin',
-    'password' => '1f5153edc921f1eee2e7916fdf98f0c6',
-    'level' => Authentication::ACCESS_LEVEL_ADMIN,
-  ],
-  [
     'name' => 'jum_admin',
     'password' => '23b43d87f5dac4cad8b2252ab8f77d82',
     'level' => Authentication::ACCESS_LEVEL_ADMIN,
+  ],
+  [
+    'name' => 'jum_tenant_admin',
+    'password' => '23b43d87f5dac4cad8b2252ab8f77d82',
+    'level' => Authentication::ACCESS_LEVEL_TENANT_ADMIN,
   ],
   [
     'name' => 'photobox',

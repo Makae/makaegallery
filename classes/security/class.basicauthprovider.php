@@ -37,6 +37,7 @@ class BasicAuthProvider implements IAuthProvider
     global $_SERVER;
     $user = $_SERVER['PHP_AUTH_USER'] ?? null;
     $password = $_SERVER['PHP_AUTH_PW'] ?? null;
+    echo print_r($_SERVER, 1);
     return $user && $password ? ['id' => $user, 'password' => $password] : null;
   }
 

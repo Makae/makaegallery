@@ -11,7 +11,7 @@ class SuffixSimpleRestController extends SimpleRestController
 
     private string $suffix;
 
-    public function __construct(string $suffix, string $method = "GET", string $routePattern = "/", int $accessLevel = Authentication::ACCESS_LEVEL_ADMIN)
+    public function __construct(string $suffix, string $method = "GET", string $routePattern = "/", int $accessLevel = Authentication::ACCESS_LEVEL_TENANT_ADMIN)
     {
         parent::__construct($method, $routePattern, $accessLevel);
         $this->suffix = $suffix;
