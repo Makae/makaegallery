@@ -6,20 +6,23 @@ use ch\makae\makaegallery\GalleryLoader;
 use ch\makae\makaegallery\GalleryRepository;
 use ch\makae\makaegallery\ImageConverter;
 use ch\makae\makaegallery\PublicGallery;
+use ch\makae\makaegallery\rest\HttpErrorResponseHandler;
 use ch\makae\makaegallery\rest\RestApi;
+use ch\makae\makaegallery\SecuredGalleryRepository;
 use ch\makae\makaegallery\security\Authentication;
 use ch\makae\makaegallery\security\BasicAuthProvider;
 use ch\makae\makaegallery\UploadHandler;
 use ch\makae\makaegallery\Utils;
-use ch\makae\makaegallery\web\AuthenticationRestController;
-use ch\makae\makaegallery\web\GalleryRestController;
-use ch\makae\makaegallery\web\ImageRestController;
+use ch\makae\makaegallery\web\controllers\AuthenticationRestController;
+use ch\makae\makaegallery\web\controllers\GalleryRestController;
+use ch\makae\makaegallery\web\controllers\ImageRestController;
 
 require_once('./loader.php');
 load_dependencies(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR);
 require_once('./config.php');
 
 global $App;
+
 $authProvider = new BasicAuthProvider(unserialize(AUTH_USERS), SALT);
 $authentication = new Authentication($authProvider);
 $galleryLoader = new GalleryLoader(GALLERY_ROOT,
@@ -32,10 +35,16 @@ $galleryConverter = new ImageConverter(
     PublicGallery::PROCESSOR_THUMBNAIL_KEY => ConversionConfig::fromArray(unserialize(PROCESS_CONFIG_THUMB))
   ]
 );
+
 $galleryRepository = new GalleryRepository(
   $galleryLoader,
   $galleryConverter
 );
+$securedGalleryRepository =
+  new SecuredGalleryRepository(
+    $galleryRepository,
+    $authentication,
+    unserialize(GALLERY_CONFIGURATION));
 
 $restApi = new RestApi(WWW_BASE . '/api', $authentication);
 $restApi->addController(new AuthenticationRestController($authentication));
@@ -44,8 +53,9 @@ $restApi->addController(new ImageRestController($galleryRepository));
 
 $App = new App(
   $authentication,
-  $galleryRepository,
-  $restApi
+  $securedGalleryRepository,
+  $restApi,
+  new HttpErrorResponseHandler()
 );
 
 $App->processRequest($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], Utils::getAllHeaders(), $_REQUEST);

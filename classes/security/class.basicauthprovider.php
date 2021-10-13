@@ -25,6 +25,7 @@ class BasicAuthProvider implements IAuthProvider
   public function isAuthenticated(): bool
   {
     $credentials = $this->getCredentials();
+
     if (!$credentials) {
       return false;
     }
@@ -35,8 +36,8 @@ class BasicAuthProvider implements IAuthProvider
   {
     global $_SERVER;
     $user = $_SERVER['PHP_AUTH_USER'] ?? null;
-    $password = $_SERVER['PHP_AUTH_PASSWORD'] ?? null;
-    return !$user && !$password ? ['id' => $user, 'password' => $password] : null;
+    $password = $_SERVER['PHP_AUTH_PW'] ?? null;
+    return $user && $password ? ['id' => $user, 'password' => $password] : null;
   }
 
   private function areCredentialsValid($id, $password): bool

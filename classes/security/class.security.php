@@ -44,7 +44,7 @@ class Security
     {
         $token = $this->getToken($identifier);
         $this->clearToken($identifier);
-        if ($token === null) return false;
+        if (is_null($token)) return false;
 
         return $this->now() <= $token->getValidUntil();
     }

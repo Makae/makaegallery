@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClientService} from "./http-client.service";
 import {BehaviorSubject, EMPTY, Observable} from "rxjs";
 import {distinctUntilChanged} from 'rxjs/operators';
-import {HttpStatusCode} from '@angular/common/http';
+import {HttpErrorResponse, HttpStatusCode} from '@angular/common/http';
 import {AuthStatus} from '../models/auth-status-model';
 
 
@@ -11,21 +11,25 @@ import {AuthStatus} from '../models/auth-status-model';
 })
 export class AuthService {
 
-  private authStatusSubject = new BehaviorSubject<AuthStatus>({loggedIn: false})
+  private authStatusSubject = new BehaviorSubject<AuthStatus>({})
 
   public constructor(private httpClientService: HttpClientService) {
     this.httpClientService.httpGet<boolean>(`auth/status`).subscribe({
       complete: () => {
-        this.authStatusSubject.next({loggedIn: false});
+        this.authStatusSubject.next({loggedIn: true});
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.Unauthorized ||error.status === HttpStatusCode.Forbidden) {
+          this.authStatusSubject.next({loggedIn: false});
+        }
       }
     });
   }
 
   public login(name: string, password: string): Observable<AuthStatus> {
     this.httpClientService.setBasicAuthHeaders(name, password);
-    this.httpClientService.httpPostResponse(
-      `auth/status`,
-      {name, password}
+    this.httpClientService.httpGet(
+      `auth/status`
     ).subscribe({
       complete: () => {
         this.authStatusSubject.next({loggedIn: true});

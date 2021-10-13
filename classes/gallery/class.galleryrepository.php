@@ -2,7 +2,7 @@
 
 namespace ch\makae\makaegallery;
 
-class GalleryRepository
+class GalleryRepository implements IGalleryRepository
 {
     private array $galleries;
     private $allowedImageTypes;

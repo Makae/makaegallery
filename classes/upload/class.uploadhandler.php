@@ -6,9 +6,9 @@ class UploadHandler
 {
 
 
-    private GalleryRepository $galleryRepository;
+    private IGalleryRepository $galleryRepository;
 
-    public function __construct(GalleryRepository $galleryRepository)
+    public function __construct(IGalleryRepository $galleryRepository)
     {
         $this->galleryRepository = $galleryRepository;
     }

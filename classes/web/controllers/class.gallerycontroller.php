@@ -1,29 +1,30 @@
 <?php
 
 
-namespace ch\makae\makaegallery\web;
+namespace ch\makae\makaegallery\web\controllers;
 
-use ch\makae\makaegallery\GalleryRepository;
+use ch\makae\makaegallery\IGalleryRepository;
+use ch\makae\makaegallery\rest\controllers\MultiRestController;
 use ch\makae\makaegallery\rest\GETRoute;
 use ch\makae\makaegallery\rest\HttpResponse;
-use ch\makae\makaegallery\rest\MultiRestController;
 use ch\makae\makaegallery\rest\POSTRoute;
 use ch\makae\makaegallery\rest\RequestData;
 use ch\makae\makaegallery\rest\RouteDeclarations;
 use ch\makae\makaegallery\security\Authentication;
 use ch\makae\makaegallery\UploadHandler;
+use ch\makae\makaegallery\web\DtoMapper;
 
 class GalleryRestController extends MultiRestController
 {
-  private GalleryRepository $galleryRepository;
+  private IGalleryRepository $galleryRepository;
   private UploadHandler $uploadHandler;
 
-  public function __construct(GalleryRepository $galleryRepository, UploadHandler $uploadHandler)
+  public function __construct(IGalleryRepository $galleryRepository, UploadHandler $uploadHandler)
   {
     parent::__construct(new RouteDeclarations([
       [new GETRoute('/api/galleries/', Authentication::ACCESS_LEVEL_PUBLIC), [$this, 'getAllGalleries']],
+      [new GETRoute('/api/galleries/{gallery_id}', Authentication::ACCESS_LEVEL_PUBLIC), [$this, 'getGallery']],
       [new GETRoute('/api/galleries/clear', Authentication::ACCESS_LEVEL_USER), [$this, 'clearAllGalleries']],
-      [new GETRoute('/api/galleries/{gallery_id}', Authentication::ACCESS_LEVEL_USER), [$this, 'getGallery']],
       [new GETRoute('/api/galleries/{gallery_id}/clear', Authentication::ACCESS_LEVEL_ADMIN), [$this, 'clearGallery']],
       [new POSTRoute('/api/galleries/{gallery_id}/image', Authentication::ACCESS_LEVEL_ADMIN), [$this, 'addImage']]
     ]));
@@ -48,7 +49,7 @@ class GalleryRestController extends MultiRestController
     if ($result->isSuccess()) {
       return HttpResponse::responseOK(json_encode(array(
         'msg' => 'Added Images to ' . $galleryId,
-        'galleryid' => $galleryId,
+        'galleryId' => $galleryId,
         'result' => $result
       )));
     }
@@ -56,7 +57,7 @@ class GalleryRestController extends MultiRestController
 
   }
 
-  public function getAllGalleries(RequestData $requestData): HttpResponse
+  public function getAllGalleries(): HttpResponse
   {
     $galleries = $this->galleryRepository->getGalleries();
 
@@ -65,7 +66,7 @@ class GalleryRestController extends MultiRestController
       HttpResponse::STATUS_OK);
   }
 
-  public function clearAllGalleries(RequestData $requestData): HttpResponse
+  public function clearAllGalleries(): HttpResponse
   {
     $galleries = $this->galleryRepository->getGalleries();
 

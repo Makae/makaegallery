@@ -4,7 +4,7 @@ namespace ch\makae\makaegallery\tests;
 
 use ch\makae\makaegallery\security\Authentication;
 use ch\makae\makaegallery\rest\HttpResponse;
-use ch\makae\makaegallery\rest\SimpleRestController;
+use ch\makae\makaegallery\rest\controllers\SimpleRestController;
 
 class SuffixSimpleRestController extends SimpleRestController
 {

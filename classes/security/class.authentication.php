@@ -35,6 +35,10 @@ class Authentication
     return $this->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN);
   }
 
+  public function getTenantId(): string {
+    return $this->getUser()['tenantId'];
+  }
+
   public function getUserLevel()
   {
     if (!$this->isAuthenticated()) {

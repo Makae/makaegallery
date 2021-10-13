@@ -1,11 +1,11 @@
 <?php
 
 
-namespace ch\makae\makaegallery\web;
+namespace ch\makae\makaegallery\web\controllers;
 
 use ch\makae\makaegallery\rest\GETRoute;
 use ch\makae\makaegallery\rest\HttpResponse;
-use ch\makae\makaegallery\rest\MultiRestController;
+use ch\makae\makaegallery\rest\controllers\MultiRestController;
 use ch\makae\makaegallery\rest\RequestData;
 use ch\makae\makaegallery\rest\RouteDeclarations;
 use ch\makae\makaegallery\security\Authentication;
@@ -24,7 +24,6 @@ class AuthenticationRestController extends MultiRestController
 
   public function authenticationStatus(RequestData $requestData): HttpResponse
   {
-    die(var_dump($requestData));
     if ($this->authentication->isAuthenticated()) {
       return HttpResponse::responseOK();
     }

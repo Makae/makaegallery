@@ -9,12 +9,20 @@ use ch\makae\makaegallery\security\Authentication;
     'title' => 'Bilder aus der Photobox',
     'description' => 'Die beschte Biuder het\'s gäh.',
     'ref_text' => 'Bilder von <b>Corinne Ritter</b>. Vielen Dank.',
-    'level' => 1
+    'level' => Authentication::ACCESS_LEVEL_USER,
+    'tenantId' => 'a84ce876-a1d9-4695-8b90-321c0ccf0db8'
   ),
   'public' => array(
     'title' => 'Bilder von der Hochzeit',
     'description' => 'So schön isch\'s gsi!',
-    'level' => 2
+    'level' => Authentication::ACCESS_LEVEL_GUEST,
+    'tenantId' => 'a84ce876-a1d9-4695-8b90-321c0ccf0db8'
+  ),
+  'other-private-tenant' => array(
+    'title' => 'PRIVATE TENANT',
+    'description' => 'sooo private',
+    'level' => Authentication::ACCESS_LEVEL_ADMIN,
+    'tenantId' => 'd9fff352-9c48-42b6-9e65-4e6a555a91d4'
   )
 )));
 
@@ -33,10 +41,12 @@ use ch\makae\makaegallery\security\Authentication;
     'name' => 'photobox',
     'password' => '4041ed306863ddde6c9ebf2c2676edb7',
     'level' => Authentication::ACCESS_LEVEL_USER,
+    'tenantId' => 'a84ce876-a1d9-4695-8b90-321c0ccf0db8'
   ],
   [
     'name' => 'besucher',
     'password' => '35b91af1d068598b2269aaf6cb56bfee',
     'level' => Authentication::ACCESS_LEVEL_GUEST,
+    'tenantId' => 'a84ce876-a1d9-4695-8b90-321c0ccf0db8'
   ]
 ]));

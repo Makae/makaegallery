@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {map} from 'rxjs/operators';
 import {AuthService} from '../shared/services/auth.service';
@@ -8,16 +8,20 @@ import {AuthService} from '../shared/services/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  public readonly loggedIn: Observable<boolean>;
+export class AppComponent implements OnInit {
+  public loggedIn?: Observable<boolean>;
 
   public constructor(
     public authService: AuthService
   ) {
+
+  }
+
+  public ngOnInit(): void {
     this.loggedIn = this.authService
       .authStatusChange()
       .pipe(
-        map((authStatus) => authStatus.loggedIn)
+        map((authStatus) => !!authStatus.loggedIn)
       );
   }
 
