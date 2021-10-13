@@ -21,7 +21,7 @@ require_once('./config.php');
 
 global $App;
 $authProvider = new BasicAuthProvider(unserialize(AUTH_USERS), SALT);
-$authentication = new Authentication($authProvider, unserialize(ROUTE_RESTRICTIONS));
+$authentication = new Authentication($authProvider);
 $galleryLoader = new GalleryLoader(GALLERY_ROOT,
   unserialize(GALLERY_CONFIGURATION),
   GALLERY_DEFAULT_COVER

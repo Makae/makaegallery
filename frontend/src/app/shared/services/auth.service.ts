@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClientService} from "./http-client.service";
-import {BehaviorSubject, Observable} from "rxjs";
-import {distinctUntilChanged, tap} from 'rxjs/operators';
-import {HttpResponse, HttpStatusCode} from '@angular/common/http';
+import {BehaviorSubject, EMPTY, Observable} from "rxjs";
+import {distinctUntilChanged} from 'rxjs/operators';
+import {HttpStatusCode} from '@angular/common/http';
 import {AuthStatus} from '../models/auth-status-model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -21,21 +22,15 @@ export class AuthService {
   }
 
   public login(name: string, password: string): Observable<AuthStatus> {
+    this.httpClientService.setBasicAuthHeaders(name, password);
     this.httpClientService.httpPostResponse(
-      `auth/login`,
+      `auth/status`,
       {name, password}
     ).subscribe({
-      next: (response) => {
-        const resp = response as unknown as HttpResponse<any>;
-        console.log(resp.headers);
-        debugger;
-      },
       complete: () => {
-        debugger;
         this.authStatusSubject.next({loggedIn: true});
       },
       error: (response) => {
-        debugger;
         if (response.status === HttpStatusCode.Unauthorized) {
           this.authStatusSubject.next({loggedIn: false});
         }
@@ -51,9 +46,7 @@ export class AuthService {
   }
 
   public logout(): Observable<void> {
-    return this.httpClientService.httpGet<void>(`auth/logout`).pipe(
-      tap(() => {
-        this.authStatusSubject.next({loggedIn: false});
-      }));
+    this.httpClientService.clearBasicAuthHeaders();
+    return EMPTY;
   }
 }

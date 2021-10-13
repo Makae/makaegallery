@@ -43,7 +43,6 @@ class BasicAuthProvider implements IAuthProvider
   {
     $user = $this->findUserById($id);
     $password = md5($password . $this->salt);
-
     if ($user && $user['password'] === $password) {
       return true;
     }

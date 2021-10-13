@@ -67,17 +67,6 @@ if (file_exists('config-env.php')) {
     )
 )));
 
-@define('ROUTE_RESTRICTIONS', serialize(array(
-    'admin' => Authentication::ACCESS_LEVEL_ADMIN,
-    'users' => Authentication::ACCESS_LEVEL_ADMIN,
-    'view/photobox' => Authentication::ACCESS_LEVEL_USER,
-    'galleries/photobox' => Authentication::ACCESS_LEVEL_USER,
-    'view' => Authentication::ACCESS_LEVEL_GUEST,
-    'masonry' => Authentication::ACCESS_LEVEL_GUEST,
-    'login' => Authentication::ACCESS_LEVEL_PUBLIC,
-    'list' => Authentication::ACCESS_LEVEL_PUBLIC
-)));
-
 @define('PROCESS_CONFIG_THUMB', serialize([
     'width' => 450,
     'quality' => 80,
