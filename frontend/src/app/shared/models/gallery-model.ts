@@ -7,9 +7,15 @@ export interface Gallery {
   images?: Image[];
 }
 
+export interface  Dimensions {
+  width: number;
+  height: number;
+}
+
 export interface Image {
   id: string;
-  name: string;
-  url: string;
-  alt?: string;
+  dimensions: Dimensions;
+  original_url: string;
+  optimized_url: string;
+  thumbnail_url: string;
 }

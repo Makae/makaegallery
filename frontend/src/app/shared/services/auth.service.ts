@@ -43,6 +43,7 @@ export class AuthService {
   }
 
   private static storeBasicAuthHeader(basicAuth: BasicAuth): void {
+    // TODO: REMOVE THIS - IS ONLY for development
     window.localStorage.setItem(AuthService.STORAGE_KEY, JSON.stringify(basicAuth as BasicAuth));
   }
 

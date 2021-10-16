@@ -19,11 +19,11 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {InputComponent} from './shared/components/input/input.component';
 import {FormComponent} from './shared/components/form/form.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { SpinnerComponent } from './shared/components/spinner/spinner.component';
-import { GalleryListingComponent } from './components/gallery/gallery-listing/gallery-listing.component';
-import {MasonryGalleryModule} from 'ngx-masonry-gallery';
-import { GalleryMasonryComponent } from './components/gallery/gallery-masonry/gallery-masonry.component';
+import {SpinnerComponent} from './shared/components/spinner/spinner.component';
+import {GalleryListingComponent} from './components/gallery/gallery-listing/gallery-listing.component';
+import {GalleryMasonryComponent} from './components/gallery/gallery-masonry/gallery-masonry.component';
 import {MatCardModule} from '@angular/material/card';
+import {HeaderComponent} from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,8 @@ import {MatCardModule} from '@angular/material/card';
     LoginDialogComponent,
     SpinnerComponent,
     GalleryListingComponent,
-    GalleryMasonryComponent
+    GalleryMasonryComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -51,8 +52,7 @@ import {MatCardModule} from '@angular/material/card';
     MatIconModule,
     MatListModule,
     MatProgressSpinnerModule,
-    MatCardModule,
-    MasonryGalleryModule
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
