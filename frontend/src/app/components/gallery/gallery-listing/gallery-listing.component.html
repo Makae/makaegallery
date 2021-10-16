@@ -1,6 +1,22 @@
-<ul>
-    <li *ngFor="let gallery of galleries">
-        <h3>{{gallery.name}} - {{gallery.id}}</h3>
-        <img [src]="gallery.image" alt="gallery.name" />
-    </li>
-</ul>
+<section class="content">
+    <p *ngIf="showLoginMessage" i18n>
+        Please log-in first.
+    </p>
+    <ul *ngIf="this.galleries">
+        <li *ngFor="let gallery of galleries">
+            <mat-card class="example-card">
+                <mat-card-header>
+                    <mat-card-title>{{gallery.name}}</mat-card-title>
+                </mat-card-header>
+                <img mat-card-image src="{{gallery.coverImage}}" i18n-alt alt="Cover image of gallery named {{gallery.name}}">
+                <mat-card-content>
+                    <p>{{gallery.description}}</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-flat-button color="primary" (click)="goToGallery(gallery.id)" i18n>Check out!</button>
+                </mat-card-actions>
+            </mat-card>
+        </li>
+    </ul>
+</section>
+

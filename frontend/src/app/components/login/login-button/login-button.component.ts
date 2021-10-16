@@ -33,8 +33,11 @@ export class LoginButtonComponent implements OnInit {
   }
 
   public onLogoutClick(): void {
-    this.authService.logout().subscribe(() => {
-      this.loginDialog.closeAll();
+    this.authService.logout().subscribe({
+      complete: () => {
+        this.loginDialog.closeAll();
+        window.location.reload();
+      }
     });
   }
 }

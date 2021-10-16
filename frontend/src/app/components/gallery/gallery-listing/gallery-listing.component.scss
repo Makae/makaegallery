@@ -1,0 +1,21 @@
+@import '/src/assets/styles/vars.layout';
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: $quarter-main-margin;
+
+  li {
+    box-sizing: border-box;
+    flex: 1 1 25%;
+  }
+}
+
+::ng-deep app-gallery-listing .mat-card-header-text {
+  height: 3rem;
+}

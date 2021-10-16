@@ -3,8 +3,9 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {ConfigService} from './config.service';
 import {Observable} from 'rxjs';
 import {PropertyModel} from '../models/property-model';
+import {AuthService} from './auth.service';
 
-interface BasicAuth {
+export interface BasicAuth {
   name: string;
   password: string;
 }
@@ -27,11 +28,8 @@ export class HttpClientService {
     }
   }
 
-  public setBasicAuthHeaders(name: string, password: string) {
-    this.basicAuth = {
-      name,
-      password
-    };
+  public setBasicAuthHeaders(basicAuth: BasicAuth) {
+    this.basicAuth = basicAuth;
   }
 
   public clearBasicAuthHeaders() {

@@ -21,6 +21,9 @@ import {FormComponent} from './shared/components/form/form.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { GalleryListingComponent } from './components/gallery/gallery-listing/gallery-listing.component';
+import {MasonryGalleryModule} from 'ngx-masonry-gallery';
+import { GalleryMasonryComponent } from './components/gallery/gallery-masonry/gallery-masonry.component';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,8 @@ import { GalleryListingComponent } from './components/gallery/gallery-listing/ga
     LoginButtonComponent,
     LoginDialogComponent,
     SpinnerComponent,
-    GalleryListingComponent
+    GalleryListingComponent,
+    GalleryMasonryComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +50,9 @@ import { GalleryListingComponent } from './components/gallery/gallery-listing/ga
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MasonryGalleryModule
   ],
   providers: [],
   bootstrap: [AppComponent]

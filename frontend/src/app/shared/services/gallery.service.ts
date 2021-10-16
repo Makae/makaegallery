@@ -15,4 +15,8 @@ export class GalleryService {
   public getGalleries(): Observable<Gallery[]> {
     return this.httpClientService.httpGet<Gallery[]>(`galleries`);
   }
+
+  public getGallery(galleryId: string): Observable<Gallery> {
+    return this.httpClientService.httpGet<Gallery>(`galleries/${galleryId}`);
+  }
 }

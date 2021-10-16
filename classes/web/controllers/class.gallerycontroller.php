@@ -62,7 +62,7 @@ class GalleryRestController extends MultiRestController
     $galleries = $this->galleryRepository->getGalleries();
 
     return new HttpResponse(
-      json_encode(DtoMapper::mapGalleryArrayToDto($galleries)),
+      json_encode(DtoMapper::mapGalleryArrayToDto($galleries, false)),
       HttpResponse::STATUS_OK);
   }
 
