@@ -41,6 +41,7 @@ if (file_exists('config-env.php')) {
 
 @define('CORS_ALLOWED_ORIGINS', '');
 @define('CORS_ALLOWED_METHODS', 'POST, GET, PUT, DELETE, OPTIONS');
+@define('CORS_ALLOWED_HEADERS', 'token, Content-Type, Authorization');
 
 @define('ALLOWED_IMAGE_TYPES', 'png,jpeg,bmp');
 

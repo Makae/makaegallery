@@ -42,7 +42,6 @@ class RestApi
         continue;
       }
       if (!$this->authentication->hasAccessForLevel($controller->getAccessLevel($method, $path))) {
-        echo print_r($this->authentication, 1);
         die(var_dump($method, $path, $controller->getAccessLevel($method, $path)));
         throw new RestAccessLevelException("Can not access $method $path");
       }

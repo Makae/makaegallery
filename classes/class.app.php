@@ -5,7 +5,6 @@ namespace ch\makae\makaegallery;
 use ch\makae\makaegallery\rest\IHttpErrorResponseHandler;
 use ch\makae\makaegallery\rest\RestApi;
 use ch\makae\makaegallery\security\Authentication;
-use Excepton;
 
 class App
 {
@@ -31,6 +30,10 @@ class App
   {
     $uri = Utils::getRequestUri($requestURI);
     $this->setHeaders();
+    if ($requestMethod === "OPTIONS") {
+      die();
+    }
+
     try {
       $response = $this->restApi->handleRequest($requestMethod, '/' . $uri, $header, $body);
     } catch (\Exception $exception) {
@@ -43,10 +46,10 @@ class App
 
   private function setHeaders()
   {
-    header("Access-Control-Allow-Credentials: true");
-    header("Access-Control-Allow-Origin: " .  CORS_ALLOWED_ORIGINS);
-    header("Access-Control-Allow-Methods: ". CORS_ALLOWED_METHODS);
-    header('Access-Control-Allow-Headers: token, Content-Type');
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Allow-Origin: ' .  CORS_ALLOWED_ORIGINS);
+    header('Access-Control-Allow-Methods: '. CORS_ALLOWED_METHODS);
+    header('Access-Control-Allow-Headers: ' . CORS_ALLOWED_HEADERS);
   }
 
   public function getGalleryRepository(): IGalleryRepository

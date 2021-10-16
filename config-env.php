@@ -50,3 +50,5 @@ use ch\makae\makaegallery\security\Authentication;
     'tenantId' => 'a84ce876-a1d9-4695-8b90-321c0ccf0db8'
   ]
 ]));
+
+@define('DEBUG', true);

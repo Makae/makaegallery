@@ -80,15 +80,13 @@ export class HttpClientService {
 
   private getBasicAuthHeaders(): HttpHeaders {
     const token = btoa(`${this.basicAuth?.name}:${this.basicAuth?.password}`);
-    // TODO: THIS IS FUCKED UP
-    const headers = new HttpHeaders();
+    let headers = new HttpHeaders();
     if (this.basicAuth) {
-      headers.append(
+      headers = headers.append(
         'Authorization',
         `Basic ${token}`
       );
     }
-    console.log(headers.getAll('Authorization'));
     return headers;
   }
 }
