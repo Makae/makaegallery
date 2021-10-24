@@ -1,0 +1,8 @@
+<app-header cssClass="hidden"></app-header>
+<div class="container-fullwidth masonry">
+    <div *ngFor="let image of this.images" class="grid-item {{image.cssClass}}">
+        <div class="image-holder"
+             style="background-image: url('{{image.thumbnail_url}}')"></div>
+    </div>
+</div>
+
