@@ -1,8 +1,10 @@
 <app-header cssClass="hidden"></app-header>
-<div class="container-fullwidth masonry">
-    <div *ngFor="let image of this.images" class="grid-item {{image.cssClass}}">
-        <div class="image-holder"
-             style="background-image: url('{{image.thumbnail_url}}')"></div>
+<div class="container-fullwidth masonry masonry-columns-{{columns.length}}">
+    <div *ngFor="let column; let i = index of columns" class="column column-idx-{{i}}">
+        <div *ngFor="let image of column.images" class="grid-item {{image.cssClass}}">
+            <div class="image-holder"
+                 style="background-image: url('{{image.thumbnail_url}}')"></div>
+        </div>
     </div>
 </div>
 

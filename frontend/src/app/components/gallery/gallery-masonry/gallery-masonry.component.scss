@@ -1,70 +1,43 @@
+* {
+  box-sizing: border-box;
+}
+
 :host {
   --main-color: #fcbc38;
   --accent-color: #ffffff;
-  --grid-columns: 4;
-  --grid-column-height: 240px;
-}
-
-/* Wide smartphone */
-@media (min-aspect-ratio: 11/16) {
-  :root {
-    --grid-columns: 4;
-    --grid-column-height: 240px;
-  }
-}
-
-@media (min-aspect-ratio: 21/20) {
-  :root {
-    --grid-columns: 5;
-    --grid-column-height: 230px;
-  }
-}
-
-@media (min-aspect-ratio: 16/12) {
-  :root {
-    --grid-columns: 6;
-    --grid-column-height: 220px;
-  }
-}
-
-@media (min-aspect-ratio: 16/8) {
-  :root {
-    --grid-columns: 7;
-    --grid-column-height: 200px;
-  }
-}
-
-
-* {
-  box-sizing: border-box;
+  --grid-rows: 3;
+  --grid-row-height: 240px;
 }
 
 .masonry {
   margin: 0;
   padding: 0;
-  width: 100vw !important;
-  height: 200vh !important;
-  height: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.column {
+  box-sizing: border-box;
+  flex: 1;
 }
 
 .grid-item {
-  height: var(--grid-column-height);
-  width: calc(100% / var(--grid-columns));
+  height: var(--grid-row-height);
+  width: 100%;
 }
 
 .grid-area-1to1 {
-  height: calc(var(--grid-column-height));
+  height: calc(var(--grid-row-height));
 }
 
 .grid-area-1to2 {
-  height: calc(var(--grid-column-height) * 2);
+  height: calc(var(--grid-row-height) * 2);
 }
 
 .grid-area-1to3 {
-  height: calc(var(--grid-column-height) * 3);
+  height: calc(var(--grid-row-height) * 3);
 }
 
 .image-holder {
@@ -74,18 +47,11 @@
   height: 100%;
   background-size: cover;
   background-position: center center;
-
-  box-shadow: none;
-  filter: blur(0.25px) grayscale(0.3) sepia(0.63);
 }
+
 
 .grid-item.focus,
 .grid-item:hover {
-  z-index: 100;
-}
-
-.grid-item.focus .image-holder,
-.grid-item:hover .image-holder {
   cursor: pointer;
   transform-origin: center center;
   animation-name: popout, heartbeat1;
@@ -110,18 +76,6 @@
     transform: scale(1.2);
   }
 }
-
-/*
-Very bad performance!
-@keyframes heartbeat2 {
-    0% {
-        box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.8);
-
-    }
-    100% {
-        box-shadow: 0 0 200px 9px rgba(0, 0, 0, 0.7);
-    }
-}*/
 
 @keyframes heartbeat1 {
   0% {
