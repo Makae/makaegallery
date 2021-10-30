@@ -8,6 +8,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {GalleryFullscreenComponent} from '../gallery-fullscreen/gallery-fullscreen.component';
 
 interface DisplayedImage extends Image {
+  loaded: boolean;
   cssClass: string;
 }
 
@@ -53,7 +54,8 @@ export class GalleryMasonryComponent implements OnInit {
   private static mapImageToDisplayedImage(image: Image): DisplayedImage {
     return {
       ...image,
-      cssClass: GalleryMasonryComponent.getCssClassForAspectRatio(image.dimensions.width / image.dimensions.height)
+      cssClass: GalleryMasonryComponent.getCssClassForAspectRatio(image.dimensions.width / image.dimensions.height),
+      loaded: false
     }
   }
 

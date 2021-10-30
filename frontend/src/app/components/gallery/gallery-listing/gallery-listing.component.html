@@ -6,19 +6,16 @@
         </p>
         <ul *ngIf="this.galleries">
             <li *ngFor="let gallery of galleries">
-                <mat-card class="example-card">
-                    <mat-card-header>
-                        <mat-card-title>{{gallery.name}}</mat-card-title>
-                    </mat-card-header>
-                    <img mat-card-image src="{{gallery.coverImage}}" i18n-alt alt="Cover image of gallery named {{gallery.name}}">
-                    <mat-card-content>
-                        <p>{{gallery.description}}</p>
-                    </mat-card-content>
-                    <mat-card-actions>
-                        <button mat-flat-button color="primary" (click)="goToGallery(gallery.id)" i18n>Check out!
-                        </button>
-                    </mat-card-actions>
-                </mat-card>
+                <div class="gallery-card">
+                    <div class="image-wrapper">
+                        <img src="{{gallery.coverImage}}" i18n-alt alt="Cover image of gallery named {{gallery.name}}">
+                        <div class="card-footer">
+                            <h2 class="header-text">{{gallery.name}}</h2>
+                            <p>{{gallery.description}}</p>
+                        </div>
+                    </div>
+                    <button mat-flat-button color="primary" (click)="goToGallery(gallery.id)" i18n>Galerie öffnen</button>
+                </div>
             </li>
         </ul>
     </section>

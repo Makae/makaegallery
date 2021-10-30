@@ -1,0 +1,79 @@
+.overlay {
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.overlay {
+  background: hsla(0, 0%, 0%, 1);
+
+  background: linear-gradient(45deg, hsla(0, 0%, 0%, 1) 0%, hsla(0, 0%, 15%, 0.9) 100%);
+
+  background: -moz-linear-gradient(45deg, hsla(0, 0%, 0%, 1) 0%, hsla(0, 0%, 15%, 0.9) 100%);
+
+  background: -webkit-linear-gradient(45deg, hsla(0, 0%, 0%, 1) 0%, hsla(0, 0%, 15%, 0.9) 100%);
+
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#272727", GradientType=1);
+}
+
+.overlay-header,
+.overlay-footer {
+  position: absolute;
+}
+.overlay-top-bar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: end;
+  gap: 12px;
+}
+
+
+img {
+  position: absolute;
+  max-width: 90vw;
+  max-height: 90vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.overlay-footer {
+  bottom: min(5vh, 24px);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .start-stop {
+    display: flex;
+    gap: 12px;
+  }
+
+  mat-progress-spinner {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    ::ng-deep {
+      svg circle {
+        stroke: rgba(255,255,255,0.7);
+      }
+    }
+  }
+}

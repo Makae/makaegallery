@@ -7,7 +7,10 @@
   --accent-color: #ffffff;
   --grid-rows: 3;
   --grid-row-height: 240px;
+
+  display: block;
   overflow: hidden;
+  background-color: #0e0e0e;
 
 }
 
@@ -62,8 +65,8 @@ img {
 }
 
 
-.grid-item-scaling.focus,
-.grid-item-scaling:hover {
+.grid-item-scaling:not(.loading).focus,
+.grid-item-scaling:not(.loading):hover {
   cursor: pointer;
   transform-origin: center center;
   animation-name: popout;
@@ -104,32 +107,18 @@ img {
 .grid-item-scaling {
   margin: 2px 1px;
 }
-/*
-.grid-item-scaling.scale-factor-grande:first-child {
-  --translate-y: calc(2vh * var(--scale-factor));
+
+.column:first-child {
+  .grid-item-scaling {
+    margin-left: 0;
+  }
 }
 
-.grid-item-scaling.scale-factor-grande:last-child {
-  --translate-y: calc(-2vh * var(--scale-factor));
+.column:last-child {
+  .grid-item-scaling {
+    margin-right: 0;
+  }
 }
-
-
-.column:nth-child(1) .grid-item-scaling.scale-factor-grande {
-  --translate-x: calc(2vw * var(--scale-factor));
-}
-
-.column:nth-child(2) .grid-item-scaling.scale-factor-grande {
-  --translate-x: calc(1vw * var(--scale-factor));
-}
-
-.column:nth-child(3) .grid-item-scaling.scale-factor-grande {
-  --translate-x: calc(-1vw * var(--scale-factor));
-}
-
-.column:nth-child(4) .grid-item-scaling.scale-factor-grande {
-  --translate-x: calc(-2vw * var(--scale-factor));
-}
-*/
 
 @keyframes popout {
   from {

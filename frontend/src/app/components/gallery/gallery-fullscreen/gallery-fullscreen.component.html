@@ -1,0 +1,41 @@
+<div class="overlay" [class.visible]="this.visible">
+    <div class="overlay-top-bar">
+        <button *ngIf="image" mat-mini-fab (click)="showOriginalImage($event, image)">
+            <mat-icon>download</mat-icon>
+        </button>
+        <button class="close" mat-mini-fab color="accent" (click)="close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div class="overlay-header">
+    </div>
+    <div class="image-container" *ngIf="image">
+        <img [src]="image?.optimized_url" alt="{{image?.id}}"/>
+    </div>
+    <div class="overlay-footer">
+        <div class="start-stop">
+            <button mat-mini-fab (click)="previous()">
+                <mat-icon *ngIf="this.activeImageIdx <= 0">skip_previous</mat-icon>
+                <mat-icon *ngIf="this.activeImageIdx > 0">navigate_before</mat-icon>
+            </button>
+            <button mat-mini-fab (click)="startPlayback()" *ngIf="!this.isPlaying">
+                <mat-icon>play_arrow</mat-icon>
+            </button>
+            <button mat-mini-fab (click)="pausePlayback()" *ngIf="this.isPlaying">
+                <mat-progress-spinner
+                        class="example-margin"
+                        color="primary"
+                        mode="determinate"
+                        diameter="40"
+                        strokeWidth="2"
+                        [value]="this.timerProgress">
+                </mat-progress-spinner>
+                <mat-icon>pause</mat-icon>
+            </button>
+            <button mat-mini-fab (click)="next()">
+                <mat-icon *ngIf="this.activeImageIdx === this.images.length - 1">skip_next</mat-icon>
+                <mat-icon *ngIf="this.activeImageIdx !== this.images.length - 1">navigate_next</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

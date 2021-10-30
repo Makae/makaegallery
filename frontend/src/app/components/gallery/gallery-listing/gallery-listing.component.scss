@@ -5,17 +5,51 @@ ul {
   margin: 0;
   list-style-type: none;
 
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: $quarter-main-margin;
+  display: grid;
+  grid-gap: $quarter-main-margin;
+  grid-template-columns: repeat(auto-fit, minmax(186px, 1fr));
 
   li {
     box-sizing: border-box;
-    flex: 1 1 25%;
-  }
-}
+    flex: 0 1 25%;
 
-::ng-deep app-gallery-listing .mat-card-header-text {
-  height: 3rem;
+    .gallery-card {
+      position: relative;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .image-wrapper {
+      position: relative;
+      display: flex;
+
+      img {
+        width: 100%;
+      }
+
+      .header-text {
+        line-height: 1.1rem;
+        margin-bottom: 4px;
+      }
+
+      .card-footer {
+        padding-left: 12px;
+        padding-right: 12px;
+        box-sizing: border-box;
+        position: absolute;
+        bottom: 5px;
+        color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        justify-items: stretch;
+        width: 100%;
+      }
+
+    }
+
+  }
 }
