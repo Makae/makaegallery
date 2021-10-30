@@ -6,12 +6,18 @@ use ch\makae\makaegallery\security\Authentication;
 
 @define('GALLERY_CONFIGURATION', serialize(array(
   'photobox' => array(
-    'title' => 'Bilder aus der Photobox',
-    'description' => 'Die beschte Biuder het\'s gäh.',
-    'ref_text' => 'Bilder von <b>Corinne Ritter</b>. Vielen Dank.',
-    'level' => Authentication::ACCESS_LEVEL_USER,
-    'tenantId' => 'a84ce876-a1d9-4695-8b90-321c0ccf0db8'
-  ),
+      'title' => 'Bilder aus der Photobox',
+      'description' => 'Die beschte Biuder het\'s gäh.',
+      'ref_text' => 'Bilder von <b>Corinne Ritter</b>. Vielen Dank.',
+      'level' => Authentication::ACCESS_LEVEL_USER,
+      'tenantId' => 'a84ce876-a1d9-4695-8b90-321c0ccf0db8'
+    ),
+    'jum-photobox' => array(
+        'title' => 'Biuder us dr Photibox',
+        'description' => 'Die beschte Biuder het\'s gäh.',
+        'level' => Authentication::ACCESS_LEVEL_USER,
+        'tenantId' => 'a84ce876-a1d9-4695-8b90-321c0ccf0db8'
+      ),
   'public' => array(
     'title' => 'Bilder von der Hochzeit',
     'description' => 'So schön isch\'s gsi!',

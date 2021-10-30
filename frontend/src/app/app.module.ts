@@ -24,6 +24,7 @@ import {GalleryListingComponent} from './components/gallery/gallery-listing/gall
 import {GalleryMasonryComponent} from './components/gallery/gallery-masonry/gallery-masonry.component';
 import {MatCardModule} from '@angular/material/card';
 import {HeaderComponent} from './components/header/header.component';
+import {GalleryFullscreenComponent} from './components/gallery/gallery-fullscreen/gallery-fullscreen.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {HeaderComponent} from './components/header/header.component';
     SpinnerComponent,
     GalleryListingComponent,
     GalleryMasonryComponent,
+    GalleryFullscreenComponent,
     HeaderComponent
   ],
   imports: [

@@ -19,12 +19,22 @@ $makaegallery-theme: mat.define-light-theme((
 
 $my-palette: mat.define-palette(mat.$indigo-palette);
 
-body {
-  background: #{mat.get-color-from-palette($makaegallery-primary, 'default')};
-  background: #{mat.get-color-from-palette($makaegallery-primary, 'lighter')};
-  background: #{mat.get-color-from-palette($makaegallery-primary, 'default-contrast')};
+html {
+  // background: #{mat.get-color-from-palette($makaegallery-primary, 900)};
 }
 
+.dark {
+  background: hsla(234, 65%, 9%, 1);
+
+  background: linear-gradient(45deg, hsla(234, 65%, 9%, 1) 0%, hsla(273, 35%, 33%, 1) 100%);
+
+  background: -moz-linear-gradient(45deg, hsla(234, 65%, 9%, 1) 0%, hsla(273, 35%, 33%, 1) 100%);
+
+  background: -webkit-linear-gradient(45deg, hsla(234, 65%, 9%, 1) 0%, hsla(273, 35%, 33%, 1) 100%);
+
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#080B26", endColorstr="#583773", GradientType=1);
+  background-attachment: fixed;
+}
 
 @import 'src/assets/styles/base.scss';
 @import 'src/assets/styles/dialogs.scss';

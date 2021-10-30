@@ -7,6 +7,8 @@
   --accent-color: #ffffff;
   --grid-rows: 3;
   --grid-row-height: 240px;
+  overflow: hidden;
+
 }
 
 .masonry {
@@ -15,8 +17,9 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  overflow: hidden;
+
 }
+
 
 .column {
   box-sizing: border-box;
@@ -47,14 +50,23 @@
   height: 100%;
   background-size: cover;
   background-position: center center;
+  overflow: hidden;
+}
+
+img {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: auto;
 }
 
 
-.grid-item.focus,
-.grid-item:hover {
+.grid-item-scaling.focus,
+.grid-item-scaling:hover {
   cursor: pointer;
   transform-origin: center center;
-  animation-name: popout, heartbeat1;
+  animation-name: popout;
   animation-duration: 300ms, 1200ms;
   animation-delay: 0ms, 300ms;
   animation-fill-mode: both, both;
@@ -63,44 +75,92 @@
   animation-timing-function: cubic-bezier(0.86, 0, 0.07, 1), ease-in-out;
 }
 
+.fullscreen .grid-item-scaling {
+  animation: none;
+}
+
+
+.masonry {
+  --scale-factor: 1;
+}
+
+.scale-factor-normal {
+  --scale-factor: 1;
+}
+
+.scale-factor-big {
+  --scale-factor: 1.25;
+}
+
+.scale-factor-grande {
+  --scale-factor: 2;
+}
+
+.grid-item-scaling {
+  --translate-x: 0;
+  --translate-y: 0;
+}
+
+.grid-item-scaling {
+  margin: 2px 1px;
+}
+/*
+.grid-item-scaling.scale-factor-grande:first-child {
+  --translate-y: calc(2vh * var(--scale-factor));
+}
+
+.grid-item-scaling.scale-factor-grande:last-child {
+  --translate-y: calc(-2vh * var(--scale-factor));
+}
+
+
+.column:nth-child(1) .grid-item-scaling.scale-factor-grande {
+  --translate-x: calc(2vw * var(--scale-factor));
+}
+
+.column:nth-child(2) .grid-item-scaling.scale-factor-grande {
+  --translate-x: calc(1vw * var(--scale-factor));
+}
+
+.column:nth-child(3) .grid-item-scaling.scale-factor-grande {
+  --translate-x: calc(-1vw * var(--scale-factor));
+}
+
+.column:nth-child(4) .grid-item-scaling.scale-factor-grande {
+  --translate-x: calc(-2vw * var(--scale-factor));
+}
+*/
 
 @keyframes popout {
   from {
     box-shadow: inset 0 0 20px 10px rgba(0, 0, 0, 0.1);
-    filter: blur(0.25px) grayscale(0.3) sepia(0.63);
-    transform: scale(1)
+    transform: scale(calc(1 * var(--scale-factor)));
   }
   to {
     box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.8);
-    filter: blur(0px) grayscale(0) sepia(0);
-    transform: scale(1.2);
+    transform: scale(calc(1.2 * var(--scale-factor))) translateX(var(--translate-x)) translateY(var(--translate-y));
   }
 }
 
 @keyframes heartbeat1 {
   0% {
     box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.8);
-    filter: blur(0px) grayscale(0) sepia(0);
-    transform: scale(1.2);
+    transform: scale(calc(1.2 * var(--scale-factor)));
   }
   25% {
-    transform: scale(1.245);
+    transform: scale(calc(1.245 * var(--scale-factor)));
     box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.8);
-    filter: blur(0px) grayscale(0) sepia(0);
   }
   50% {
-    transform: scale(1.25);
+    transform: scale(calc(1.25 * var(--scale-factor)));
     box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.8);
-    filter: blur(0px) grayscale(0) sepia(0);
   }
   75% {
-    transform: scale(1.255);
+    transform: scale(calc(1.255 * var(--scale-factor)));
     box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.8);
-    filter: blur(0px) grayscale(0) sepia(0);
   }
   100% {
-    transform: scale(1.25);
+    transform: scale(calc(1.25 * var(--scale-factor)));
     box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.8);
-    filter: blur(0px) grayscale(0) sepia(0);
   }
 }

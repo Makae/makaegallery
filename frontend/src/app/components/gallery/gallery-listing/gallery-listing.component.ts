@@ -29,8 +29,7 @@ export class GalleryListingComponent implements OnInit {
       switchMap(() => this.galleryService.getGalleries())
     ).subscribe((galleries) => {
         this.showLoginMessage = false;
-        const g2 = ([] as Gallery[]).concat(galleries).reverse();
-        this.galleries = galleries.concat(g2).concat(galleries);
+        this.galleries = galleries;
       }
     );
   }

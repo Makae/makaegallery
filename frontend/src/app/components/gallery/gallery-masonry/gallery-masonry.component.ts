@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {GalleryService} from '../../../shared/services/gallery.service';
 import {ActivatedRoute} from '@angular/router';
 import {filter, map, switchMap} from 'rxjs/operators';
 import {Image} from '../../../shared/models/gallery-model';
 import {CapabilityService} from '../../../shared/services/capability.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {GalleryFullscreenComponent} from '../gallery-fullscreen/gallery-fullscreen.component';
 
 interface DisplayedImage extends Image {
   cssClass: string;
@@ -21,15 +23,21 @@ interface DisplayedColumn {
   styleUrls: ['./gallery-masonry.component.scss']
 })
 export class GalleryMasonryComponent implements OnInit {
-  private static readonly NUM_COLUMNS = 3;
+  private static readonly NUM_COLUMNS = 4;
   public containerWidth?: number;
   public width = 250;
   public columns: DisplayedColumn[] = [];
+  public images: DisplayedImage[] = [];
+
+  @ViewChild("galleryFullscreenComponent")
+  private galleryFullscreenComponent?: GalleryFullscreenComponent;
+  public isFullscreen = false;
 
   public constructor(
     public galleryService: GalleryService,
     public activatedRoute: ActivatedRoute,
-    public capabilityService: CapabilityService
+    public capabilityService: CapabilityService,
+    public sanitizer: DomSanitizer
   ) {
     capabilityService.screenDimensionChanged().subscribe((screenDimensions) => {
       //this.containerWidth = Math.ceil(screenDimensions.width / this.width) * this.width;
@@ -51,12 +59,22 @@ export class GalleryMasonryComponent implements OnInit {
 
   private static getCssClassForAspectRatio(aspectRatio: number): string {
     if (aspectRatio <= 0.6) {
-      return 'grid-area-1to3'
+      return 'scale-factor-normal'
     } else if (aspectRatio <= 0.8) {
-      return 'grid-area-1to2'
+      return 'scale-factor-big'
     } else {
-      return 'grid-area-1to1'
+      return 'scale-factor-grande'
     }
+  }
+
+  private static findNextColumnIndex(columns: DisplayedColumn[]): number {
+    let index = -1;
+    for (let i = 0; i < columns.length; i++) {
+      if (index === -1 || columns[i].heightSum < columns[index].heightSum) {
+        index = i;
+      }
+    }
+    return index;
   }
 
   public ngOnInit(): void {
@@ -72,8 +90,16 @@ export class GalleryMasonryComponent implements OnInit {
       map(gallery => gallery.images as Image[]),
       map(images => images.map(GalleryMasonryComponent.mapImageToDisplayedImage))
     ).subscribe(images => {
-      this.assignImagesToColumns(images);
+      this.images = images;
+      this.assignImagesToColumns(this.images);
     });
+  }
+
+  public showImageFullscreen(image: DisplayedImage): void {
+    this.galleryFullscreenComponent?.open(image.id).afterClose(() => {
+      this.isFullscreen = false;
+    });
+    this.isFullscreen = true;
   }
 
   private assignImagesToColumns(images: DisplayedImage[]) {
@@ -83,15 +109,5 @@ export class GalleryMasonryComponent implements OnInit {
       column.images.push(image);
       column.heightSum += image.dimensions.height
     }
-  }
-
-  private static findNextColumnIndex(columns: DisplayedColumn[]): number {
-    let index = -1;
-    for (let i = 0; i < columns.length; i++) {
-      if(index === -1 || columns[i].heightSum < columns[index].heightSum) {
-        index = i;
-      }
-    }
-    return index;
   }
 }

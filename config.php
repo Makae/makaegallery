@@ -69,9 +69,10 @@ if (file_exists('config-env.php')) {
 )));
 
 @define('PROCESS_CONFIG_THUMB', serialize([
-    'width' => 450,
+    'width' => 750,
+    'height' => 650,
     'quality' => 80,
-    'mode' => ImageConverter::RESIZE_MODE_TO_DEFINED_DIMENSION
+    'mode' => ImageConverter::RESIZE_MODE_TO_SMALLER
 ]));
 
 @define('PROCESS_CONFIG_NORMAL', serialize([
