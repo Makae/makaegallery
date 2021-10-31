@@ -1,3 +1,5 @@
+@import 'src/assets/styles/vars.layout';
+
 * {
   box-sizing: border-box;
 }
@@ -37,23 +39,6 @@
   flex: 1;
 }
 
-.grid-item {
-  height: var(--grid-row-height);
-  width: 100%;
-}
-
-.grid-area-1to1 {
-  height: calc(var(--grid-row-height));
-}
-
-.grid-area-1to2 {
-  height: calc(var(--grid-row-height) * 2);
-}
-
-.grid-area-1to3 {
-  height: calc(var(--grid-row-height) * 3);
-}
-
 .image-holder {
   padding: 0;
   margin: 0;
@@ -72,6 +57,10 @@ img {
   height: auto;
 }
 
+.grid-item {
+  overflow: hidden;
+  border-radius: $double-border-radius;
+}
 
 .grid-item-scaling:not(.loading).focus,
 .grid-item-scaling:not(.loading):hover {

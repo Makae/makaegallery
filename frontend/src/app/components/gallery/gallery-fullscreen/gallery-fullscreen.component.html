@@ -1,6 +1,6 @@
 <div class="overlay" [class.visible]="this.visible">
     <div class="overlay-settings" *ngIf="image">
-        <button mat-mini-fab [mat-menu-trigger-for]="settingsMenu">
+        <button mat-mini-fab color="primary" [mat-menu-trigger-for]="settingsMenu">
             <mat-icon>settings</mat-icon>
         </button>
         <mat-menu #settingsMenu="matMenu" class="settings-menu">
@@ -19,26 +19,26 @@
         </mat-menu>
     </div>
     <div class="overlay-top-bar">
-        <button *ngIf="image" mat-mini-fab (click)="showOriginalImage($event, image)">
+        <button *ngIf="image" mat-mini-fab color="primary" (click)="showOriginalImage($event, image)">
             <mat-icon>download</mat-icon>
         </button>
-        <button class="close" mat-mini-fab color="accent" (click)="close()">
+        <button class="close" mat-mini-fab color="primary" (click)="close()">
             <mat-icon>close</mat-icon>
         </button>
     </div>
     <div class="image-container" *ngIf="image">
-        <img [src]="image?.optimized_url" alt="{{image?.id}}"/>
+        <img class="mat-elevation-z10" [src]="image?.optimized_url" alt="{{image?.id}}"/>
     </div>
     <div class="overlay-footer">
         <div class="start-stop">
-            <button mat-mini-fab (click)="previous()">
+            <button mat-mini-fab color="primary" (click)="previous()">
                 <mat-icon *ngIf="this.activeImageIdx <= 0">skip_previous</mat-icon>
                 <mat-icon *ngIf="this.activeImageIdx > 0">navigate_before</mat-icon>
             </button>
-            <button mat-mini-fab (click)="startPlayback()" *ngIf="!this.isPlaying">
+            <button mat-mini-fab color="primary" (click)="startPlayback()" *ngIf="!this.isPlaying">
                 <mat-icon>play_arrow</mat-icon>
             </button>
-            <button mat-mini-fab (click)="pausePlayback()" *ngIf="this.isPlaying">
+            <button mat-mini-fab color="primary" (click)="pausePlayback()" *ngIf="this.isPlaying">
                 <mat-progress-spinner
                         class="example-margin"
                         color="primary"
@@ -49,7 +49,7 @@
                 </mat-progress-spinner>
                 <mat-icon>pause</mat-icon>
             </button>
-            <button mat-mini-fab (click)="next()">
+            <button mat-mini-fab color="primary" (click)="next()">
                 <mat-icon *ngIf="this.activeImageIdx === this.images.length - 1">skip_next</mat-icon>
                 <mat-icon *ngIf="this.activeImageIdx !== this.images.length - 1">navigate_next</mat-icon>
             </button>
