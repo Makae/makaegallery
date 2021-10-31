@@ -21,10 +21,6 @@ if (!preg_match('/^https?:\/\/.*/', $domain)) {
     $domain = '//' . $domain;
 }
 
-if (file_exists('config-env.php')) {
-    require_once('config-env.php');
-}
-
 // GETTING PLACES
 @define('SUB_ROOT', str_replace('/', DIRECTORY_SEPARATOR, $subFolder));
 @define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . SUB_ROOT);
@@ -37,13 +33,18 @@ if (file_exists('config-env.php')) {
 @define('WWW_ROOT', $domain);
 @define('WWW_BASE', $domain . (WWW_SUB_ROOT === "" ? "" : '/' . WWW_SUB_ROOT));
 @define('WWW_ASSETS', WWW_BASE . '/assets');
-@define('WWW_GALLERY_ROOT', WWW_SUB_ROOT . '/' . GALLERY_FOLDER);
+@define('WWW_GALLERY_ROOT', WWW_BASE . '/' . GALLERY_FOLDER);
+
+if (file_exists('config-env.php')) {
+  require_once('config-env.php');
+}
 
 @define('CORS_ALLOWED_ORIGINS', '');
 @define('CORS_ALLOWED_METHODS', 'POST, GET, PUT, DELETE, OPTIONS');
 @define('CORS_ALLOWED_HEADERS', 'token, Content-Type, Authorization');
 
 @define('ALLOWED_IMAGE_TYPES', 'png,jpeg,bmp');
+
 
 @define('TESTDIR', ROOT . 'tests' . DIRECTORY_SEPARATOR);
 @define('DOING_AJAX', isset($_REQUEST['ajax']));

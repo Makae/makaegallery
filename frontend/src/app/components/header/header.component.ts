@@ -28,6 +28,5 @@ export class HeaderComponent {
 
   private setShowBackToGalleriesBasedOnUrl(url: string): void {
     this.showBackToGalleries = url.startsWith('/gallery/');
-    console.log(url, this.showBackToGalleries);
   }
 }
