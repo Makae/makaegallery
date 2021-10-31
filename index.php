@@ -36,20 +36,19 @@ $galleryConverter = new ImageConverter(
   ]
 );
 
-$galleryRepository = new GalleryRepository(
-  $galleryLoader,
-  $galleryConverter
-);
 $securedGalleryRepository =
   new SecuredGalleryRepository(
-    $galleryRepository,
+    new GalleryRepository(
+      $galleryLoader,
+      $galleryConverter
+    ),
     $authentication,
     unserialize(GALLERY_CONFIGURATION));
 
 $restApi = new RestApi(WWW_BASE . '/api', $authentication);
 $restApi->addController(new AuthenticationRestController($authentication));
-$restApi->addController(new GalleryRestController($galleryRepository, new UploadHandler($galleryRepository)));
-$restApi->addController(new ImageRestController($galleryRepository));
+$restApi->addController(new GalleryRestController($securedGalleryRepository, new UploadHandler($securedGalleryRepository)));
+$restApi->addController(new ImageRestController($securedGalleryRepository));
 
 $App = new App(
   $authentication,

@@ -5,7 +5,7 @@ namespace ch\makae\makaegallery;
 class GalleryRepository implements IGalleryRepository
 {
     private array $galleries;
-    private $allowedImageTypes;
+    private array $allowedImageTypes;
 
     public function __construct(GalleryLoader $galleryLoader, ImageConverter $imageConverter)
     {

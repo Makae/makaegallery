@@ -14,7 +14,7 @@ class BasicAuthProvider implements IAuthProvider
     $this->users = $users;
   }
 
-  public function getCurrentUser()
+  public function getCurrentUser(): ?array
   {
     if (!$this->isAuthenticated()) {
       return null;

@@ -11,11 +11,11 @@ abstract class DtoMapper
 {
   public static function mapGalleryArrayToDto(array $galleries, bool $deep = true): array
   {
-    $array_map = [];
+    $mapped = [];
     foreach ($galleries as $key => $value) {
-      $array_map[$key] = DtoMapper::mapGalleryToDto($galleries[$key], $deep);
-    }
-    return $array_map;
+      array_push($mapped, DtoMapper::mapGalleryToDto($galleries[$key], $deep));
+      }
+    return $mapped;
   }
 
   public static function mapGalleryToDto(PublicGallery $gallery, bool $deep = true): array

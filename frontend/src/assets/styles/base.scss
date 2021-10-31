@@ -9,9 +9,16 @@ html, body {
 
 .app-container {
   margin: 0 auto;
-  max-width: 1280px;
+  max-width: $layout-width;
 }
 
 .content {
   margin-top: $main-margin;
+}
+
+.container {
+  @media (max-width: $layout-width) {
+    padding-left: $main-margin;
+    padding-right: $main-margin;
+  }
 }

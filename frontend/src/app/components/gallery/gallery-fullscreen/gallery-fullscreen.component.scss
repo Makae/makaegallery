@@ -38,6 +38,7 @@
 }
 
 .overlay-top-bar {
+  z-index: 10;
   position: absolute;
   top: $half-main-margin;
   right: $half-main-margin;
@@ -47,6 +48,7 @@
 }
 
 .overlay-settings {
+  z-index: 10;
   position: absolute;
   top: $half-main-margin;
   left: $half-main-margin;

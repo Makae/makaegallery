@@ -3,6 +3,7 @@
 namespace ch\makae\makaegallery;
 
 use ch\makae\makaegallery\rest\AccessLevelException;
+use ch\makae\makaegallery\rest\UserAuthenticationException;
 use ch\makae\makaegallery\rest\WrongTenantException;
 use ch\makae\makaegallery\security\Authentication;
 
@@ -34,10 +35,13 @@ class SecuredGalleryRepository implements IGalleryRepository
   private function throwIfNoAccessToGallery($galleryId)
   {
     $galleryAccess = $this->getGalleryAccess($galleryId);
+    if (!$galleryAccess) {
+      throw new AccessLevelException('No gallery access specified');
+    }
     if ($this->authentication->isSuperAdmin()) {
       return;
     }
-    if (!$this->belongsToTenant($galleryAccess['tenantId'])) {
+    if (!$this->hasAccessToTenant($galleryAccess['tenantId'])) {
       throw new WrongTenantException('Unauthorized');
     }
     if (!$this->authentication->hasAccessForLevel($galleryAccess['level'])) {
@@ -55,9 +59,21 @@ class SecuredGalleryRepository implements IGalleryRepository
     return null;
   }
 
-  private function belongsToTenant($tenantId): bool
+  private function hasAccessToTenant($tenantId): bool
   {
-    return $this->authentication->getTenantId() === $tenantId;
+    if ($tenantId === null) {
+      throw new \Exception("TenantId is required in gallery definition");
+    }
+
+    if (!$this->authentication->isAuthenticated()) {
+      return false;
+    }
+
+    try {
+      return $this->authentication->getTenantId() === $tenantId;
+    } catch (UserAuthenticationException $e) {
+      return false;
+    }
   }
 
   /**
@@ -69,11 +85,11 @@ class SecuredGalleryRepository implements IGalleryRepository
   }
 
   /**
-   * @return Gallery[] $gallery
+   * @return PublicGallery[] $gallery
    */
   private function filterGalleries(array $galleries): array
   {
-    return array_filter($galleries, function (Gallery $gallery) {
+    return array_filter($galleries, function (PublicGallery $gallery) {
       try {
         $this->throwIfNoAccessToGallery($gallery->getIdentifier());
         return true;

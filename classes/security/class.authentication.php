@@ -2,6 +2,8 @@
 
 namespace ch\makae\makaegallery\security;
 
+use ch\makae\makaegallery\rest\UserAuthenticationException;
+
 class Authentication
 {
   const ACCESS_LEVEL_ADMIN = 5;
@@ -18,21 +20,36 @@ class Authentication
     $this->authProvider = $authProvider;
   }
 
+  public function getTenantId(): ?string
+  {
+    if(!$this->authProvider->isAuthenticated()) {
+      throw new UserAuthenticationException("User is not authenticated");
+    }
+
+    return $this->getUser()['tenantId'];
+  }
+
+  public function getUser(): ?array
+  {
+    return $this->authProvider->getCurrentUser();
+  }
+
+  public function getUsers()
+  {
+    return $this->authProvider->getAllUsers();
+  }
+
+  public function isTenantAdmin()
+  {
+    return $this->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN);
+  }
+
   public function hasAccessForLevel($level): bool
   {
     if ($this->getUserLevel() <= $level) {
       return true;
     }
     return false;
-  }
-
-  public function isAuthenticated()
-  {
-    return $this->authProvider->isAuthenticated();
-  }
-
-  public function getTenantId(): string {
-    return $this->getUser()['tenantId'];
   }
 
   public function getUserLevel()
@@ -44,25 +61,14 @@ class Authentication
     return $this->authProvider->getCurrentUser()['level'];
   }
 
-  public function getUser()
+  public function isAuthenticated()
   {
-    return $this->getUser();
-  }
-
-  public function getUsers()
-  {
-    return $this->authProvider->getAllUsers();
-  }
-
-
-  public function isTenantAdmin()
-  {
-    return $this->hasAccessForLevel(Authentication::ACCESS_LEVEL_ADMIN);
+    return $this->authProvider->isAuthenticated();
   }
 
   public function isSuperAdmin()
   {
-    return $this->hasAccessForLevel(self::ACCESS_LEVEL_TENANT_ADMIN);
+    return $this->hasAccessForLevel(self::ACCESS_LEVEL_ADMIN);
   }
 
 }
