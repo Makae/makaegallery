@@ -25,6 +25,7 @@ import {GalleryMasonryComponent} from './components/gallery/gallery-masonry/gall
 import {MatCardModule} from '@angular/material/card';
 import {HeaderComponent} from './components/header/header.component';
 import {GalleryFullscreenComponent} from './components/gallery/gallery-fullscreen/gallery-fullscreen.component';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import {GalleryFullscreenComponent} from './components/gallery/gallery-fullscree
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatMenuModule,
     MatProgressSpinnerModule,
     MatCardModule
   ],

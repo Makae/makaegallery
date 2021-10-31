@@ -9,10 +9,18 @@
   --grid-row-height: 240px;
 
   display: block;
-  overflow: hidden;
-  background-color: #0e0e0e;
-
 }
+
+
+::ng-deep app-header.hidden {
+  pointer-events: none;
+
+  .mat-toolbar.mat-primary {
+    z-index: 0;
+
+  }
+}
+
 
 .masonry {
   margin: 0;
@@ -127,7 +135,7 @@ img {
   }
   to {
     box-shadow: 0 0 200px 10px rgba(0, 0, 0, 0.8);
-    transform: scale(calc(1.2 * var(--scale-factor))) translateX(var(--translate-x)) translateY(var(--translate-y));
+    transform: scale(calc(1.08 * var(--scale-factor))) translateX(var(--translate-x)) translateY(var(--translate-y));
   }
 }
 

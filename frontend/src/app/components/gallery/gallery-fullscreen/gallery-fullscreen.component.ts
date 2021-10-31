@@ -22,11 +22,14 @@ type CallbackFn = () => void;
   styleUrls: ['./gallery-fullscreen.component.scss']
 })
 export class GalleryFullscreenComponent implements OnDestroy {
+  private readonly  DEFAULT_DURATION = 6000;
+  public readonly MIN_DURATION =  1000;
+  public readonly CHANGE_DURATION_SIZE =  500;
 
   public visible = false;
 
   @Input()
-  public playbackDuration = 7000;
+  public playbackDuration = this.DEFAULT_DURATION;
 
   @Input()
   public images: DisplayedImage[] = [];
@@ -179,5 +182,11 @@ export class GalleryFullscreenComponent implements OnDestroy {
   private unsubscribeAll(): void {
     this.keyHandlingSubscription?.unsubscribe();
     this.playbackSubscription?.unsubscribe();
+  }
+
+  public changePlaybackSpeedClicked($event: MouseEvent, amount: number): void {
+    $event.stopImmediatePropagation();
+    const duration = this.playbackDuration + amount;
+    this.playbackDuration = Math.max(this.MIN_DURATION, duration);
   }
 }

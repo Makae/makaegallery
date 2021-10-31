@@ -1,6 +1,11 @@
-<mat-toolbar class="header-toolbar {{cssClass}}" color="primary">
+<mat-toolbar class="header-toolbar {{cssClass}} mat-elevation-z1" color="primary">
     <div class="toolbar-wrapper">
         <span>Makae Gallery</span>
     </div>
-    <app-login-button></app-login-button>
+    <div class="button-wrapper">
+        <button *ngIf="showBackToGalleries" mat-raised-button routerLink="/" i18n>
+            Back to galleries
+        </button>
+        <app-login-button></app-login-button>
+    </div>
 </mat-toolbar>

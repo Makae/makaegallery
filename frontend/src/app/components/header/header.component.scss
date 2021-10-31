@@ -1,3 +1,4 @@
+@import '/src/assets/styles/vars.layout';
 
 :host .hidden {
   display: none;
@@ -6,10 +7,20 @@
 .mat-toolbar {
   display: flex;
   justify-content: space-between;
+  padding-left: $main-margin;
+  padding-right: $main-margin;
+
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
 }
 
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.button-wrapper {
+  display: flex;
+  gap: $quarter-main-margin;
 }

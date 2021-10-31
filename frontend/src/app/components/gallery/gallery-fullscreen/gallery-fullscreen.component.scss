@@ -1,3 +1,5 @@
+@import 'src/assets/styles/vars.layout';
+
 .overlay {
   opacity: 0;
   pointer-events: none;
@@ -34,25 +36,47 @@
 .overlay-footer {
   position: absolute;
 }
+
 .overlay-top-bar {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: $half-main-margin;
+  right: $half-main-margin;
   display: flex;
   justify-content: end;
-  gap: 12px;
+  gap: $half-main-margin;
+}
+
+.overlay-settings {
+  position: absolute;
+  top: $half-main-margin;
+  left: $half-main-margin;
+
+  .settings-duration {
+    display: flex;
+    justify-content: space-around;
+    line-height: 42px;
+  }
+}
+
+::ng-deep .settings-menu {
+  padding-left: $half-main-margin;
+  padding-right: $half-main-margin;
+
+  p {
+    margin-bottom: -8px;
+    text-align: center;
+  }
 }
 
 
 img {
   position: absolute;
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: 95vw;
+  max-height: 95vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 
 .overlay-footer {
   bottom: min(5vh, 24px);
@@ -72,7 +96,7 @@ img {
 
     ::ng-deep {
       svg circle {
-        stroke: rgba(255,255,255,0.7);
+        stroke: rgba(255, 255, 255, 0.7);
       }
     }
   }

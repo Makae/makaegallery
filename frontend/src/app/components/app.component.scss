@@ -1,20 +1,5 @@
 @import '/src/assets/styles/vars.layout';
 
-::ng-deep {
-  .container {
-    margin: 0 auto;
-    padding: $main-margin;
-    max-width: min(1027px, 80vw);
-  }
-
-  .container-fullwidth {
-    padding: 0;
-    max-width: none;
-  }
-}
-
-
-
 mat-toolbar.header-toolbar {
   &.header-toolbar.hidden {
     display: none;

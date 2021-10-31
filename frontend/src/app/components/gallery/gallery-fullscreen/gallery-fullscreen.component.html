@@ -1,4 +1,23 @@
 <div class="overlay" [class.visible]="this.visible">
+    <div class="overlay-settings" *ngIf="image">
+        <button mat-mini-fab [mat-menu-trigger-for]="settingsMenu">
+            <mat-icon>settings</mat-icon>
+        </button>
+        <mat-menu #settingsMenu="matMenu" class="settings-menu">
+            <div class="settings-entry">
+                <p i18n>Playback speed</p>
+                <div class="settings-duration">
+                    <button mat-icon-button (click)="changePlaybackSpeedClicked($event, -CHANGE_DURATION_SIZE)" [disabled]="this.playbackDuration <= MIN_DURATION">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <span>{{this.playbackDuration / 1000 | number:"1.1-1" }}s</span>
+                    <button mat-icon-button (click)="changePlaybackSpeedClicked($event, CHANGE_DURATION_SIZE)">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </mat-menu>
+    </div>
     <div class="overlay-top-bar">
         <button *ngIf="image" mat-mini-fab (click)="showOriginalImage($event, image)">
             <mat-icon>download</mat-icon>
@@ -6,8 +25,6 @@
         <button class="close" mat-mini-fab color="accent" (click)="close()">
             <mat-icon>close</mat-icon>
         </button>
-    </div>
-    <div class="overlay-header">
     </div>
     <div class="image-container" *ngIf="image">
         <img [src]="image?.optimized_url" alt="{{image?.id}}"/>
